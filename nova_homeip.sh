@@ -1,5 +1,6 @@
 #!/bin/bash
-LOG=/Users/fblaise/openstack_client_tools/venv_openstack/log/`basename $0`.log
+#LOG=/Users/fblaise/openstack_client_tools/venv_openstack/log/`basename $0`.log
+LOG=/tmp/`basename $0`.log
 
 function myhelp () {
 	echo
@@ -10,7 +11,7 @@ function myhelp () {
 	echo " 2. You have to be at work or connected via VPN to connect to the nova API"
 	echo " 3. You will obviously need to install the python-nova client"
 	echo
-	echo " This script was written way to quickly in a place that I will not name..."
+	echo " This script was written way too quickly in a place that I will not name..."
 }
 
 function valid_ip()
