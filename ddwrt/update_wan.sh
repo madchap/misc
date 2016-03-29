@@ -3,10 +3,35 @@
 #   Fred on 28.03.2016
 #   Since the swisscom router IP passthrough is not dynamic, need a way to update the WAN IP from the inside.
 #   Allows DDWRT to update its WAN IP based on the swisscom router information
-#   You can cron that every 10 minutes for example
+#   You can cron that every hour for example
 
-# Change to whereever you need
 WANINFO=/opt/bin/wan.out
+EMAIL=xxxxxx@gmail.com
+SMTPGW=aspmx.l.google.com
+
+send_email() {
+    # sendmail is still segfaulting, so need an alternative way.
+        (
+        sleep 5
+    echo "helo r7000.home"
+    sleep 2
+    echo "mail from: $EMAIL"
+    sleep 2
+    echo "rcpt to: $EMAIL"
+    sleep 2
+    echo "data"
+    sleep 1
+    echo "From: <$EMAIL>"
+    sleep 1
+    echo "Subject: WAN IP has changed"
+    sleep 1
+    echo "Hello, the WAN IP has changed from $1 to $2. Thank you!"
+    echo "."
+    sleep 3
+    echo "quit"
+    sleep 1
+    ) | telnet $SMTPGW 25
+}
 
 echo "==> Starting at `date`"
 echo
@@ -48,6 +73,10 @@ else
     stopservice wan
     sleep 5
     startservice wan
+
+    # do we need to wait a bit to send the email? maybe...
+    sleep 15
+    send_email $CUR_WANIP $WANIP
 fi
 
 echo
