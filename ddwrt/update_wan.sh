@@ -1,9 +1,12 @@
 #!/bin/sh
 
 #   Fred on 28.03.2016
-#   Since the swisscom router IP passthrough is not dynamic, need a way to update the WAN IP from the inside.
-#   Allows DDWRT to update its WAN IP based on the swisscom router information
-#   You can cron that every hour for example
+#   Since the swisscom router IP passthrough is not dynamic (on certain fw versions anyway), need a way to update the WAN IP from the inside.
+#   Allows DDWRT to update its WAN IP based on the swisscom router information.
+#   This script was made using the following router:
+#   General Information for "Centro_piccolo"
+#            Hardware: Motorola Netopia Model 7640-47 Annex A VDSL2 IAD
+#   You can cron that every 10 minutes for example
 
 WANINFO=/opt/bin/wan.out
 EMAIL=xxxxxx@gmail.com
@@ -49,16 +52,14 @@ sleep 1
 ) |telnet 192.168.1.1 > $WANINFO
 
 WANIP=`grep "IP Address" $WANINFO | grep -v "192.168." |awk {'print $3'}`
-echo "WAN IP is : $WANIP"
+echo "ISP WAN IP is : $WANIP"
 
 WANGW=`grep "Default Gateway" $WANINFO | grep -v "192.168." |awk {'print $3'}`
-echo "WAN GW is : $WANGW"
+WANMASK=`grep "Default Gateway" $WANINFO | grep -v "192.168." |awk {'print $5'}`
 
 echo
 CUR_WANIP=`nvram get wan_ipaddr`
-CUR_WANGW=`nvram get wan_gateway`
 echo "Current NVRAM WAN IP value is $CUR_WANIP"
-echo "Current NVRAM WAN GW value is $CUR_WANGW"
 
 if [ "$WANIP" == "$CUR_WANIP" ]; then
     echo "WAN IP is still the same. Not doing anything."
@@ -67,6 +68,7 @@ else
     nvram set wan_ipaddr=$WANIP
     nvram set wan_ipaddr_buf=$WANIP
     nvram set wan_gateway=$WANGW
+    nvram set wan_netmask=$WANMASK
     nvram commit
     echo "Committed."
     echo "Restarting WAN service"
