@@ -2,9 +2,10 @@
 
 #   FBI - 10.06.2016
 #   Basic script to dynamically update home IP address in particular Openstack SecurityGroup based on dynamicDNS result
-#   Only TCP ports for now
+#   Only TCP ports for now, single IP.
 
 LOG=/tmp/`basename $0`.log
+echo > $LOG
 
 # BEGIN defaults VARIABLES ###
 SECGROUP_ACTION="list"
@@ -14,19 +15,33 @@ PORTS=( )
 
 function show_help() {
 cat << EOH
-Usage: ${0##*/} [-s SECGROUP_NAME] [ [-d DNSNAME] or [-i IPADDR]] [-f OPENRC_FILE] [-p PORTS] [-arl]
+Usage: ${0##*/} [-s SECGROUP_NAME] [ [-d DNSNAME] or [-i IPADDR]] [-f OPENRC_FILE] [-p PORTS] [-n EMAIL] [-arlu]
 
-    -a add to SECGROUP_NAME
-    -r remove from SECGROUP_NAME
-    -l list from SECGROUP_NAME [default]
+    -a Add to SECGROUP_NAME
+    -r Remove from SECGROUP_NAME
+    -l List from SECGROUP_NAME [default]
+    -u Reads current rules, checks the IP, and updates it if needed
 
     -s Security group to act on
     -i Single IP address to act on
     -d DNS domain to resolve (will be converted to single IP)
     -f OPENRC_FILE to source
     -p Ports to open, as array (e.g. -p "22,80,443")
+    -m Email address to notify upon changes when updating (via mailx). Several can be specified, separated by commas, no space.
 
 EOH
+}
+
+function get_raw_rules() {
+    echo -e "$(nova secgroup-list-rules $SECGROUP_NAME)"
+}
+
+function log() {
+    echo -e "$(date) $1" |tee -a $LOG
+}
+
+function send_email() {
+    cat $LOG | mail -s "$1" "$EMAIL"
 }
 
 function valid_ip() {
@@ -56,29 +71,28 @@ source_openrc() {
 
 
 ### MAIN STARTS ###
-
 opt_ip=false
 opt_dns=false
-while getopts "s:d:i:f:p:arlh" opt; do
+while getopts "s:d:i:f:p:n:arluh" opt; do
     case $opt in
         s)
             SECGROUP_NAME=$OPTARG
-            echo "Security group passed in : $SECGROUP_NAME"
+            log "Security group passed in : $SECGROUP_NAME"
             ;;
         d)
             opt_dns=true
-            $opt_ip && echo "IP option already specified. Specify either an IP or DNS." && exit 3
+            $opt_ip && log "IP option already specified. Specify either an IP or DNS." && exit 3
             DNS2WL=$OPTARG
-            echo "DNS domain passed in : $DNS2WL"
+            log "DNS domain passed in : $DNS2WL"
             ;;
         i)
             opt_ip=true
-            $opt_dns && echo "DNS option already specified. Specify either an IP or DNS." && exit 3
+            $opt_dns && log "DNS option already specified. Specify either an IP or DNS." && exit 3
             if valid_ip $OPTARG; then
                 IP2WL=$OPTARG
-                echo "IP ipassed in : $IP2WL"
+                log "IP passed in : $IP2WL"
             else
-                echo "IP given for override not valid. Exiting."
+                log "IP given for override not valid. Exiting."
                 exit 2
             fi
             ;;
@@ -91,59 +105,77 @@ while getopts "s:d:i:f:p:arlh" opt; do
         l)
             SECGROUP_ACTION="list"
             ;;
+        u)
+            SECGROUP_ACTION="update"
+            ;;
         f)
             OPENRC_FILE=$OPTARG
-            echo "Will source file $OPENRC_FILE"
+            log "Will source file $OPENRC_FILE"
             source $OPENRC_FILE
             ;;
         p)
             PORTS="$OPTARG"
-            echo "Will act on ports \"$PORTS\""
+            log "Will act on ports \"$PORTS\""
+            ;;
+        n)
+            EMAIL="$OPTARG"
+            log "Will send notification to $EMAIL"
             ;;
         h)
             show_help
             exit 1
             ;;
         :)
-            echo "Option -$OPTARG needs an argument"
+            log "Option -$OPTARG needs an argument"
             exit 1
             ;;
         *)
-            echo "Not an option here"
+            log "Not an option here"
             exit 1
             ;;
     esac
 done
 
 [[ ! -z $DNS2WL ]] && IP2WL=`host ${DNS2WL} | awk '/has address/ { print $4 }'`
-cat << EOC
---
-Sourced file: $OPENRC_FILE
-SecGroup: $SECGROUP_NAME
-Current IP: $IP2WL
-Action: $SECGROUP_ACTION
---
-EOC
+IP2WL=${IP2WL}/32
+log "\n--\nSourced file: $OPENRC_FILE\nSecGroup: $SECGROUP_NAME\nCurrent IP: $IP2WL\nAction: $SECGROUP_ACTION\n--\n"
 
 case $SECGROUP_ACTION in
     list)
-        nova secgroup-list-rules $SECGROUP_NAME
+        log "$(get_raw_rules)"
         ;;
 
     delete)
-        echo "Deleting rules in security group $SECGROUP_NAME in 5 seconds. Ctrl-C to stop."
+        log "Deleting rules in security group $SECGROUP_NAME in 5 seconds. Ctrl-C to stop."
         sleep 5
         # will delete all existing rules, clear table. only 1 home right?
-        RAW_RULES=$(nova secgroup-list-rules $SECGROUP_NAME)
+        RAW_RULES="$(get_raw_rules)"
         while read -r line; do
-            read from_port to_port ip_addr <<< `echo "$line"`
-            nova secgroup-delete-rule $SECGROUP_NAME tcp $from_port $to_port $ip_addr
+            read from_port to_port ip_addr <<< $(echo "$line")
+            nova secgroup-delete-rule $SECGROUP_NAME tcp $from_port $to_port $ip_addr |tee -a $LOG
         done <<< "$(echo -e "$RAW_RULES" | awk '/[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/ {print $4,$6,$8}')"
         ;;
 
     add)
         for port in ${PORTS[@]}; do
-            nova secgroup-add-rule $SECGROUP_NAME tcp $port $port ${IP2WL}/32
+            nova secgroup-add-rule $SECGROUP_NAME tcp $port $port ${IP2WL} |tee -a $LOG
         done
+        ;;
+
+    update)
+        RAW_RULES="$(get_raw_rules)"
+        IS_CHANGED=false
+
+        log "Going over rules to detect change in IP address..."
+        while read -r line; do
+            read from_port to_port ip_addr <<< `echo "$line"`
+            if [ "$ip_addr" != "" ] && [ "$ip_addr" != "$IP2WL" ]; then
+                log "IP in security group ($ip_addr) is different than IP to whitelist ($IP2WL). Deleting and re-adding rule."
+                nova secgroup-delete-rule $SECGROUP_NAME tcp $from_port $to_port $ip_addr |tee -a $LOG
+                nova secgroup-add-rule $SECGROUP_NAME tcp $from_port $to_port ${IP2WL} |tee -a $LOG
+            fi
+        done <<< "$(echo -e "$RAW_RULES" | awk '/[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/ {print $4,$6,$8}')"
+        log "Done updating rules."
+        [[ $IS_CHANGED ]] && send_email "$SECGROUP_NAME rules updated" 
         ;;
 esac
