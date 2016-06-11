@@ -170,12 +170,13 @@ case $SECGROUP_ACTION in
         while read -r line; do
             read from_port to_port ip_addr <<< `echo "$line"`
             if [ "$ip_addr" != "" ] && [ "$ip_addr" != "$IP2WL" ]; then
+                IS_CHANGED=true
                 log "IP in security group ($ip_addr) is different than IP to whitelist ($IP2WL). Deleting and re-adding rule."
                 nova secgroup-delete-rule $SECGROUP_NAME tcp $from_port $to_port $ip_addr |tee -a $LOG
                 nova secgroup-add-rule $SECGROUP_NAME tcp $from_port $to_port ${IP2WL} |tee -a $LOG
             fi
         done <<< "$(echo -e "$RAW_RULES" | awk '/[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/ {print $4,$6,$8}')"
         log "Done updating rules."
-        [[ $IS_CHANGED ]] && send_email "$SECGROUP_NAME rules updated" 
+        $IS_CHANGED && send_email "$SECGROUP_NAME rules updated" 
         ;;
 esac
