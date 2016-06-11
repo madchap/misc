@@ -27,7 +27,7 @@ Usage: ${0##*/} [-s SECGROUP_NAME] [ [-d DNSNAME] or [-i IPADDR]] [-f OPENRC_FIL
     -d DNS domain to resolve (will be converted to single IP)
     -f OPENRC_FILE to source
     -p Ports to open, as array (e.g. -p "22,80,443")
-    -m Email address to notify upon changes when updating (via mailx). Several can be specified, separated by commas, no space.
+    -n Email address to notify upon changes when updating (via mailx). Several can be specified, separated by commas, no space.
 
 EOH
 }
@@ -138,7 +138,7 @@ done
 
 [[ ! -z $DNS2WL ]] && IP2WL=`host ${DNS2WL} | awk '/has address/ { print $4 }'`
 IP2WL=${IP2WL}/32
-log "\n--\nSourced file: $OPENRC_FILE\nSecGroup: $SECGROUP_NAME\nCurrent IP: $IP2WL\nAction: $SECGROUP_ACTION\n--\n"
+log "\n--\nSourced file: $OPENRC_FILE\nSecGroup: $SECGROUP_NAME\nIP to whitelist: $IP2WL\nAction: $SECGROUP_ACTION\n--\n"
 
 case $SECGROUP_ACTION in
     list)
