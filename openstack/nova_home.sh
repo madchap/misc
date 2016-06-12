@@ -133,7 +133,7 @@ done
 [[ ! -z $DNS2WL ]] && IP2WL=`host ${DNS2WL} | awk '/has address/ { print $4 }'`
 IP2WL=${IP2WL}/32
 [[ ! -z $DNS2WL ]] && IPv6WL=`host ${DNS2WL} | awk '/has IPv6 address/ { print $5 }'`
-IPv6WL=${IPv6WL}/64
+[[ ! -z $IPv6WL ]] && IPv6WL=${IPv6WL}/64
 log "\n--\nSourced file: $OPENRC_FILE\nSecGroup: $SECGROUP_NAME\nIPv4 to whitelist: $IP2WL\nIPv6 to whitelist: $IPv6WL\nAction: $SECGROUP_ACTION\n--\n"
 
 case $SECGROUP_ACTION in
@@ -149,7 +149,7 @@ case $SECGROUP_ACTION in
         while read -r line; do
             read from_port to_port ip_addr <<< $(echo "$line")
             nova secgroup-delete-rule $SECGROUP_NAME tcp $from_port $to_port $ip_addr |tee -a $LOG
-        done <<< "$(echo -e "$RAW_RULES" | awk '/\| tcp/ {print $4,$6,$8}')"
+        done <<< "$(echo -e "$RAW_RULES" | awk '/\s+tcp/ {print $4,$6,$8}')"
         ;;
 
     add)
@@ -168,13 +168,15 @@ case $SECGROUP_ACTION in
         log "Going over rules to detect change in IP address..."
         while read -r line; do
             read from_port to_port ip_addr <<< `echo "$line"`
-            if [ "$ip_addr" != "" ] && [ [ "$ip_addr" != "$IP2WL" ] || [ "$ip_addr" != "$IPv6WL" ] ]; then
-                IS_CHANGED=true
-                log "IP in security group ($ip_addr) is different than IP to whitelist ($IP2WL). Deleting and re-adding rule."
-                nova secgroup-delete-rule $SECGROUP_NAME tcp $from_port $to_port $ip_addr |tee -a $LOG
-                nova secgroup-add-rule $SECGROUP_NAME tcp $from_port $to_port ${IP2WL} |tee -a $LOG
+            if [ "$ip_addr" != "" ]; then
+                if [[ "$ip_addr" != "$IP2WL" && "$ip_addr" != "$IPv6WL" ]]; then
+                    IS_CHANGED=true
+                    log "IP in security group ($ip_addr) is different than IP to whitelist ($IP2WL). Deleting and re-adding rule."
+                    nova secgroup-delete-rule $SECGROUP_NAME tcp $from_port $to_port $ip_addr |tee -a $LOG
+                    nova secgroup-add-rule $SECGROUP_NAME tcp $from_port $to_port ${IP2WL} |tee -a $LOG
+                fi
             fi
-        done <<< "$(echo -e "$RAW_RULES" | awk '/\| tcp}/ {print $4,$6,$8}')"
+        done <<< "$(echo -e "$RAW_RULES" | awk '/\s+tcp}/ {print $4,$6,$8}')"
         log "Done updating rules."
         $IS_CHANGED && send_email "$SECGROUP_NAME rules updated" 
         ;;
