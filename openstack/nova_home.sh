@@ -17,14 +17,16 @@ function show_help() {
 cat << EOH
 Usage: ${0##*/} [-s SECGROUP_NAME] [ [-d DNSNAME] or [-i IPADDR]] [-f OPENRC_FILE] [-p PORTS] [-n EMAIL] [-arlu]
 
+This script works with IPv4 (/32) and IPv6 (/64). It was written for a home usage, with a single IPv4 and single IPv6 in mind and dynamic DNS. Use at your own risk, I am a sh*! programmer ^^
+
     -a Add to SECGROUP_NAME
     -r Remove from SECGROUP_NAME
     -l List from SECGROUP_NAME [default]
-    -u Reads current rules, checks the IP, and updates it if needed
+    -u Reads current rules and updates it if needed. It will delete a rule if it cannot find a correspondance, but never add.
 
     -s Security group to act on
-    -i Single IP address to act on
-    -d DNS domain to resolve (will be converted to single IP)
+    -i Single IP address to act on (v4 or v6, do not specify mask)
+    -d DNS domain to resolve (will be converted to single IPv4 and single IPv6 if any)
     -f OPENRC_FILE to source
     -p Ports to open, as array (e.g. -p "22,80,443")
     -n Email address to notify upon changes when updating (via mailx). Several can be specified, separated by commas, no space.
@@ -53,7 +55,7 @@ function valid_ip() {
         return $stat
     fi
 
-    if [[ $ip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+    if [[ $ip =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3} ]]; then
         OIFS=$IFS
         IFS='.'
         ip=($ip)
@@ -88,7 +90,11 @@ while getopts "s:d:i:f:p:n:arluh" opt; do
         i)
             opt_ip=true
             $opt_dns && log "DNS option already specified. Specify either an IP or DNS." && exit 3
-            IP2WL=$OPTARG
+            if valid_ip $OPTARG; then
+                IP2WL=$OPTARG
+            else
+                IPv6WL=$OPTARG
+            fi
             ;;
         a)
             SECGROUP_ACTION="add"
@@ -131,9 +137,10 @@ while getopts "s:d:i:f:p:n:arluh" opt; do
 done
 
 [[ ! -z $DNS2WL ]] && IP2WL=`host ${DNS2WL} | awk '/has address/ { print $4 }'`
-IP2WL=${IP2WL}/32
+[[ ! -z $IP2WL ]] && IP2WL=${IP2WL}/32
 [[ ! -z $DNS2WL ]] && IPv6WL=`host ${DNS2WL} | awk '/has IPv6 address/ { print $5 }'`
 [[ ! -z $IPv6WL ]] && IPv6WL=${IPv6WL}/64
+
 log "\n--\nSourced file: $OPENRC_FILE\nSecGroup: $SECGROUP_NAME\nIPv4 to whitelist: $IP2WL\nIPv6 to whitelist: $IPv6WL\nAction: $SECGROUP_ACTION\n--\n"
 
 case $SECGROUP_ACTION in
@@ -168,16 +175,30 @@ case $SECGROUP_ACTION in
         log "Going over rules to detect change in IP address..."
         while read -r line; do
             read from_port to_port ip_addr <<< `echo "$line"`
-            if [ "$ip_addr" != "" ]; then
-                if [[ "$ip_addr" != "$IP2WL" && "$ip_addr" != "$IPv6WL" ]]; then
+            # Dealing with ipv4
+            if valid_ip "$ip_addr"; then
+                NEWIP=$IP2WL
+            # must be IPv6 .. any of them can be empty if override with -i
+            else
+                NEWIP=$IPv6WL
+            fi
+
+            if [ "$NEWIP" != "" ]; then
+                if [ "$ip_addr" != "$NEWIP" ]; then
                     IS_CHANGED=true
-                    log "IP in security group ($ip_addr) is different than IP to whitelist ($IP2WL). Deleting and re-adding rule."
+                    log "IP in security group ($ip_addr) is different than IP to whitelist ($NEWIP). Deleting and re-adding rule."
                     nova secgroup-delete-rule $SECGROUP_NAME tcp $from_port $to_port $ip_addr |tee -a $LOG
-                    nova secgroup-add-rule $SECGROUP_NAME tcp $from_port $to_port ${IP2WL} |tee -a $LOG
+                    nova secgroup-add-rule $SECGROUP_NAME tcp $from_port $to_port ${NEWIP} |tee -a $LOG
+                fi
+            else
+                # prevent deletion if -i switch was used
+                if ! $opt_ip; then
+                    log "IP $ip_addr not found anymore. Deleting from the ruleset."
+                    nova secgroup-delete-rule $SECGROUP_NAME tcp $from_port $to_port $ip_addr |tee -a $LOG
                 fi
             fi
-        done <<< "$(echo -e "$RAW_RULES" | awk '/\s+tcp}/ {print $4,$6,$8}')"
+        done <<< "$(echo -e "$RAW_RULES" | awk '/\s+tcp/ {print $4,$6,$8}')"
         log "Done updating rules."
-        $IS_CHANGED && send_email "$SECGROUP_NAME rules updated" 
+        $IS_CHANGED && send_email "$SECGROUP_NAME rules updated"
         ;;
 esac
