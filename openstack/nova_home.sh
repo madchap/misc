@@ -175,10 +175,15 @@ case $SECGROUP_ACTION in
 
         log "Going over rules to detect change in IP address..."
         while read -r line; do
+            # sometimes empty.. ?
+            [[ -z $line ]] && continue
+
             read from_port to_port ip_addr <<< `echo "$line"`
+
             # Dealing with ipv4
             if valid_ip "$ip_addr"; then
                 NEWIP=$IP2WL
+            
             # must be IPv6 .. any of them can be empty if override with -i
             else
                 NEWIP=$IPv6WL
