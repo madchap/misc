@@ -136,9 +136,10 @@ while getopts "s:d:i:f:p:n:arluh" opt; do
     esac
 done
 
-[[ ! -z $DNS2WL ]] && IP2WL=`host ${DNS2WL} | awk '/has address/ { print $4 }'`
+[[ ! -z $DNS2WL ]] && HOSTOUTPUT=$(host ${DNS2WL})
+[[ ! -z $DNS2WL ]] && IP2WL=$(echo "$HOSTOUTPUT" | awk '/has address/ { print $4 }')
 [[ ! -z $IP2WL ]] && IP2WL=${IP2WL}/32
-[[ ! -z $DNS2WL ]] && IPv6WL=`host ${DNS2WL} | awk '/has IPv6 address/ { print $5 }'`
+[[ ! -z $DNS2WL ]] && IPv6WL=$(echo "$HOSTOUTPUT" | awk '/has IPv6 address/ { print $5 }')
 [[ ! -z $IPv6WL ]] && IPv6WL=${IPv6WL}/64
 
 log "\n--\nSourced file: $OPENRC_FILE\nSecGroup: $SECGROUP_NAME\nIPv4 to whitelist: $IP2WL\nIPv6 to whitelist: $IPv6WL\nAction: $SECGROUP_ACTION\n--\n"
