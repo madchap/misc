@@ -4,6 +4,9 @@
 #   Basic script to dynamically update home IP address in particular Openstack SecurityGroup based on dynamicDNS result
 #   Only TCP ports for now, single IP.
 
+#   tag v0.1 uses nova client
+#   tag v0.2 uses openstack client
+
 LOG=/tmp/`basename $0`.log
 echo > $LOG
 
@@ -35,7 +38,7 @@ EOH
 }
 
 function get_raw_rules() {
-    echo -e "$(nova secgroup-list-rules $SECGROUP_NAME)"
+    echo -e "$(openstack security group rule list $SECGROUP_NAME)"
 }
 
 function log() {
@@ -155,16 +158,16 @@ case $SECGROUP_ACTION in
         # will delete all existing rules, clear table. only 1 home right?
         RAW_RULES="$(get_raw_rules)"
         while read -r line; do
-            read from_port to_port ip_addr <<< $(echo "$line")
-            nova secgroup-delete-rule $SECGROUP_NAME tcp $from_port $to_port $ip_addr |tee -a $LOG
-        done <<< "$(echo -e "$RAW_RULES" | awk '/tcp/ {print $4,$6,$8}')"
+            read rule_id <<< $(echo "$line")
+            openstack security group rule delete  |tee -a $LOG
+        done <<< "$(echo -e "$RAW_RULES" | awk '/tcp/ {print $2}')"
         ;;
 
     add)
         for port in ${PORTS[@]}; do
-            nova secgroup-add-rule $SECGROUP_NAME tcp $port $port ${IP2WL} |tee -a $LOG
+            openstack security group rule create FBI-home --proto tcp --src-ip ${IP2WL} --dst-port $port |tee -a $LOG
             if [ ! -z $IPv6WL ]; then
-                nova secgroup-add-rule $SECGROUP_NAME tcp $port $port ${IPv6WL} |tee -a $LOG
+                openstack security group rule create FBI-home --proto tcp --src-ip ${IPv6WL} --dst-port $port |tee -a $LOG
             fi
         done
         ;;
@@ -178,13 +181,14 @@ case $SECGROUP_ACTION in
             # sometimes empty.. ?
             [[ -z $line ]] && continue
 
-            read from_port to_port ip_addr <<< `echo "$line"`
+            read rule_id ports ip_addr <<< `echo "$line"`
+            target_port=${ports#:*}
 
             # Dealing with ipv4
             if valid_ip "$ip_addr"; then
                 NEWIP=$IP2WL
             
-            # must be IPv6 .. any of them can be empty if override with -i
+            # dirty, must be IPv6 .. any of them can be empty if override with -i
             else
                 NEWIP=$IPv6WL
             fi
@@ -193,17 +197,17 @@ case $SECGROUP_ACTION in
                 if [ "$ip_addr" != "$NEWIP" ]; then
                     IS_CHANGED=true
                     log "IP in security group ($ip_addr) is different than IP to whitelist ($NEWIP). Deleting and re-adding rule."
-                    nova secgroup-delete-rule $SECGROUP_NAME tcp $from_port $to_port $ip_addr |tee -a $LOG
-                    nova secgroup-add-rule $SECGROUP_NAME tcp $from_port $to_port ${NEWIP} |tee -a $LOG
+                    openstack security group rule delete $rule_id |tee -a $LOG
+                    openstack security group rule create FBI-home --proto tcp --src-ip ${NEWIP} --dst-port $target_port |tee -a $LOG
                 fi
             else
                 # prevent deletion if -i switch was used
                 if ! $opt_ip; then
                     log "IP $ip_addr not found anymore. Deleting from the ruleset."
-                    nova secgroup-delete-rule $SECGROUP_NAME tcp $from_port $to_port $ip_addr |tee -a $LOG
+                    openstack security group rule delete $rule_id |tee -a $LOG
                 fi
             fi
-        done <<< "$(echo -e "$RAW_RULES" | awk '/tcp/ {print $4,$6,$8}')"
+        done <<< "$(echo -e "$RAW_RULES" | awk '/tcp/ {print $2,$6,$8}')"
         log "Done updating rules."
         $IS_CHANGED && send_email "$SECGROUP_NAME rules updated"
         ;;
