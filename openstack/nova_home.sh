@@ -157,7 +157,7 @@ case $SECGROUP_ACTION in
         while read -r line; do
             read from_port to_port ip_addr <<< $(echo "$line")
             nova secgroup-delete-rule $SECGROUP_NAME tcp $from_port $to_port $ip_addr |tee -a $LOG
-        done <<< "$(echo -e "$RAW_RULES" | awk '/\s+tcp/ {print $4,$6,$8}')"
+        done <<< "$(echo -e "$RAW_RULES" | awk '/tcp/ {print $4,$6,$8}')"
         ;;
 
     add)
@@ -203,7 +203,7 @@ case $SECGROUP_ACTION in
                     nova secgroup-delete-rule $SECGROUP_NAME tcp $from_port $to_port $ip_addr |tee -a $LOG
                 fi
             fi
-        done <<< "$(echo -e "$RAW_RULES" | awk '/\s+tcp/ {print $4,$6,$8}')"
+        done <<< "$(echo -e "$RAW_RULES" | awk '/tcp/ {print $4,$6,$8}')"
         log "Done updating rules."
         $IS_CHANGED && send_email "$SECGROUP_NAME rules updated"
         ;;
