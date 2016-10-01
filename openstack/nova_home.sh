@@ -31,7 +31,7 @@ This script works with IPv4 (/32) and IPv6 (/64). It was written for a home usag
     -i Single IP address to act on (v4 or v6, do not specify mask)
     -d DNS domain to resolve (will be converted to single IPv4 and single IPv6 if any)
     -f OPENRC_FILE to source
-    -p Ports to open, as array (e.g. -p "22,80,443")
+    -p Ports to open, as array (e.g. -p "22 80 443")
     -n Email address to notify upon changes when updating (via mailx). Several can be specified, separated by commas, no space.
 
 EOH
@@ -117,8 +117,8 @@ while getopts "s:d:i:f:p:n:arluh" opt; do
             source $OPENRC_FILE
             ;;
         p)
-            PORTS="$OPTARG"
-            log "Will act on ports \"$PORTS\""
+            PORTS=( $OPTARG )
+            log "Will act on ports \"${PORTS[*]}\""
             ;;
         n)
             EMAIL="$OPTARG"
@@ -164,8 +164,8 @@ case $SECGROUP_ACTION in
         ;;
 
     add)
-        for port in ${PORTS[@]}; do
-            openstack security group rule create FBI-home --proto tcp --src-ip ${IP2WL} --dst-port $port |tee -a $LOG
+        for port in "${PORTS[@]}"; do
+	    openstack security group rule create FBI-home --proto tcp --src-ip ${IP2WL} --dst-port $port |tee -a $LOG
             if [ ! -z $IPv6WL ]; then
                 openstack security group rule create FBI-home --proto tcp --src-ip ${IPv6WL} --dst-port $port |tee -a $LOG
             fi
@@ -176,12 +176,12 @@ case $SECGROUP_ACTION in
         RAW_RULES="$(get_raw_rules)"
         IS_CHANGED=false
 
-        log "Going over rules to detect change in IP address..."
+        log "Going over existing rules to detect change in IP address... will not add new ports. Use 'add' for that."
         while read -r line; do
             # sometimes empty.. ?
             [[ -z $line ]] && continue
 
-            read rule_id ports ip_addr <<< `echo "$line"`
+            read rule_id ip_addr ports <<< `echo "$line"`
             target_port=${ports#:*}
 
             # Dealing with ipv4
