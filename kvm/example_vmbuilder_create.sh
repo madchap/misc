@@ -1,0 +1,27 @@
+ubuntu-vm-builder kvm xenial \
+    --flavour=virtual \
+    --addpkg=linux-image-generic \
+    --addpkg=unattended-upgrades \
+    --addpkg=openssh-server \
+    --addpkg=vim \
+    --addpkg unattended-upgrades \
+    --addpkg=acpid \
+    --arch=amd64 \
+    --libvirt=qemu:///system \
+    --components=main,universe,restricted \
+    --mirror=http://bouyguestelecom.ubuntu.lafibre.info/ubuntu/ \
+    --user=ubuntu \
+    --name=ubuntu \
+    --hostname=test \
+    --ssh-user-key=/home/fblaise/.ssh/authorized_keys \
+    --pass=default \
+    --cpus=2 \
+    --mem=2048 \
+    --rootsize=15000 \
+    --domain=darthgibus.net \
+    --ip=192.168.10.80 \
+    --mask=255.255.255.0 \
+    --gw=192.168.10.1 \
+    --bridge=kvmbr0 \
+    --debug \
+    --overwrite
