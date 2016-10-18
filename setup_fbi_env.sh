@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-sudo apt-get -y install zsh zsh-syntax-highlighting gitlab-shell git curl vim terminator powerline xfonts-terminus tmux
-=======
-sudo apt-get -y install zsh zsh-syntax-highlighting gitlab-shell git curl vim terminator powerline xfonts-terminus python-pip jq
->>>>>>> 5d6aea0242db58ed9666a94a3e09712908666403
+sudo apt-get -y install zsh zsh-syntax-highlighting gitlab-shell git curl vim terminator powerline xfonts-terminus python-pip jq tmux
 
 if [ $(getent passwd $(whoami) | cut -d: -f7) = "/bin/bash" ]; then
 	echo "Changing shell to zsh.. please enter your password."
@@ -45,7 +41,6 @@ curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/m
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.zshrc > ~/.zshrc
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/zsh_autosuggestions_config.zsh > ~/.oh-my-zsh/custom/config.zsh
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.tmux.conf > ~/.tmux.conf
-
 
 # pip
 pip install --upgrade pip
