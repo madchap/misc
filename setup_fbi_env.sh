@@ -1,4 +1,4 @@
-sudo apt-get -y install zsh zsh-syntax-highlighting gitlab-shell git curl vim terminator powerline xfonts-terminus
+sudo apt-get -y install zsh zsh-syntax-highlighting gitlab-shell git curl vim terminator powerline xfonts-terminus tmux
 
 if [ $(getent passwd $(whoami) | cut -d: -f7) = "/bin/bash" ]; then
 	echo "Changing shell to zsh.. please enter your password."
@@ -31,8 +31,15 @@ if [ ! -d vim-wombat256mod ]; then
 	sudo cp vim-wombat256mod/colors/wombat256mod.vim /usr/share/vim/vim74/colors
 fi
 
+# tmux
+if [ ! -d ~/.tmux/plugins/tpm ]; then
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
+
 # get custom files from git
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.vimrc > ~/.vimrc
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.zshrc > ~/.zshrc
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/zsh_autosuggestions_config.zsh > ~/.oh-my-zsh/custom/config.zsh
+curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.tmux.conf > ~/.tmux.conf
+
 
