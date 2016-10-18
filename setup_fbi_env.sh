@@ -1,4 +1,4 @@
-sudo apt-get -y install zsh zsh-syntax-highlighting gitlab-shell git curl vim terminator powerline xfonts-terminus
+sudo apt-get -y install zsh zsh-syntax-highlighting gitlab-shell git curl vim terminator powerline xfonts-terminus python-pip jq
 
 if [ $(getent passwd $(whoami) | cut -d: -f7) = "/bin/bash" ]; then
 	echo "Changing shell to zsh.. please enter your password."
@@ -36,3 +36,6 @@ curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/m
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.zshrc > ~/.zshrc
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/zsh_autosuggestions_config.zsh > ~/.oh-my-zsh/custom/config.zsh
 
+# pip
+pip install --upgrade pip
+sudo pip install python-openstackclient
