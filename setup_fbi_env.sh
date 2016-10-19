@@ -46,9 +46,6 @@ curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/m
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.tmux.conf > ~/.tmux.conf
 
 # pip
-pip install --upgrade pip
-if [ $(which -s openstack) -eq 1 ]; then
-	sudo pip install python-openstackclient
-fi
-
+# pip install --upgrade pip
+hash openstack 2>/dev/null || sudo pip install python-openstackclient
 
