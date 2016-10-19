@@ -63,6 +63,7 @@ CASE_SENSITIVE="true"
 plugins=(git zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
+source ~/tmuxinator.zsh
 
 # User configuration
 
