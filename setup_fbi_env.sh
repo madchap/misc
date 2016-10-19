@@ -34,6 +34,9 @@ fi
 # tmux
 if [ ! -d ~/.tmux/plugins/tpm ]; then
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+    sudo gem install tmuxinator
+    cp /var/lib/gems/2.3.0/gems/tmuxinator-0.9.0/completion/tmuxinator.zsh ~
 fi
 
 # get custom files from git
@@ -44,4 +47,8 @@ curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/m
 
 # pip
 pip install --upgrade pip
-sudo pip install python-openstackclient
+if [ $(which openstack) -eq 1 ]; then
+	sudo pip install python-openstackclient
+fi
+
+
