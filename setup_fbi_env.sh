@@ -1,4 +1,4 @@
-if [ uname -v |grep -q Ubuntu ]; then
+if [ `uname -v |grep -q Ubuntu` ]; then
 	sudo apt-get -y install zsh zsh-syntax-highlighting gitlab-shell git curl vim terminator powerline xfonts-terminus python-pip jq tmux
 
 	if [ $(getent passwd $(whoami) | cut -d: -f7) = "/bin/bash" ]; then
