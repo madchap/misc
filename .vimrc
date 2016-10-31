@@ -42,5 +42,9 @@
     " gitgutter
     set updatetime=250
 
+    " set incr search
+    set incsearch
+
+
  
 " Setting up Vundle - the vim plugin bundler end
