@@ -14,4 +14,4 @@ $RSYNC ~/.vim $1:~/.vim/
 $RSYNC ~/.vimrc-server $1:~/.vimrc
 
 TMUX_SESSION_NAME="fbi-mux"
-ssh -t $1 "if [[ ! $(which tmux) ]]; then sudo yum -y install tmux; fi; tmux attach -t $TMUX_SESSION_NAME || tmux new -s $TMUX_SESSION_NAME"
+ssh -t $1 "hash tmux 2>/dev/null || sudo yum -y install tmux; tmux attach -t $TMUX_SESSION_NAME || tmux new -s $TMUX_SESSION_NAME"
