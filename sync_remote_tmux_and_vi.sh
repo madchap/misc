@@ -3,9 +3,8 @@
 REMOTE=$1
 RSYNC=$(which rsync)
 
-echo "Sync'ing tmux config and plugins..."
-
 # sync tmux config and plugins from local
+echo "Sync'ing tmux config and plugins..."
 $RSYNC -a ~/.tmux/plugins $1:~ 
 $RSYNC -a ~/.tmux.conf $1:~
 
