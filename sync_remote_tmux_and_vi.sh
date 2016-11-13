@@ -5,7 +5,7 @@ RSYNC="$(which rsync) -rtuL"
 
 # sync tmux config and plugins from local
 echo "Sync'ing tmux config and plugins..."
-$RSYNC ~/.tmux/ $1:~/.tmux/
+$RSYNC --exclude 'tmux_resurrect_*' ~/.tmux/ $1:~/.tmux/
 $RSYNC ~/.tmux-server.conf $1:~/.tmux.conf
 
 echo "Sync'ing vim config and plugins..."
