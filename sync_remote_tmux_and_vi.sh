@@ -1,17 +1,17 @@
 #!/bin/bash
 
-REMOTE=$1
-RSYNC=$(which rsync)
+[[ -z $1 ]] && echo "Need a host to connect to." && exit -1
+RSYNC="$(which rsync) -rtuL"
 
 # sync tmux config and plugins from local
 echo "Sync'ing tmux config and plugins..."
-$RSYNC -a ~/.tmux/plugins $1:~ 
-$RSYNC -a ~/.tmux.conf $1:~
+$RSYNC ~/.tmux/plugins $1:~ 
+$RSYNC ~/.tmux-server.conf $1:~/.tmux.conf
 
 echo "Sync'ing vim config and plugins..."
 # sync vim config
-$RSYNC -a ~/.vim $1:~
-$RSYNC -a ~/.vimrc $1:~
+$RSYNC ~/.vim $1:~
+$RSYNC ~/.vimrc $1:~
 
 TMUX_SESSION_NAME="fbi-mux"
-ssh -t $1 "sed -i '/set-option -g prefix/d' ~/.tmux.conf; tmux attach -t $TMUX_SESSION_NAME || tmux new -s $TMUX_SESSION_NAME"
+ssh -t $1 "if [[ ! $(which tmux) ]]; then sudo yum -y install tmux; fi; tmux attach -t $TMUX_SESSION_NAME || tmux new -s $TMUX_SESSION_NAME"
