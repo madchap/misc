@@ -37,8 +37,8 @@ fi
 if [ ! -d ~/.tmux/plugins/tpm ]; then
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
-    sudo gem install tmuxinator
-    cp /var/lib/gems/2.3.0/gems/tmuxinator-0.9.0/completion/tmuxinator.zsh ~
+    #sudo gem install tmuxinator
+    #cp /var/lib/gems/2.3.0/gems/tmuxinator-0.9.0/completion/tmuxinator.zsh ~
 fi
 
 # get custom files from git
