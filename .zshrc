@@ -4,6 +4,8 @@ export TERM="xterm-256color"
 export LC_ALL="en_US.UTF-8"
 export EDITOR="vim"
 
+source ~/.alias
+
 # zsh vi mode
 bindkey -v
 export KEYTIMEOUT=1
@@ -63,7 +65,8 @@ CASE_SENSITIVE="true"
 plugins=(git zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
-source ~/tmuxinator.zsh
+# source ~/tmuxinator.zsh
+# source <(kubectl completion zsh)
 
 # User configuration
 
