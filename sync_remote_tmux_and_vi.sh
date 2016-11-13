@@ -11,7 +11,7 @@ $RSYNC ~/.tmux-server.conf $1:~/.tmux.conf
 echo "Sync'ing vim config and plugins..."
 # sync vim config
 $RSYNC ~/.vim $1:~/.vim/
-$RSYNC ~/.vimrc $1:~
+$RSYNC ~/.vimrc-server $1:~/.vimrc
 
 TMUX_SESSION_NAME="fbi-mux"
-ssh -t $1 "if [[ ! $(which tmux) ]]; then sudo yum -y install tmux; fi; tmux attach -t $TMUX_SESSION_NAME || tmux new -s $TMUX_SESSION_NAME"
+ssh -t $1 "if [[ ! $(which tmux) ]]; then sudo yum -y install tmux git; fi; tmux attach -t $TMUX_SESSION_NAME || tmux new -s $TMUX_SESSION_NAME"
