@@ -1,0 +1,1 @@
+alias sshr='~/sync_remote_tmux_and_vi.sh "$@"'
