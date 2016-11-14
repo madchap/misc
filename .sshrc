@@ -1,10 +1,17 @@
 #!/bin/bash
 
 # Fix SSH auth socket location so agent forwarding works with tmux
-if test "$SSH_AUTH_SOCK" ; then
-	ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock.$(hostname)
+if [ ! -e "$SSH_AUTH_SOCK" ] && [ "$SSH_AUTH_SOCK" != '' ]; then
+        echo "Removing stale SSH_AUTH_SOCK"
+
+        rm -f ~/.ssh/ssh_auth_sock
+        unset SSH_AUTH_SOCK
+        eval $(ssh-agent -s)
+        ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock 2>/dev/null
+        export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
+
+	echo "Now, add your key to the agent."
 fi
-export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock.$(hostname)
 
 # Taken from the sshd(8) manpage.
 # if read proto cookie && [ -n "$DISPLAY" ]; then
@@ -17,3 +24,4 @@ export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock.$(hostname)
 #                 echo add $DISPLAY $proto $cookie
 #         fi | xauth -q -
 #fi
+
