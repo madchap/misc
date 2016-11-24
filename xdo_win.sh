@@ -7,7 +7,7 @@ base_search_cmd="xdotool search --name"
 time_between_window=6 # in seconds
 idle_time_ms=$(($time_between_window*1000-10))  # in ms
 
-windows_id[0]=$($base_search_cmd "p-mon-zabbix-001: Dashboard") # zabbix
+windows_id[0]=$($base_search_cmd "zabbix Dashboard") # zabbix
 windows_id[1]=$($base_search_cmd Overview)                      # katello
 windows_id[2]=$($base_search_cmd "IDE Kanban")                  # leankit
 windows_id[3]=$($base_search_cmd "Events")              # datadog evente
