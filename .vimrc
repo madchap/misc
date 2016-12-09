@@ -21,6 +21,7 @@
     Plugin 'vim-airline/vim-airline'
     Plugin 'vim-airline/vim-airline-themes'
     Plugin 'airblade/vim-gitgutter'
+    Plugin 'rodjek/vim-puppet'
     if iCanHazVundle == 0
         echo "Installing Vundles, please ignore key map error messages"
         echo ""
