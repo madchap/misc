@@ -7,6 +7,9 @@
 #   tag v0.1 uses nova client
 #   tag v0.2 uses openstack client
 
+export SHELL=/bin/bash
+export PATH=$PATH:/usr/local/bin
+
 LOG=/tmp/`basename $0`.log
 echo > $LOG
 
