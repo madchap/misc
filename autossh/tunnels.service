@@ -1,0 +1,15 @@
+[Unit]
+Description=SSH tunnels
+After=network.target
+
+[Service]
+User=autossh
+Type=simple
+
+PIDFile=/var/run/tunnels.pid
+ExecStart=/usr/local/bin/tunnels.sh start
+RemainAfterExit=yes
+ExecStop=/usr/local/bin/tunnels.sh stop
+
+[Install]
+WantedBy=multi-user.target
