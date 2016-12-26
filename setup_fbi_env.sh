@@ -1,10 +1,13 @@
 if uname -v |grep -q Ubuntu; then
 	sudo apt-get -y install zsh zsh-syntax-highlighting gitlab-shell git curl vim terminator powerline xfonts-terminus python-pip jq tmux xclip xsel
+else
+	# knowing me, probably opensuse
+	sudo zypper --non-interactive install zsh git curl vim terminator python-pip jq tmux xclip xsel chromium
+fi
 
-	if [ $(getent passwd $(whoami) | cut -d: -f7) = "/bin/bash" ]; then
-		echo "Changing shell to zsh.. please enter your password."
-		chsh -s $(which zsh)
-	fi
+if [ $(getent passwd $(whoami) | cut -d: -f7) = "/bin/bash" ]; then
+	echo "Changing shell to zsh.. please enter your password."
+	chsh -s $(which zsh)
 fi
 
 if [ ! -d ~/gitrepos ]; then 
@@ -30,7 +33,8 @@ fi
 cd ~/gitrepos
 if [ ! -d vim-wombat256mod ]; then
 	git clone https://github.com/michalbachowski/vim-wombat256mod.git
-	sudo cp vim-wombat256mod/colors/wombat256mod.vim /usr/share/vim/vim74/colors
+	sudo cp ~/gitrepos/vim-wombat256mod/colors/wombat256mod.vim /usr/share/vim/vim74/colors
+	sudo cp ~/gitrepos/vim-wombat256mod/colors/wombat256mod.vim /usr/share/vim/vim80/colors
 fi
 
 # tmux
