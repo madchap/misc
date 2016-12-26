@@ -3,6 +3,7 @@ if uname -v |grep -q Ubuntu; then
 else
 	# knowing me, probably opensuse
 	sudo zypper --non-interactive install zsh git curl vim terminator python-pip jq tmux xclip xsel chromium
+	sudo zypper install -t pattern devel_python devel_python3 devel_basis
 fi
 
 if [ $(getent passwd $(whoami) | cut -d: -f7) = "/bin/bash" ]; then
