@@ -22,6 +22,9 @@
     Plugin 'vim-airline/vim-airline-themes'
     Plugin 'airblade/vim-gitgutter'
     Plugin 'rodjek/vim-puppet'
+    Plugin 'vim-scripts/indentpython.vim'       " python indent
+    Plugin 'Valloric/YouCompleteMe'             " python autocomplete
+
     if iCanHazVundle == 0
         echo "Installing Vundles, please ignore key map error messages"
         echo ""
