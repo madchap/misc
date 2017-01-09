@@ -49,6 +49,8 @@
     " set incr search
     set incsearch
 
+    :map <F6> :w<CR>:silent !chmod +x %:p<CR>:silent !%:p 2>&1 \| tee /tmp/%:t.tmp<CR>:pedit! +:42343234 /tmp/%:t.tmp<CR>:redraw!<CR><CR>n
+
 
  
 " Setting up Vundle - the vim plugin bundler end
