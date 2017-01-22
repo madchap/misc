@@ -168,9 +168,9 @@ case $SECGROUP_ACTION in
 
     add)
         for port in "${PORTS[@]}"; do
-	    openstack security group rule create FBI-home --proto tcp --src-ip ${IP2WL} --dst-port $port |tee -a $LOG
+	    openstack security group rule create $SECGROUP_NAME --proto tcp --src-ip ${IP2WL} --dst-port $port |tee -a $LOG
             if [ ! -z $IPv6WL ]; then
-                openstack security group rule create FBI-home --proto tcp --src-ip ${IPv6WL} --dst-port $port |tee -a $LOG
+                openstack security group rule create $SECGROUP_NAME --proto tcp --src-ip ${IPv6WL} --dst-port $port |tee -a $LOG
             fi
         done
         ;;
@@ -179,7 +179,8 @@ case $SECGROUP_ACTION in
         RAW_RULES="$(get_raw_rules)"
         IS_CHANGED=false
 
-        log "Going over existing rules to detect change in IP address... will not add new ports. Use 'add' for that."
+        log "Updating rules. Going over existing rules to detect change in IP address... will not add new ports. Use 'add' for that."
+	log "current RULES: \n$RAW_RULES"
         while read -r line; do
             # sometimes empty.. ?
             [[ -z $line ]] && continue
@@ -201,7 +202,7 @@ case $SECGROUP_ACTION in
                     IS_CHANGED=true
                     log "IP in security group ($ip_addr) is different than IP to whitelist ($NEWIP). Deleting and re-adding rule."
                     openstack security group rule delete $rule_id |tee -a $LOG
-                    openstack security group rule create FBI-home --proto tcp --src-ip ${NEWIP} --dst-port $target_port |tee -a $LOG
+                    openstack security group rule create $SECGROUP_NAME --proto tcp --src-ip ${NEWIP} --dst-port $target_port |tee -a $LOG
                 fi
             else
                 # prevent deletion if -i switch was used
@@ -212,6 +213,7 @@ case $SECGROUP_ACTION in
             fi
         done <<< "$(echo -e "$RAW_RULES" | awk '/tcp/ {print $2,$6,$8}')"
         log "Done updating rules."
+	log "===================="
         $IS_CHANGED && send_email "$SECGROUP_NAME rules updated"
         ;;
 esac
