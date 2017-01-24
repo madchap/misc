@@ -30,6 +30,13 @@ else
 	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 fi
 
+if [ -d ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions ]; then
+	cd ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+	git pull
+else
+	git clone git://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+fi
+
 # vim
 cd ~/gitrepos
 if [ ! -d vim-wombat256mod ]; then
