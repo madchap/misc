@@ -29,6 +29,7 @@ if [ $FORCE ]; then
 	echo "Sync'ing tmux config and plugins..."
 	$RSYNC --exclude 'tmux_resurrect_*' ~/.tmux/ $MYHOST:~/.tmux/
 	$RSYNC ~/.tmux-server.conf $MYHOST:~/.tmux.conf
+	ssh $MYHOST "sed -i '/set-option -g prefix C-x/d' .tmux.conf"
 
 	echo "Sync'ing vim config and plugins..."
 	# sync vim config
