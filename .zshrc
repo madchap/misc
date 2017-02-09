@@ -112,3 +112,5 @@ function zle-line-init zle-keymap-select {
 zle -N zle-line-init
 zle -N zle-keymap-select
 export KEYTIMEOUT=20
+
+sh ~/gitrepos/misc/setxkbmap

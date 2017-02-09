@@ -2,8 +2,12 @@ if uname -v |grep -q Ubuntu; then
 	sudo apt-get -y install zsh zsh-syntax-highlighting gitlab-shell git curl vim terminator powerline xfonts-terminus python-pip jq tmux xclip xsel
 else
 	# knowing me, probably opensuse
-	sudo zypper --non-interactive install zsh git curl vim terminator python-pip jq tmux xclip xsel chromium
-	sudo zypper install -t pattern devel_python devel_python3 devel_basis
+	sudo zypper --non-interactive install zsh git curl vim terminator python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb
+	sudo zypper --non-interactive install -t pattern devel_python devel_python3 devel_basis
+
+	sudo zypper ar -f -n packman http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman
+	sudo zypper ar -f -n packman http://download.videolan.org/pub/vlc/SuSE/Tumbleweed/ vlc
+
 fi
 
 if [ $(getent passwd $(whoami) | cut -d: -f7) = "/bin/bash" ]; then
