@@ -6,7 +6,7 @@ else
 	sudo zypper ar -f -n packman http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman
 	sudo zypper ar -f -n packman http://download.videolan.org/pub/vlc/SuSE/Tumbleweed/ vlc
 	sudo zypper up
-	sudo zypper --non-interactive install zsh git curl vim terminator python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh
+	sudo zypper --non-interactive install zsh git curl vim terminator python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter
 	sudo zypper --non-interactive install -t pattern devel_python devel_python3 devel_basis
 
 fi
