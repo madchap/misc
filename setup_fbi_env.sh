@@ -1,8 +1,8 @@
 if uname -v |grep -q Ubuntu; then
-	sudo apt-get -y install zsh zsh-syntax-highlighting gitlab-shell git curl vim terminator powerline xfonts-terminus python-pip jq tmux xclip xsel
+	sudo apt-get -y install zsh zsh-syntax-highlighting gitlab-shell git curl vim powerline xfonts-terminus python-pip jq tmux xclip xsel
 else
 	# knowing me, probably opensuse
-	sudo zypper --non-interactive install zsh git curl vim terminator python-pip jq tmux xclip xsel chromium
+	sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium
 	sudo zypper install -t pattern devel_python devel_python3 devel_basis
 fi
 
