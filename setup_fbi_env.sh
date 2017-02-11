@@ -1,5 +1,5 @@
 if uname -v |grep -q Ubuntu; then
-	sudo apt-get -y install zsh zsh-syntax-highlighting gitlab-shell git curl vim powerline xfonts-terminus python-pip jq tmux xclip xsel
+	sudo apt-get -y install zsh zsh-syntax-highlighting gitlab-shell git curl vim powerline xfonts-terminus python-pip jq tmux xclip xsel x11-xkb-utils
 else
 	# knowing me, probably opensuse
 	sudo zypper --non-interactive ar -f -n packman http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman
