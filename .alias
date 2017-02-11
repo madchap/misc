@@ -1,1 +1,6 @@
 alias sshr='~/sync_remote_tmux_and_vi.sh "$@"'
+alias luxred='sudo ~/gitrepos/luxafor-python/luxafor-linux.py color -l 255 -r 255 -g 0 -b 0'
+alias luxgreen='sudo ~/gitrepos/luxafor-python/luxafor-linux.py color -l 255 -r 0 -g 255 -b 0'
+alias luxblue='sudo ~/gitrepos/luxafor-python/luxafor-linux.py color -l 255 -r 0 -g 0 -b 255'
+alias luxstrobe='sudo ~/gitrepos/luxafor-python/luxafor-linux.py strobe -l 255 -r 255 -g 0 -b 0 -s 20 -t 5'
+alias luxpattern='sudo ~/gitrepos/luxafor-python/luxafor-linux.py pattern -p 2 -r 3'
