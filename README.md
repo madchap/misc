@@ -4,6 +4,14 @@
 > Either keyboard or trackpad works fine, but the 2 together is causing much problem.
 > The Zik3 pairs OK, but sounds chops very badly at some point, where it becomes unusable...
 
+## Pre-requisites
+Add the following to the bottom of your /etc/pulse/system.pa and do a `pulseaudio -k` to restart the pulseaudio deamon (or reboot your box)
+
+```
+load-module module-bluez5-device
+load-module module-bluez5-discover
+```
+
 ## Apple bluetooth keyboard (not the newest one but the one which still has like regular batteries) bluetooth hints
 
 Could have possibly be done via a UI but have not tried.
@@ -98,13 +106,6 @@ Pairing successful
 [trackpad-bluetooth]: https://raw.githubusercontent.com/madchap/misc/master/images/mini_bluetooth_trackpad.png
 
 ## Parrot Zik 3 on linux
-
-Add the following to the bottom of your /etc/pulse/system.pa and do a `pulseaudio -k` to restart the pulseaudio deamon (or reboot your box)
-
-```
-load-module module-bluez5-device
-load-module module-bluez5-discover
-```
 
 Trust, and pair, as for the above devices.
 
