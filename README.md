@@ -43,7 +43,7 @@ Pairing successful
 ```
 
 I then ungeekly went to the bluetooth menu of gnome, and could see the keyboard.
-[alt text][keyboard-mini-bluetooth]
+![alt text][keyboard-mini-bluetooth]
 [keyboard-mini-bluetooth]: https://raw.githubusercontent.com/madchap/misc/master/images/mini_bluetooth_keyboard.png
 
 The first try to bind it failed oddly, but the second time when straight in.
