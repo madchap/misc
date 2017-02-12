@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 my $username = "fred.blaise";
-my $password = "1moreyeaR";
+my $password = "xxxx";
 #my $filterJQL = 'project%20%3D%20"IN"%20AND%20status%20%3D%20Resolved';
 #my $filterJQL = 'project%20%3D%20"IN"%20AND%20status%20%3D%20Resolved%20AND%20resolved%20<%3D%20-10d';
 my $filterJQL = 'project%20%3D%20"IN"%20AND%20issuetype%20in%20standardIssueTypes()%20AND%20status%20%3D%20Resolved%20AND%20resolved%20<%3D%20-10d';
