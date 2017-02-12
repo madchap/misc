@@ -127,3 +127,11 @@ Seems related to https://bugs.freedesktop.org/show_bug.cgi?id=58746 -- bluetooth
 https://help.ubuntu.com/community/AppleKeyboard
 
 `echo 0 | sudo tee /sys/module/hid_apple/parameters/iso_layout`
+
+## Non-breaking space (a.k.a non-ascii that make your code or shell command break)
+https://help.ubuntu.com/community/AppleKeyboard
+
+Add this to your .Xmodmap
+```
+keycode 65 =space space
+```
