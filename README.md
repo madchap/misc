@@ -113,6 +113,6 @@ The headset will even autoconnect when powered on (provided no other paired devi
 ![alt-text][zik3]
 [zik3]: https://raw.githubusercontent.com/madchap/misc/master/images/zik3.png
 
-Archlinux has some awesome doc: https://wiki.archlinux.org/index.  php/Bluetooth_headset
+Archlinux has some awesome doc: https://wiki.archlinux.org/index.php/Bluetooth_headset
 
 Let me know if you can make it work perfectly. (Macs are good for that...)
