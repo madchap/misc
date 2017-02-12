@@ -119,3 +119,9 @@ The sound becomes so choppy though, it is not really usable. Some talk about rad
 Archlinux has some awesome doc: https://wiki.archlinux.org/index.php/Bluetooth_headset
 
 Let me know if you can make it work perfectly. (Macs are good for that...)
+
+# Other stuff to remember
+## Apple slim aluminium keyboard ISO layout fix
+https://help.ubuntu.com/community/AppleKeyboard
+
+`echo 0 | sudo tee /sys/module/hid_apple/parameters/iso_layout`
