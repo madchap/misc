@@ -1,11 +1,8 @@
 # Bluetooth Linux tips
 (feb 12 2017 - opensuse tumbleweed - Gnome)
 
-[quote]
-# Notice
-* Either keyboard or trackpad works fine, but the 2 together is causing much problem.
-* The Zik3 pairs OK, but sounds chops very badly at some point, where it becomes unusable...
-[/quote]
+> Either keyboard or trackpad works fine, but the 2 together is causing much problem.
+> The Zik3 pairs OK, but sounds chops very badly at some point, where it becomes unusable...
 
 ## Apple bluetooth keyboard (not the newest one but the one which still has like regular batteries) bluetooth hints
 
@@ -108,6 +105,13 @@ Add the following to the bottom of your /etc/pulse/system.pa and do a `pulseaudi
 load-module module-bluez5-device
 load-module module-bluez5-discover
 ```
+
+Trust, and pair, as for the above devices.
+
+The headset will even autoconnect when powered on (provided no other paired devices are there before, but that's a known behavior).
+
+![alt-text][zik3]
+[zik3]: https://raw.githubusercontent.com/madchap/misc/master/images/zik3.png
 
 Archlinux has some awesome doc: https://wiki.archlinux.org/index.  php/Bluetooth_headset
 
