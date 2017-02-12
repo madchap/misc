@@ -111,6 +111,8 @@ Trust, and pair, as for the above devices.
 
 The headset will even autoconnect when powered on (provided no other paired devices are there before, but that's a known behavior).
 
+The sound becomes so choppy though, it is not really usable. Some talk about radio interferences, I don't know. Only with Linux then.
+
 ![alt-text][zik3]
 [zik3]: https://raw.githubusercontent.com/madchap/misc/master/images/zik3.png
 
