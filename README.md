@@ -120,6 +120,8 @@ Archlinux has some awesome doc: https://wiki.archlinux.org/index.php/Bluetooth_h
 
 Let me know if you can make it work perfectly. (Macs are good for that...)
 
+Seems related to https://bugs.freedesktop.org/show_bug.cgi?id=58746 -- bluetooth buffering and pulseaudio shit (man... nearly a decade we hear pulseaudio is s---  hahaha... like evolution mail ^^, but well. I guess it is still better than what it used to be. We just hoped it was _even_ better!)
+
 # Other stuff to remember
 ## Apple slim aluminium keyboard ISO layout fix
 https://help.ubuntu.com/community/AppleKeyboard
