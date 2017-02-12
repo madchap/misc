@@ -90,6 +90,3 @@ EOF'
 # Apparently not needed since I got sound without it.. for doc. -- as root, https://wiki.archlinux.org/index.php/Bluetooth_headset
 # # sudo mkdir -p ~gdm/.config/systemd/user
 # # ln -s /dev/null ~gdm/.config/systemd/user/pulseaudio.socket
-
-# trust the headset
-bluetoothctl trust A0:14:3D:D3:9C:A4
