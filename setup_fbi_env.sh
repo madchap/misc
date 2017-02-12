@@ -5,7 +5,7 @@ else
 	sudo zypper --non-interactive ar -f -n packman http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman
 	sudo zypper --non-interactive ar -f -n packman http://download.videolan.org/pub/vlc/SuSE/Tumbleweed/ vlc
 	sudo zypper up
-	sudo zypper --non-interactive install zsh git curl vim terminator python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter gnome-shell-devel libgtop-devel libgtop-2_0-10
+	sudo zypper --non-interactive install zsh git curl vim terminator python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter gnome-shell-devel libgtop-devel libgtop-2_0-10 cmake
 	sudo zypper --non-interactive install -t pattern devel_python devel_python3 devel_basis
 fi
 
@@ -72,3 +72,8 @@ curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/m
 # pip install --upgrade pip
 hash openstack 2>/dev/null || sudo pip install python-openstackclient
 
+# Install vundle plugins
+vim +PluginInstall +qall
+
+# compile ycm_core
+cd ~/.vim/bundle/YouCompleteMe && ./install.py
