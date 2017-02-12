@@ -48,8 +48,7 @@ check_nfs_mount
 
 # Look for file
 files=$(find ${scan_point} -type f -newermt "-${scan_max_value} seconds" -not -newermt "-${scan_min_value} seconds")
-
-[[ ${#files[@]} -eq 1 ]] && log_it "No new file found."
+#[[ ${#files[@]} -eq 1 ]] && log_it "No new file found."
 
 for file in ${files}; do
 	log_it "Found file $file. Uploading..."
@@ -60,6 +59,6 @@ for file in ${files}; do
 		send_email "Geeknote scan error" "$(tail -n100 $logfile)"
 	else
 		log_it "Ok, $file uploaded."
-		send_email "Evernote: New files to be triaged" "You've got new files that need to be triaged."
+		send_email "Geeknote scan: New file(s) to be triaged" "You've got new file(s) that need to be triaged."
 	fi
 done
