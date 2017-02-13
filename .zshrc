@@ -114,3 +114,5 @@ zle -N zle-keymap-select
 export KEYTIMEOUT=20
 
 sh ~/gitrepos/misc/setxkbmap
+
+xmodmap ~/.Xmodmap

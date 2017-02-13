@@ -25,11 +25,14 @@ check_nfs_mount() {
 	count=1
 	nfs_ok=1
 
-	while [[ $count -le 3 ]] && [[ $nfs_ok -eq 1 ]] ; do
+	while [[ $count -le 2 ]] && [[ $nfs_ok -eq 1 ]] ; do
 		local fs=$(stat -f -L -c %T ${scan_point})
 		if [ "$fs" != "nfs" ]; then
-			log_it "NFS not mounted. Attempting now (Attempt $count)."
-			sudo mount -t nfs ${nfs_server}:{$nfs_export_point} ${scan_point}
+			log_it "NFS not mounted (fs indicated $fs). Attempting now (Attempt $count)."
+			nfsoutput=$(sudo mount -t nfs ${nfs_server}:{$nfs_export_point} ${scan_point})
+			if [ $? -ne 0 ]; then
+				send_email "Geeknote scan: NFS refused to mount" "$nfsoutput"
+			fi
 		else
 			nfs_ok=0
 		fi
