@@ -2,10 +2,11 @@ if uname -v |grep -q Ubuntu; then
 	sudo apt-get -y install zsh zsh-syntax-highlighting gitlab-shell git curl vim powerline xfonts-terminus python-pip jq tmux xclip xsel x11-xkb-utils
 else
 	# knowing me, probably opensuse
-	sudo zypper --non-interactive ar -f -n packman http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman
-	sudo zypper --non-interactive ar -f -n packman http://download.videolan.org/pub/vlc/SuSE/Tumbleweed/ vlc
+	sudo zypper --non-interactive --gpg-auto-import-keys ar -f -n packman http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman
+	sudo zypper --non-interactive --gpg-auto-import-keys ar -f -n packman http://download.videolan.org/pub/vlc/SuSE/Tumbleweed/ vlc
 	sudo zypper up
-	sudo zypper --non-interactive install zsh git curl vim terminator python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter gnome-shell-devel libgtop-devel libgtop-2_0-10 cmake pavucontrol
+	sudo zypper --non-interactive install zsh git curl vim terminator python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter gnome-shell-devel libgtop-devel libgtop-2_0-10 cmake pavucontrol evolution-ews
+	sudo usermod -a -G vboxusers fblaise
 	sudo zypper --non-interactive install -t pattern devel_python devel_python3 devel_basis
 fi
 
