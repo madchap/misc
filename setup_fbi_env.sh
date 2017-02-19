@@ -9,10 +9,11 @@ sudo zypper --non-interactive --gpg-auto-import-keys ar -f -n packman http://dow
 
 sudo zypper up
 
-sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter gnome-shell-devel libgtop-devel libgtop-2_0-10 cmake pavucontrol evolution-ews
+sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter gnome-shell-devel libgtop-devel libgtop-2_0-10 cmake pavucontrol evolution-ews inkscape docker docker-zsh-completion
 sudo zypper --non-interactive install -t pattern devel_python devel_python3 devel_basis
 
 sudo usermod -a -G vboxusers fblaise
+sudo usermod -a -G docker fblaise
 
 if [ $(getent passwd $(whoami) | cut -d: -f7) = "/bin/bash" ]; then
 	echo "Changing shell to zsh.. please enter password for ${currentuser}."
