@@ -11,7 +11,7 @@ sudo zypper --non-interactive --gpg-auto-import-keys ar -f -n vlc http://downloa
 
 sudo zypper up
 
-sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter gnome-shell-devel libgtop-devel libgtop-2_0-10 cmake pavucontrol evolution-ews inkscape docker docker-zsh-completion
+sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter gnome-shell-devel libgtop-devel libgtop-2_0-10 cmake pavucontrol evolution-ews inkscape docker docker-zsh-completion mlocate powertop
 sudo zypper --non-interactive install -t pattern devel_python devel_python3 devel_basis
 sudo zypper --non-interactive install -t pattern "VideoLAN - VLC media player"
 
@@ -89,13 +89,29 @@ cd ~/.vim/bundle/YouCompleteMe && ./install.py
 
 # Make sure (or try) that my bluetooth headset work. OK as of Feb 12 2017
 # kinda lots of breakouts/glitches it seems.. wifi/waves interferences? Useless at this point.
-sudo bash -c 'cat <<EOF>>/etc/pulse/system.pa
+# sudo bash -c 'cat <<EOF>>/etc/pulse/system.pa
 
 ## FBI -- bluetooth
-load-module module-bluez5-device
-load-module module-bluez5-discover
-EOF'
+#load-module module-bluez5-device
+#load-module module-bluez5-discover
+#EOF'
 
-# Apparently not needed since I got sound without it.. for doc. -- as root, https://wiki.archlinux.org/index.php/Bluetooth_headset
-# # sudo mkdir -p ~gdm/.config/systemd/user
-# # ln -s /dev/null ~gdm/.config/systemd/user/pulseaudio.socket
+# Prevent GDM from starting pulseaudio and a2dp sink
+# or you can just kill the gdm owned process, so that the user's process take precedence somehow?
+#sudo bash -c 'cat <<EOF>>/var/lib/gdm/.config/pulse/client.conf
+## FBI -- prevent gdm to start pulseaudio
+#autospawn = no
+#daemon-binary = /bin/true
+#EOF'
+
+# In the end, using the 'threadirqs' kernel param seems to do the trick! 4mn of audio playing with no stutter!
+sudo sed -i 's!quiet showopts"!quiet showopts threadirqs"!' /etc/default/grub
+sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+
+# Get extra softwares instead of going to download them again from websites.
+echo "Downloading extra software from jh"
+scp -P2202 jh.darthgibus.net:~/softwares/* ~/Downloads
+
+# Extra github repos
+cd ~/gitrepos
+git clone https://github.com/vmitchell85/luxafor-python.git
