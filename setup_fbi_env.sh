@@ -1,3 +1,5 @@
+#!/bin/bash
+
 currentuser=$(whoami)
 if [[ `sudo grep -q "$currentuser" /etc/sudoers` -eq 1 ]]; then
 	echo "Adding $currentuser to sudoers"
@@ -5,12 +7,13 @@ if [[ `sudo grep -q "$currentuser" /etc/sudoers` -eq 1 ]]; then
 fi
 
 sudo zypper --non-interactive --gpg-auto-import-keys ar -f -n packman http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman
-sudo zypper --non-interactive --gpg-auto-import-keys ar -f -n packman http://download.videolan.org/pub/vlc/SuSE/Tumbleweed/ vlc
+sudo zypper --non-interactive --gpg-auto-import-keys ar -f -n vlc http://download.videolan.org/pub/vlc/SuSE/Tumbleweed/ vlc
 
 sudo zypper up
 
 sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter gnome-shell-devel libgtop-devel libgtop-2_0-10 cmake pavucontrol evolution-ews inkscape docker docker-zsh-completion
 sudo zypper --non-interactive install -t pattern devel_python devel_python3 devel_basis
+sudo zypper --non-interactive install -t pattern "VideoLAN - VLC media player"
 
 sudo usermod -a -G vboxusers fblaise
 sudo usermod -a -G docker fblaise
