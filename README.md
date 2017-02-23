@@ -113,14 +113,22 @@ Archlinux has some awesome doc: https://wiki.archlinux.org/index.php/Bluetooth_h
 
 Let me know if you can make it work perfectly. (Macs are good for that...)
 
-UPDATE: Looks like adding 'threadirqs' to the kernel boot params makes a HUGE different in my openSUSE tumbleweed!
+**UPDATE**: Looks like adding `threadirqs` to the kernel boot params makes a HUGE different in my openSUSE tumbleweed!
 ```
 sudo sed -i 's!quiet showopts"!quiet showopts threadirqs"!' /etc/default/grub
 sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 ```
 Reboot.
 
-If gdm pulseaudio is taking over your own user's pulseaudio process, kill the gdm's one. This will free a2dp sink for your use.
+If gdm pulseaudio is taking over your own user's pulseaudio process, kill the gdm's one. This will free a2dp sink for your use. Or disable it altogether with :
+
+/var/lib/gdm/.config/pulse/client.conf (or whatever your gdm's home happen to be)
+```
+autospawn = no
+daemon-binary = /bin/true
+```
+
+While doing this, don't be surprised if your desktop no longer make any song.
 
 Seems related to https://bugs.freedesktop.org/show_bug.cgi?id=58746 -- bluetooth buffering and pulseaudio shit (man... nearly a decade we hear pulseaudio is s---  hahaha... like evolution MTA ^^, but well. I guess it is still better than what it used to be. We just hoped it was _even_ better!)
 
