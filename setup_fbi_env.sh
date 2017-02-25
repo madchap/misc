@@ -1,16 +1,25 @@
-if uname -v |grep -q Ubuntu; then
-	sudo apt-get -y install zsh zsh-syntax-highlighting gitlab-shell git curl vim powerline xfonts-terminus python-pip jq tmux xclip xsel x11-xkb-utils
-else
-	# knowing me, probably opensuse
-	sudo zypper --non-interactive ar -f -n packman http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman
-	sudo zypper --non-interactive ar -f -n packman http://download.videolan.org/pub/vlc/SuSE/Tumbleweed/ vlc
-	sudo zypper up
-	sudo zypper --non-interactive install zsh git curl vim terminator python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter gnome-shell-devel libgtop-devel libgtop-2_0-10 cmake pavucontrol
-	sudo zypper --non-interactive install -t pattern devel_python devel_python3 devel_basis
+#!/bin/bash
+
+currentuser=$(whoami)
+if [[ `sudo grep -q "$currentuser" /etc/sudoers` -eq 1 ]]; then
+	echo "Adding $currentuser to sudoers"
+	sudo bash -c "echo \"$currentuser ALL=(ALL) NOPASSWD:ALL\" >> /etc/sudoers"
 fi
 
+sudo zypper --non-interactive --gpg-auto-import-keys ar -f -n packman http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman
+sudo zypper --non-interactive --gpg-auto-import-keys ar -f -n vlc http://download.videolan.org/pub/vlc/SuSE/Tumbleweed/ vlc
+
+sudo zypper up
+
+sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter gnome-shell-devel libgtop-devel libgtop-2_0-10 cmake pavucontrol evolution-ews inkscape docker docker-zsh-completion mlocate powertop
+sudo zypper --non-interactive install -t pattern devel_python devel_python3 devel_basis
+sudo zypper --non-interactive install -t pattern "VideoLAN - VLC media player"
+
+sudo usermod -a -G vboxusers fblaise
+sudo usermod -a -G docker fblaise
+
 if [ $(getent passwd $(whoami) | cut -d: -f7) = "/bin/bash" ]; then
-	echo "Changing shell to zsh.. please enter your password."
+	echo "Changing shell to zsh.. please enter password for ${currentuser}."
 	chsh -s $(which zsh)
 fi
 
@@ -80,13 +89,29 @@ cd ~/.vim/bundle/YouCompleteMe && ./install.py
 
 # Make sure (or try) that my bluetooth headset work. OK as of Feb 12 2017
 # kinda lots of breakouts/glitches it seems.. wifi/waves interferences? Useless at this point.
-sudo bash -c 'cat <<EOF>>/etc/pulse/system.pa
+# sudo bash -c 'cat <<EOF>>/etc/pulse/system.pa
 
 ## FBI -- bluetooth
-load-module module-bluez5-device
-load-module module-bluez5-discover
-EOF'
+#load-module module-bluez5-device
+#load-module module-bluez5-discover
+#EOF'
 
-# Apparently not needed since I got sound without it.. for doc. -- as root, https://wiki.archlinux.org/index.php/Bluetooth_headset
-# # sudo mkdir -p ~gdm/.config/systemd/user
-# # ln -s /dev/null ~gdm/.config/systemd/user/pulseaudio.socket
+# Prevent GDM from starting pulseaudio and a2dp sink
+# or you can just kill the gdm owned process, so that the user's process take precedence somehow?
+#sudo bash -c 'cat <<EOF>>/var/lib/gdm/.config/pulse/client.conf
+## FBI -- prevent gdm to start pulseaudio
+#autospawn = no
+#daemon-binary = /bin/true
+#EOF'
+
+# In the end, using the 'threadirqs' kernel param seems to do the trick! 4mn of audio playing with no stutter!
+sudo sed -i 's!quiet showopts"!quiet showopts threadirqs"!' /etc/default/grub
+sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+
+# Get extra softwares instead of going to download them again from websites.
+echo "Downloading extra software from jh"
+scp -P2202 jh.darthgibus.net:~/softwares/* ~/Downloads
+
+# Extra github repos
+cd ~/gitrepos
+git clone https://github.com/vmitchell85/luxafor-python.git
