@@ -1,15 +1,18 @@
 #!/bin/bash
 
 # Fix SSH auth socket location so agent forwarding works with tmux
-if [ ! -e "$SSH_AUTH_SOCK" ] && [ "$SSH_AUTH_SOCK" != '' ]; then
-        echo "Removing stale SSH_AUTH_SOCK"
+echo "Looking at sockets and SSH_AUTH_SOCK currently set at $SSH_AUTH_SOCK"
 
+ssh-add -l
+if [[ $? -eq 2 ]]; then
+	echo "Cannot connect to agent. Unsetting $SSH_AUTH_SOCK"
+	unset SSH_AUTH_SOCK
+        echo "Removing stale SSH_AUTH_SOCK"
         rm -f ~/.ssh/ssh_auth_sock
         unset SSH_AUTH_SOCK
         eval $(ssh-agent -s)
         ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock 2>/dev/null
         export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
-
 	echo "Now, add your key to the agent."
 fi
 
