@@ -1,9 +1,10 @@
 echo "Moving ~/.cache to its own subvol"
-sudo btrfs sub create /home/fblaise/.cache-sub
-sudo chown fblaise: /home/fblaise/.cache-sub
-rsync -a ~/.cache/* /home/fblaise/.cache-sub/
-mv /home/fblaise/.cache /home/fblaise/.cache-old
-mv /home/fblaise/.cache-sub /home/fblaise/.cache
+sudo btrfs sub create ~/.cache-sub
+sudo chown fblaise: ~/.cache-sub
+rsync -a ~/.cache/* ~/.cache-sub/
+mv ~/.cache ~/.cache-old
+mv ~/.cache-sub ~/.cache
+rm -rf ~/.cache-old
 sudo btrfs sub list /home
 
 echo
