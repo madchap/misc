@@ -4,9 +4,9 @@
 # 03.02.2017
 # Quick and dirty script to vpnssl with totp
 
-# - get your seeds from MultiOTP (base32)
+# - get your seeds (base32)
 # - Create a directory to hold your base32 seed at ~/.seeds and chmod 700
-# - create files emea, us and st1 with the respective seed for your user. chown 600.
+# - create files for target with the respective seed for your user. chown 600.
 # - Modify the hardcoded user just below to reflect yours
 # - Modify the path to your forticlientssl
 # - Launch the script with the target argument.
