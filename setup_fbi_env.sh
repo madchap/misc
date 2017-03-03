@@ -11,7 +11,7 @@ sudo zypper --non-interactive --gpg-auto-import-keys ar -f -n vlc http://downloa
 
 sudo zypper up
 
-sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter gnome-shell-devel libgtop-devel libgtop-2_0-10 cmake pavucontrol evolution-ews inkscape docker docker-zsh-completion mlocate powertop
+sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter gnome-shell-devel libgtop-devel libgtop-2_0-10 cmake pavucontrol evolution-ews inkscape docker docker-zsh-completion mlocate powertop expect
 sudo zypper --non-interactive install -t pattern devel_python devel_python3 devel_basis
 sudo zypper --non-interactive install -t pattern "VideoLAN - VLC media player"
 
@@ -119,3 +119,14 @@ scp -P2202 jh.darthgibus.net:~/softwares/* ~/Downloads
 # Extra github repos
 cd ~/gitrepos
 git clone https://github.com/vmitchell85/luxafor-python.git
+
+# oathtool
+cd ~/Downloads
+wget http://download.savannah.nongnu.org/releases/oath-toolkit/oath-toolkit-2.6.2.tar.gz
+tar zxf oath-toolkit-2.6.2.tar.gz
+cd oath-toolkit-2.6.2
+./configure && make -j3 && sudo make install
+
+echo
+echo
+echo "Done."
