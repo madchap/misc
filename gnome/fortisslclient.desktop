@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=FortiSSL VPN Client
+Exec=/home/fblaise/apps/forticlientsslvpn/64bit/forticlientsslvpn
+Icon=/home/fblaise/apps/forticlientsslvpn/icon.gif
+Type=Application
+Terminal=False
+Categories=Network;
