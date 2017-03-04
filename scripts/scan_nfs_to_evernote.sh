@@ -29,7 +29,7 @@ check_nfs_mount() {
 		local fs=$(stat -f -L -c %T ${scan_point})
 		if [ "$fs" != "nfs" ]; then
 			log_it "NFS not mounted (fs indicated $fs). Attempting now (Attempt $count)."
-			nfsoutput=$(sudo mount -t nfs ${nfs_server}:{$nfs_export_point} ${scan_point})
+			nfsoutput=$(sudo mount -t nfs ${nfs_server}:${nfs_export_point} ${scan_point})
 			if [ $? -ne 0 ]; then
 				send_email "Geeknote scan: NFS refused to mount" "$nfsoutput"
 			fi
