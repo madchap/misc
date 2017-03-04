@@ -4,6 +4,7 @@ do
     for key in $(gsettings list-keys $schema | sort)
     do
         value="$(gsettings range $schema $key | tr "\n" " ")"
-        echo "$schema :: $key :: $value"
+        echo -n "$schema :: $key :: $value --> "
+	echo $(gsettings get $schema $key)
     done
 done
