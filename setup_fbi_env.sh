@@ -127,6 +127,13 @@ tar zxf oath-toolkit-2.6.2.tar.gz
 cd oath-toolkit-2.6.2
 ./configure && make -j3 && sudo make install
 
+# copy own desktop files
+curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/gnome/mattermost.desktop > ~/.local/share/applications/mattermost.desktop
+curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/gnome/fortisslclient.desktop > ~/.local/share/applications/fortisslclient.desktop
+curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/gnome/fortisslclient_icon.gif > ~/apps/forticlientsslvpn/icon.gif
+
+
+
 echo
 echo
 echo "Done."
