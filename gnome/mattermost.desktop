@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Mattermost
+Exec=/home/fblaise/apps/mattermost/mattermost-desktop
+Icon=/home/fblaise/apps/mattermost/icon.png
+Type=Application
+Terminal=False
+Categories=Web;
