@@ -122,7 +122,7 @@ git clone https://github.com/vmitchell85/luxafor-python.git
 
 # oathtool
 cd ~/Downloads
-wget http://download.savannah.nongnu.org/releases/oath-toolkit/oath-toolkit-2.6.2.tar.gz
+wget -q --show-progress http://download.savannah.nongnu.org/releases/oath-toolkit/oath-toolkit-2.6.2.tar.gz
 tar zxf oath-toolkit-2.6.2.tar.gz
 cd oath-toolkit-2.6.2
 ./configure && make -j3 && sudo make install
@@ -135,6 +135,17 @@ curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/m
 # minikube, kubectl
 curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
 curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+
+# more up-to-date version of vagrant
+cd ~/Downloads
+wget -q --show-progress -O vagrant.rpm https://releases.hashicorp.com/vagrant/1.9.2/vagrant_1.9.2_x86_64.rpm
+sudo rpm -Uvh vagrant.rpm
+
+# coreOS for vagrant
+cd ~/gitrepos
+git clone https://github.com/coreos/coreos-vagrant.git
+# coreOS for k8s
+# git clone https://github.com/coreos/coreos-kubernetes.git
 
 echo
 echo
