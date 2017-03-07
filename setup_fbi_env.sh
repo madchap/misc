@@ -27,6 +27,9 @@ if [ ! -d ~/gitrepos ]; then
 	mkdir ~/gitrepos 
 fi
 
+if [ ! -d ~/apps ]; then 
+	mkdir ~/apps 
+fi
 # zsh
 if [ -d  ~/.oh-my-zsh ]; then
 	cd ~/.oh-my-zsh
