@@ -80,6 +80,7 @@ curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/m
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.alias > ~/.alias
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/sync_remote_tmux_and_vi.sh > ~/sync_remote_tmux_and_vi.sh && chmod u+x ~/sync_remote_tmux_and_vi.sh
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/yubikey/70-u2f.rules > ~/70-u2f.rules
+curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/gnome/gtk.css > ~/.config/gtk-3.0/gtk.css
 
 # Moving yubikey udev rules
 sudo mv ~/70-u2f.rules /etc/udev/rules.d/70-u2f.rules
@@ -117,7 +118,7 @@ sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 
 # Get extra softwares instead of going to download them again from websites.
 echo "Downloading extra software from jh"
-scp -P2202 jh.darthgibus.net:~/softwares/* ~/Downloads
+scp jh.darthgibus.net:~/softwares/* ~/Downloads/
 
 # Installing extra soft
 sudo rpm -Uvh ~/Downloads/google-chrome-stable_current_x86_64.rpm
