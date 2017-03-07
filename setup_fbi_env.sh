@@ -119,6 +119,11 @@ sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 echo "Downloading extra software from jh"
 scp -P2202 jh.darthgibus.net:~/softwares/* ~/Downloads
 
+# Installing extra soft
+sudo rpm -Uvh ~/Downloads/google-chrome-stable_current_x86_64.rpm
+mv forticlientsslvpn_linux_4.4.2332.tar.gz ~/apps/
+cd ~/apps && tar zxf forticlientsslvpn_linux_4.4.2332.tar.gz
+
 # Extra github repos
 cd ~/gitrepos
 git clone https://github.com/vmitchell85/luxafor-python.git
