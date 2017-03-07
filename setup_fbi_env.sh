@@ -115,7 +115,7 @@ sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 
 # Get extra softwares instead of going to download them again from websites.
 echo "Downloading extra software from jh"
-scp -P2202 jh.darthgibus.net:~/softwares/* ~/Downloads
+scp jh.darthgibus.net:~/softwares/* ~/Downloads/
 
 # Extra github repos
 cd ~/gitrepos
