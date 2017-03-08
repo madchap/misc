@@ -4,6 +4,8 @@ export TERM="xterm-256color"
 export LC_ALL="en_US.UTF-8"
 export EDITOR="vim"
 
+unset SSH_ASKPASS
+
 source ~/.alias
 
 # Path to your oh-my-zsh installation.
