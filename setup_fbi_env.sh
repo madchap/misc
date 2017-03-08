@@ -2,10 +2,10 @@
 
 sudo grep -q $(whoami) /etc/sudoers
 if [[ $? -eq 1 ]]; then
-	echo "Adding $currentuser to sudoers"
-	sudo bash -c "echo \"$currentuser ALL=(ALL) NOPASSWD:ALL\" >> /etc/sudoers"
+	echo "Adding $(whoami) to sudoers"
+	sudo bash -c "echo \"$(whoami) ALL=(ALL) NOPASSWD:ALL\" >> /etc/sudoers"
 fi
-exit 1
+
 sudo zypper --non-interactive --gpg-auto-import-keys ar -f -n packman http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman
 sudo zypper --non-interactive --gpg-auto-import-keys ar -f -n vlc http://download.videolan.org/pub/vlc/SuSE/Tumbleweed/ vlc
 
