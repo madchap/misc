@@ -63,7 +63,7 @@ plugins=(git zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 # source ~/tmuxinator.zsh
-# source <(kubectl completion zsh)
+source <(kubectl completion zsh)
 
 # User configuration
 
