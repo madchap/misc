@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Teamspeak
+Exec=/home/fblaise/apps/TeamSpeak3-Client-linux_amd64/ts3client_runscript.sh
+Icon=/home/fblaise/apps/TeamSpeak3-Client-linux_amd64/./styles/classic/logo-128x128.png
+Type=Application
+Terminal=False
+Categories=Web;
