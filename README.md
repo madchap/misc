@@ -145,3 +145,25 @@ Add this to your .Xmodmap
 ```
 keycode 65 =space space
 ```
+
+## Tilde
+Found at http://askubuntu.com/questions/530325/tilde-key-on-mac-air-with-ubuntu
+
+Find the file /usr/share/X11/xkb/symbols/pc, backup it, then open and comment out the line:
+```
+key <LSGT> {    [ less, greater, bar, brokenbar ] };
+```
+And on the next line, add the following:
+```
+key <LSGT> { [ grave, asciitilde, grave, asciitilde ] };
+```
+
+If you need to change configuration for another locale, check the folder /usr/share/X11/xkb/symbols/ and find the file corresponding to the locale you want to change.
+
+To apply the changes, you have to remove all xkb cache files:
+
+```
+rm -rf /var/lib/xkb/*
+```
+
+```
