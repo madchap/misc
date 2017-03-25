@@ -1,8 +1,10 @@
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/bin:/usr/local/bin:$PATH:/usr/sbin
 export TERM="xterm-256color"
 export LC_ALL="en_US.UTF-8"
 export EDITOR="vim"
+
+unset SSH_ASKPASS
 
 source ~/.alias
 
@@ -61,7 +63,7 @@ plugins=(git zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 # source ~/tmuxinator.zsh
-# source <(kubectl completion zsh)
+source <(kubectl completion zsh)
 
 # User configuration
 

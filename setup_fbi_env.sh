@@ -1,9 +1,9 @@
 #!/bin/bash
 
-currentuser=$(whoami)
-if [[ `sudo grep -q "$currentuser" /etc/sudoers` -eq 1 ]]; then
-	echo "Adding $currentuser to sudoers"
-	sudo bash -c "echo \"$currentuser ALL=(ALL) NOPASSWD:ALL\" >> /etc/sudoers"
+sudo grep -q $(whoami) /etc/sudoers
+if [[ $? -eq 1 ]]; then
+	echo "Adding $(whoami) to sudoers"
+	sudo bash -c "echo \"$(whoami) ALL=(ALL) NOPASSWD:ALL\" >> /etc/sudoers"
 fi
 
 sudo zypper --non-interactive --gpg-auto-import-keys ar -f -n packman http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman
@@ -27,6 +27,9 @@ if [ ! -d ~/gitrepos ]; then
 	mkdir ~/gitrepos 
 fi
 
+if [ ! -d ~/apps ]; then 
+	mkdir ~/apps 
+fi
 # zsh
 if [ -d  ~/.oh-my-zsh ]; then
 	cd ~/.oh-my-zsh
@@ -77,6 +80,7 @@ curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/m
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.alias > ~/.alias
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/sync_remote_tmux_and_vi.sh > ~/sync_remote_tmux_and_vi.sh && chmod u+x ~/sync_remote_tmux_and_vi.sh
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/yubikey/70-u2f.rules > ~/70-u2f.rules
+curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/gnome/gtk.css > ~/.config/gtk-3.0/gtk.css
 
 # Moving yubikey udev rules
 sudo mv ~/70-u2f.rules /etc/udev/rules.d/70-u2f.rules
@@ -114,7 +118,12 @@ sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 
 # Get extra softwares instead of going to download them again from websites.
 echo "Downloading extra software from jh"
-scp -P2202 jh.darthgibus.net:~/softwares/* ~/Downloads
+scp jh.darthgibus.net:~/softwares/* ~/Downloads/
+
+# Installing extra soft
+sudo rpm -Uvh ~/Downloads/google-chrome-stable_current_x86_64.rpm
+mv forticlientsslvpn_linux_4.4.2332.tar.gz ~/apps/
+cd ~/apps && tar zxf forticlientsslvpn_linux_4.4.2332.tar.gz
 
 # Extra github repos
 cd ~/gitrepos
@@ -122,7 +131,7 @@ git clone https://github.com/vmitchell85/luxafor-python.git
 
 # oathtool
 cd ~/Downloads
-wget http://download.savannah.nongnu.org/releases/oath-toolkit/oath-toolkit-2.6.2.tar.gz
+wget -q --show-progress http://download.savannah.nongnu.org/releases/oath-toolkit/oath-toolkit-2.6.2.tar.gz
 tar zxf oath-toolkit-2.6.2.tar.gz
 cd oath-toolkit-2.6.2
 ./configure && make -j3 && sudo make install
@@ -132,7 +141,20 @@ curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/m
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/gnome/fortisslclient.desktop > ~/.local/share/applications/fortisslclient.desktop
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/gnome/fortisslclient_icon.gif > ~/apps/forticlientsslvpn/icon.gif
 
+# minikube, kubectl
+curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && sudo mv kubectl /usr/local/bin/ && sudo chmod +x /usr/local/bin/kubectl
+curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
 
+# more up-to-date version of vagrant
+cd ~/Downloads
+wget -q --show-progress -O vagrant.rpm https://releases.hashicorp.com/vagrant/1.9.2/vagrant_1.9.2_x86_64.rpm
+sudo rpm -Uvh vagrant.rpm
+
+# coreOS for vagrant
+cd ~/gitrepos
+git clone https://github.com/coreos/coreos-vagrant.git
+# coreOS for k8s
+# git clone https://github.com/coreos/coreos-kubernetes.git
 
 echo
 echo
