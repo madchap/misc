@@ -52,9 +52,10 @@
     " disable .swp
     set noswapfile
 
-
     :map <F6> :w<CR>:silent !chmod +x %:p<CR>:silent !%:p 2>&1 \| tee /tmp/%:t.tmp<CR>:pedit! +:42343234 /tmp/%:t.tmp<CR>:redraw!<CR><CR>n
 
+    " yaml
+    autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
  
 " Setting up Vundle - the vim plugin bundler end
