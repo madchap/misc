@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# geeknote used is https://github.com/jeffkowalski/geeknote
+
 geeknote=/usr/bin/geeknote
 tag_triage="triage"
 notebook="Main"
