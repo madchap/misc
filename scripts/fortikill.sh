@@ -20,3 +20,4 @@ echo
 
 # reset proxy
 gsettings set org.gnome.system.proxy mode 'none'
+sed -i 's!ProxyType=2!ProxyType=0!' ~/.config/kioslaverc
