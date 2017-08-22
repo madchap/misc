@@ -118,13 +118,16 @@ sudo sed -i 's!quiet showopts"!quiet showopts threadirqs"!' /etc/default/grub
 sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 
 # Get extra softwares instead of going to download them again from websites.
-echo "Downloading extra software from jh"
-scp jh.darthgibus.net:~/softwares/* ~/Downloads/
+echo "Downloading extra software from vps"
+scp 149.202.49.79:~/softwares/* ~/Downloads/
 
 # Installing extra soft
 sudo rpm -Uvh ~/Downloads/google-chrome-stable_current_x86_64.rpm
 mv forticlientsslvpn_linux_4.4.2332.tar.gz ~/apps/
 cd ~/apps && tar zxf forticlientsslvpn_linux_4.4.2332.tar.gz
+
+mv ~/Downloads/mattermost-desktop-3.7.0-linux-x64.tar.gz ~/apps/
+cd ~/apps && tar zxvf mattermost-desktop-3.7.0-linux-x64.tar.gz && ln -s mattermost-desktop-3.7.0 mattermost
 
 # Extra github repos
 cd ~/gitrepos
@@ -133,8 +136,11 @@ git clone https://github.com/vmitchell85/luxafor-python.git
 # oathtool
 cd ~/Downloads
 wget -q --show-progress http://download.savannah.nongnu.org/releases/oath-toolkit/oath-toolkit-2.6.2.tar.gz
+# Patches should already be fetched from vps
 tar zxf oath-toolkit-2.6.2.tar.gz
 cd oath-toolkit-2.6.2
+mv ~/Downloads/patch_*.patch .
+for i in $(find . -name intprops.h); do patch -p2 $i < patch_intprops.patch; done
 ./configure && make -j3 && sudo make install
 
 # copy own desktop files
@@ -148,7 +154,7 @@ curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/miniku
 
 # more up-to-date version of vagrant
 cd ~/Downloads
-wget -q --show-progress -O vagrant.rpm https://releases.hashicorp.com/vagrant/1.9.2/vagrant_1.9.2_x86_64.rpm
+wget -q --show-progress -O vagrant.rpm https://releases.hashicorp.com/vagrant/1.9.7/vagrant_1.9.7_x86_64.rpm
 sudo rpm -Uvh vagrant.rpm
 
 # coreOS for vagrant
