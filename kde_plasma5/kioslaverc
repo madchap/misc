@@ -1,0 +1,7 @@
+ProxyUrlDisplayFlags=0
+
+[Proxy Settings]
+Proxy Config Script=/home/fblaise/proxy.pac
+ProxyType=2
+ReversedException=false
+socksProxy=
