@@ -16,11 +16,9 @@
 # - Squeeze your butt.
 
 if [[ ! -f ~/.vpnssl_set ]]; then
-	echo "First time running... invoking helper."
-	sh ~/apps/forticlientsslvpn/64bit/helper/setup
-	echo
-	echo "Now, you need to manually edit l.53 to put the proper domain name to connect to."
-	exit 0
+	echo "First time running... invoking helper at ~/apps/forticlientsslvpn/64bit/helper/setup and manually edit l.53 to put the proper domain name to connect to."
+	touch ~/.vpnssl_set
+	exit 1
 fi
 
 USER=adminfbi
