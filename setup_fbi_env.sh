@@ -84,6 +84,8 @@ curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/m
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/gnome/gtk.css > ~/.config/gtk-3.0/gtk.css
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/kde_plasma5/kioslaverc > ~/.config/kioslaverc
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/scripts/launch_fortivpnsslcli_cli > ~/bin/launch_fortivpnsslcli_cli
+curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/scripts/establish_tunnels.sh > ~/bin/establish_tunnels.sh
+
 
 # Moving yubikey udev rules
 sudo mv ~/70-u2f.rules /etc/udev/rules.d/70-u2f.rules
