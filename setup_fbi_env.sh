@@ -148,6 +148,7 @@ for i in $(find . -name intprops.h); do patch -p2 $i < patch_intprops.patch; don
 ./configure && make -j3 && sudo make install
 
 # copy own desktop files
+mkdir -p ~/.local/share/applications
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/gnome/mattermost.desktop > ~/.local/share/applications/mattermost.desktop
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/gnome/fortisslclient.desktop > ~/.local/share/applications/fortisslclient.desktop
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/gnome/fortisslclient_icon.gif > ~/apps/forticlientsslvpn/icon.gif
