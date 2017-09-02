@@ -14,6 +14,7 @@ sudo zypper up
 sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter gnome-shell-devel libgtop-devel libgtop-2_0-10 cmake pavucontrol evolution-ews inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools yakuake ansible xdotool net-tools-deprecated docker-compose weechat kernel-source libinput-tools yakuake ansible xdotool net-tools-deprecated docker-compose weechat kernel-firmware
 sudo zypper --non-interactive install -t pattern devel_python devel_python3 devel_basis
 sudo zypper --non-interactive install -t pattern "VideoLAN - VLC media player"
+sudo zypper --non-interactive install -t pattern "gnome"
 
 sudo usermod -a -G vboxusers fblaise
 sudo usermod -a -G docker fblaise
@@ -124,16 +125,16 @@ sudo sed -i 's!quiet showopts"!quiet showopts threadirqs"!' /etc/default/grub
 sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 
 # Get extra softwares instead of going to download them again from websites.
+
 echo "Downloading extra software from vps"
-scp 149.202.49.79:~/softwares/* ~/Downloads/
+scp 149.202.49.79:~/softwares/* ~/apps/
 
 # Installing extra soft
 sudo rpm -Uvh ~/Downloads/google-chrome-stable_current_x86_64.rpm
-mv ~/Downloads/forticlientsslvpn_linux_4.4.2332.tar.gz ~/apps/
-cd ~/apps && tar zxf forticlientsslvpn_linux_4.4.2332.tar.gz
-
-mv ~/Downloads/mattermost-desktop-3.7.0-linux-x64.tar.gz ~/apps/
-cd ~/apps && tar zxvf mattermost-desktop-3.7.0-linux-x64.tar.gz && ln -s mattermost-desktop-3.7.0 mattermost
+cd ~/apps
+tar zxf forticlientsslvpn_linux_4.4.2332.tar.gz
+tar zxf sdtconnector-1.7.5.tar.gz
+tar zxvf mattermost-desktop-3.7.0-linux-x64.tar.gz && ln -s mattermost-desktop-3.7.0 mattermost
 
 # Extra github repos
 cd ~/gitrepos
@@ -184,6 +185,19 @@ sudo btrfs quota enable /home
 
 # init snapper for /home config
 ~/gitrepos/misc/snapper/snapper_home.sh
+
+# remove synaptics if there, to the profit of libinput (gnome anyways)
+sudo zypper rm xf86-input-synaptics
+
+# Get gnomeshell install script
+curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/NicolasBernaerts/ubuntu-scripts/master/ubuntugnome/gnomeshell-extension-manage > ~/bin/gnomeshell-extension-manage
+
+# install my wanted gnome extensions, thanks to Nicolas (http://bernaerts.dyndns.org/linux/76-gnome/345-gnome-shell-install-remove-extension-command-line-script)
+~/bin/gnomeshell-extension-manage --install --extension-id 15
+~/bin/gnomeshell-extension-manage --install --extension-id 118
+~/bin/gnomeshell-extension-manage --install --extension-id 818
+~/bin/gnomeshell-extension-manage --install --extension-id 1160
+~/bin/gnomeshell-extension-manage --install --extension-id 545
 
 echo
 echo
