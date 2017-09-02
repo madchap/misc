@@ -179,6 +179,12 @@ sudo ./libinput-gestures-setup install
 ./libinput-gestures-setup start
 ./libinput-gestures-setup autostart
 
+# enable btrfs quotas
+sudo btrfs quota enable /home
+
+# init snapper for /home config
+~/gitrepos/misc/snapper/snapper_home.sh
+
 echo
 echo
 echo "Done."
