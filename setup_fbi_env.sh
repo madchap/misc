@@ -11,7 +11,7 @@ sudo zypper --non-interactive --gpg-auto-import-keys ar -f -n vlc http://downloa
 
 sudo zypper up
 
-sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter gnome-shell-devel libgtop-devel libgtop-2_0-10 cmake pavucontrol evolution-ews inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools yakuake ansible xdotool net-tools-deprecated docker-compose weechat kernel-source libinput-tools yakuake ansible xdotool net-tools-deprecated docker-compose weechat
+sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter gnome-shell-devel libgtop-devel libgtop-2_0-10 cmake pavucontrol evolution-ews inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools yakuake ansible xdotool net-tools-deprecated docker-compose weechat kernel-source libinput-tools yakuake ansible xdotool net-tools-deprecated docker-compose weechat kernel-firmware
 sudo zypper --non-interactive install -t pattern devel_python devel_python3 devel_basis
 sudo zypper --non-interactive install -t pattern "VideoLAN - VLC media player"
 
@@ -82,10 +82,12 @@ curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/m
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/sync_remote_tmux_and_vi.sh > ~/sync_remote_tmux_and_vi.sh && chmod u+x ~/sync_remote_tmux_and_vi.sh
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/yubikey/70-u2f.rules > ~/70-u2f.rules
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/gnome/gtk.css > ~/.config/gtk-3.0/gtk.css
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/kde_plasma5/kioslaverc > ~/.config/kioslaverc
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/scripts/launch_fortivpnsslcli_cli > ~/bin/launch_fortivpnsslcli_cli
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/scripts/establish_tunnels.sh > ~/bin/establish_tunnels.sh
 
+# plasma config files
+# kglobalshortcut has to be put prior to starting kdm to prevent being overwritten
+cp -ar ~/gitrepos/misc/kde_plasma5/* ~/.config/
 
 # Moving yubikey udev rules
 sudo mv ~/70-u2f.rules /etc/udev/rules.d/70-u2f.rules
@@ -167,6 +169,15 @@ cd ~/gitrepos
 git clone https://github.com/coreos/coreos-vagrant.git
 # coreOS for k8s
 # git clone https://github.com/coreos/coreos-kubernetes.git
+
+# libgestures libinput
+cd ~/gitrepos
+git clone https://github.com/bulletmark/libinput-gestures.git
+sudo gpasswd -a $USER input
+cd ~/gitrepos/libinput-gestures
+sudo ./libinput-gestures-setup install
+./libinput-gestures-setup start
+./libinput-gestures-setup autostart
 
 echo
 echo
