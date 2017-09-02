@@ -1,0 +1,33 @@
+[General]
+screenCount=1
+
+[LegacySession: saved at previous logout]
+count=0
+
+[Session: saved at previous logout]
+clientId1=10cbe1d366000150341067300000023200000
+clientId2=10cbe1d366000150342519200000018960001
+clientId3=10cbe1d366000150341067300000023200008
+clientId4=10cbe1d366000150342519400000018960007
+count=4
+discardCommand1[$e]=rm,$HOME/.config/session/kwin_10cbe1d366000150341067300000023200000_1503850683_695809
+program1=kwin_x11
+program2=/usr/lib64/libexec/kdeconnectd
+program3=/usr/lib64/libexec/org_kde_powerdevil
+program4=pulseaudio
+restartCommand1=kwin_x11,-session,10cbe1d366000150341067300000023200000_1503850683_695809
+restartCommand2=/usr/lib64/libexec/kdeconnectd,-session,10cbe1d366000150342519200000018960001_1503850683_682410
+restartCommand3=/usr/lib64/libexec/org_kde_powerdevil,-session,10cbe1d366000150341067300000023200008_1503850683_682454
+restartCommand4=
+restartStyleHint1=0
+restartStyleHint2=0
+restartStyleHint3=0
+restartStyleHint4=0
+userId1=fblaise
+userId2=fblaise
+userId3=fblaise
+userId4=fblaise
+wasWm1=true
+wasWm2=false
+wasWm3=false
+wasWm4=false

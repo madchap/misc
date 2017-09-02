@@ -1,0 +1,6 @@
+[KFileDialog Settings]
+Recent Files[$e]=proxy.pac,file:$HOME/proxy.pac
+
+[Open-with settings]
+CompletionMode=5
+History=gnome-terminal,evolution
