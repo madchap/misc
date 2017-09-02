@@ -9,4 +9,4 @@ alias fortiemea='~/bin/launch_fortivpnsslcli_cli emea  && ~/bin/establish_tunnel
 alias resize_single_4k='xrandr --output eDP-1 --scale 1.2x1.2 --panning 3840x2160'
 alias resize_origin='xrandr --output eDP-1 --scale 1x1 --panning 3200x1800'
 alias resize_dual_hdmi='xrandr --output eDP-1 --output DP-1-1 --scale 1.2x1.2 --panning 4608x2592+3200+0 --right-of eDP-1'
-alias resize_dual_dp='xrandr --output eDP-1 --output DP-1-1 --scale 1.2x1.2 --panning 4608x2592+3200+0 --right-of eDP-1'
+alias resize_dual_dp='xrandr --output eDP-1 --output DP-1-2 --scale 1.2x1.2 --panning 4608x2592+3200+0 --right-of eDP-1'
