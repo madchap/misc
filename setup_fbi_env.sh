@@ -198,6 +198,20 @@ curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/NicolasBe
 ~/bin/gnomeshell-extension-manage --install --extension-id 818
 ~/bin/gnomeshell-extension-manage --install --extension-id 1160
 ~/bin/gnomeshell-extension-manage --install --extension-id 545
+~/bin/gnomeshell-extension-manage --install --extension-id 779
+
+# Setting up onedrive client
+sudo zypper in sqlite3-devel libcurl-devel
+cd ~/gitrepos
+git clone git clone https://github.com/skilion/onedrive.git
+cd ~/gitrepos/onedrive
+curl -fsS https://dlang.org/install.sh | bash -s dmd
+source ~/dlang/dmd-2.076.0/activate
+make
+sudo make install
+cp ./onedrive ~/bin/
+echo "Please initiate the setup manually."
+
 
 echo
 echo
