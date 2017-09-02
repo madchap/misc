@@ -127,7 +127,7 @@ scp 149.202.49.79:~/softwares/* ~/Downloads/
 
 # Installing extra soft
 sudo rpm -Uvh ~/Downloads/google-chrome-stable_current_x86_64.rpm
-mv forticlientsslvpn_linux_4.4.2332.tar.gz ~/apps/
+mv ~/Downloads/forticlientsslvpn_linux_4.4.2332.tar.gz ~/apps/
 cd ~/apps && tar zxf forticlientsslvpn_linux_4.4.2332.tar.gz
 
 mv ~/Downloads/mattermost-desktop-3.7.0-linux-x64.tar.gz ~/apps/
