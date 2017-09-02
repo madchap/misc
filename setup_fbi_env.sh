@@ -211,6 +211,7 @@ make
 sudo make install
 cp ./onedrive ~/bin/
 echo "Please initiate the setup manually."
+systemctl --user enable onedrive
 
 
 echo
