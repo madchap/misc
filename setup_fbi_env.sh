@@ -199,6 +199,9 @@ curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/NicolasBe
 ~/bin/gnomeshell-extension-manage --install --extension-id 1160
 ~/bin/gnomeshell-extension-manage --install --extension-id 545
 ~/bin/gnomeshell-extension-manage --install --extension-id 779
+~/bin/gnomeshell-extension-manage --install --extension-id 826
+~/bin/gnomeshell-extension-manage --install --extension-id 1031
+#freon not working ~/bin/gnomeshell-extension-manage --install --extension-id 841
 
 # Setting up onedrive client
 sudo zypper in sqlite3-devel libcurl-devel
