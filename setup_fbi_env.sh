@@ -201,6 +201,7 @@ curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/NicolasBe
 ~/bin/gnomeshell-extension-manage --install --extension-id 779
 ~/bin/gnomeshell-extension-manage --install --extension-id 826
 ~/bin/gnomeshell-extension-manage --install --extension-id 1031
+~/bin/gnomeshell-extension-manage --install --extension-id 1276
 #freon not working ~/bin/gnomeshell-extension-manage --install --extension-id 841
 
 # Setting up onedrive client
