@@ -191,6 +191,7 @@ sudo zypper rm xf86-input-synaptics
 
 # Get gnomeshell install script
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/NicolasBernaerts/ubuntu-scripts/master/ubuntugnome/gnomeshell-extension-manage > ~/bin/gnomeshell-extension-manage
+chmod +x ~/bin/gnomeshell-extension-manage
 
 # install my wanted gnome extensions, thanks to Nicolas (http://bernaerts.dyndns.org/linux/76-gnome/345-gnome-shell-install-remove-extension-command-line-script)
 ~/bin/gnomeshell-extension-manage --install --extension-id 15
