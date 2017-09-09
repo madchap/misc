@@ -124,31 +124,38 @@ cd ~/.vim/bundle/YouCompleteMe && ./install.py
 sudo sed -i 's!quiet showopts"!quiet showopts threadirqs"!' /etc/default/grub
 sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 
-# Get extra softwares instead of going to download them again from websites.
-
-echo "Downloading extra software from vps"
-scp 149.202.49.79:~/softwares/* ~/apps/
-
 # Installing extra soft
-sudo rpm -Uvh ~/Downloads/google-chrome-stable_current_x86_64.rpm
-cd ~/apps
-tar zxf forticlientsslvpn_linux_4.4.2332.tar.gz
-tar zxf sdtconnector-1.7.5.tar.gz
-tar zxvf mattermost-desktop-3.7.0-linux-x64.tar.gz && ln -s mattermost-desktop-3.7.0 mattermost
+if [ ! -f ~/.extra_softs_installed ]; then
+	# Get extra softwares instead of going to download them again from websites.
+	echo "Downloading extra software from vps"
+	scp 149.202.49.79:~/softwares/* ~/apps/
+	
+	sudo rpm -Uvh ~/Downloads/google-chrome-stable_current_x86_64.rpm
+	cd ~/apps
+	tar zxf forticlientsslvpn_linux_4.4.2332.tar.gz
+	tar zxf sdtconnector-1.7.5.tar.gz
+	tar zxvf mattermost-desktop-3.7.0-linux-x64.tar.gz && ln -s mattermost-desktop-3.7.0 mattermost
+
+	touch ~/.extra_softs_installed
+fi
 
 # Extra github repos
-cd ~/gitrepos
-git clone https://github.com/vmitchell85/luxafor-python.git
+if [ ! -d ~/gitrepos/luxafor-python ]; then
+	cd ~/gitrepos
+	git clone https://github.com/vmitchell85/luxafor-python.git
+fi
 
 # oathtool
-cd ~/Downloads
-wget -q --show-progress http://download.savannah.nongnu.org/releases/oath-toolkit/oath-toolkit-2.6.2.tar.gz
-# Patches should already be fetched from vps
-tar zxf oath-toolkit-2.6.2.tar.gz
-cd oath-toolkit-2.6.2
-mv ~/Downloads/patch_*.patch .
-for i in $(find . -name intprops.h); do patch -p2 $i < patch_intprops.patch; done
-./configure && make -j3 && sudo make install
+if [ ! $(hash oathtool 2>/dev/null) ]; then
+	cd ~/Downloads
+	wget -q --show-progress http://download.savannah.nongnu.org/releases/oath-toolkit/oath-toolkit-2.6.2.tar.gz
+	# Patches should already be fetched from vps
+	tar zxf oath-toolkit-2.6.2.tar.gz
+	cd oath-toolkit-2.6.2
+	mv ~/Downloads/patch_*.patch .
+	for i in $(find . -name intprops.h); do patch -p2 $i < patch_intprops.patch; done
+	./configure && make -j3 && sudo make install
+fi
 
 # copy own desktop files
 mkdir -p ~/.local/share/applications
@@ -161,24 +168,30 @@ curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(cur
 curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
 
 # more up-to-date version of vagrant
-cd ~/Downloads
-wget -q --show-progress -O vagrant.rpm https://releases.hashicorp.com/vagrant/1.9.7/vagrant_1.9.7_x86_64.rpm
-sudo rpm -Uvh vagrant.rpm
+if [ ! $(hash vagrant 2>/dev/null) ]; then
+	cd ~/Downloads
+	wget -q --show-progress -O vagrant.rpm https://releases.hashicorp.com/vagrant/1.9.7/vagrant_1.9.7_x86_64.rpm
+	sudo rpm -Uvh vagrant.rpm
+fi
 
 # coreOS for vagrant
-cd ~/gitrepos
-git clone https://github.com/coreos/coreos-vagrant.git
-# coreOS for k8s
-# git clone https://github.com/coreos/coreos-kubernetes.git
+if [ ! -d ~/gitrepos/coreos-vagrant ]; then
+	cd ~/gitrepos
+	git clone https://github.com/coreos/coreos-vagrant.git
+	# coreOS for k8s
+	# git clone https://github.com/coreos/coreos-kubernetes.git
+fi
 
 # libgestures libinput
-cd ~/gitrepos
-git clone https://github.com/bulletmark/libinput-gestures.git
-sudo gpasswd -a $USER input
-cd ~/gitrepos/libinput-gestures
-sudo ./libinput-gestures-setup install
-./libinput-gestures-setup start
-./libinput-gestures-setup autostart
+if [ ! -d ~/gitrepos/libinput-gestures ]; then
+	cd ~/gitrepos
+	git clone https://github.com/bulletmark/libinput-gestures.git
+	sudo gpasswd -a $USER input
+	cd ~/gitrepos/libinput-gestures
+	sudo ./libinput-gestures-setup install
+	./libinput-gestures-setup start
+	./libinput-gestures-setup autostart
+fi
 
 # enable btrfs quotas
 sudo btrfs quota enable /home
@@ -190,8 +203,10 @@ sudo btrfs quota enable /home
 sudo zypper rm xf86-input-synaptics
 
 # Get gnomeshell install script
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/NicolasBernaerts/ubuntu-scripts/master/ubuntugnome/gnomeshell-extension-manage > ~/bin/gnomeshell-extension-manage
-chmod +x ~/bin/gnomeshell-extension-manage
+if [ ! -f ~/bin/gnomeshell-ext-manage ]; then
+	curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/NicolasBernaerts/ubuntu-scripts/master/ubuntugnome/gnomeshell-extension-manage > ~/bin/gnomeshell-extension-manage
+	chmod +x ~/bin/gnomeshell-extension-manage
+fi
 
 # install my wanted gnome extensions, thanks to Nicolas (http://bernaerts.dyndns.org/linux/76-gnome/345-gnome-shell-install-remove-extension-command-line-script)
 ~/bin/gnomeshell-extension-manage --install --extension-id 15
@@ -206,17 +221,19 @@ chmod +x ~/bin/gnomeshell-extension-manage
 #freon not working ~/bin/gnomeshell-extension-manage --install --extension-id 841
 
 # Setting up onedrive client
-sudo zypper in sqlite3-devel libcurl-devel
-cd ~/gitrepos
-git clone git clone https://github.com/skilion/onedrive.git
-cd ~/gitrepos/onedrive
-curl -fsS https://dlang.org/install.sh | bash -s dmd
-source ~/dlang/dmd-2.076.0/activate
-make
-sudo make install
-cp ./onedrive ~/bin/
-echo "Please initiate the setup manually."
-systemctl --user enable onedrive
+if [ -d ~/gitrepos/onedrive ]; then
+	sudo zypper in sqlite3-devel libcurl-devel
+	cd ~/gitrepos
+	git clone https://github.com/skilion/onedrive.git
+	cd ~/gitrepos/onedrive
+	curl -fsS https://dlang.org/install.sh | bash -s dmd
+	source ~/dlang/dmd-2.076.0/activate
+	make
+	sudo make install
+	cp ./onedrive ~/bin/
+	echo "Please initiate the setup manually."
+	systemctl --user enable onedrive
+fi
 
 
 echo
