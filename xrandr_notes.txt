@@ -1,0 +1,12 @@
+# laptop monitor only 4k res
+xrandr --output eDP-1 --scale 1.2x1.2 --panning 3840x2160
+
+# dual
+xrandr --output eDP-1 --scale 1.2x1.2 --panning 3840x2160 --output DP-1-2 --auto --panning 3840x2160+3840+0 --right-of eDP-1
+
+# fails. overall screen too big, not supported  (maximum 8192 x 8192)
+xrandr --output eDP-1 --scale 1.2x1.2 --panning 3840x2160 --output DP-1-2 --scale 1.2x1.2 --panning 4608x2592+3840+0 --right-of eDP-1
+
+# Scale the 4K external monitor and leave the laptop monitor the same
+xrandr --output eDP-1 --output DP-1-2 --scale 1.2x1.2 --panning 4608x2592+3200+0 --right-of eDP-1
+
