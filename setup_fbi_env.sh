@@ -11,7 +11,7 @@ sudo zypper --non-interactive --gpg-auto-import-keys ar -f -n vlc http://downloa
 
 sudo zypper up
 
-sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter gnome-shell-devel libgtop-devel libgtop-2_0-10 cmake pavucontrol evolution-ews inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools yakuake ansible xdotool net-tools-deprecated docker-compose weechat kernel-source libinput-tools yakuake ansible xdotool net-tools-deprecated docker-compose weechat kernel-firmware
+sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter gnome-shell-devel libgtop-devel libgtop-2_0-10 cmake pavucontrol evolution-ews inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools yakuake ansible xdotool net-tools-deprecated docker-compose weechat kernel-source libinput-tools yakuake ansible xdotool net-tools-deprecated docker-compose weechat kernel-firmware dconf-editor
 sudo zypper --non-interactive install -t pattern devel_python devel_python3 devel_basis
 sudo zypper --non-interactive install -t pattern "VideoLAN - VLC media player"
 sudo zypper --non-interactive install -t pattern "gnome"
@@ -219,6 +219,9 @@ fi
 ~/bin/gnomeshell-extension-manage --install --extension-id 1031
 ~/bin/gnomeshell-extension-manage --install --extension-id 1276
 #freon not working ~/bin/gnomeshell-extension-manage --install --extension-id 841
+
+# gnome-screenshot
+gsettings set org.gnome.gnome-screenshot auto-save-directory "file:///home/$USER/Pictures/"
 
 # Setting up onedrive client
 if [ -d ~/gitrepos/onedrive ]; then
