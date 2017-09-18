@@ -85,6 +85,9 @@ curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/m
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/gnome/gtk.css > ~/.config/gtk-3.0/gtk.css
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/scripts/launch_fortivpnsslcli_cli > ~/bin/launch_fortivpnsslcli_cli
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/scripts/establish_tunnels.sh > ~/bin/establish_tunnels.sh
+curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/scripts/tmux_sshkey_indicator.sh > ~/bin/tmux_sshkey_indicator.sh
+curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/scripts/tmux_autossh_indicator.sh > ~/bin/tmux_autossh_indicator.sh
+curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/scripts/tmux_vpnssl_indicator.sh > ~/bin/tmux_vpnssl_indicator.sh
 
 # plasma config files
 # kglobalshortcut has to be put prior to starting kdm to prevent being overwritten
@@ -237,7 +240,6 @@ if [ -d ~/gitrepos/onedrive ]; then
 	echo "Please initiate the setup manually."
 	systemctl --user enable onedrive
 fi
-
 
 echo
 echo
