@@ -1,16 +1,14 @@
 #!/bin/bash
 
+# mainly for centos7
+
 sudo yum -y install http://mirror.ghettoforge.org/distributions/gf/el/7/plus/x86_64/tmux-2.4-2.gf.el7.x86_64.rpm
 curl -L https://copr.fedorainfracloud.org/coprs/mcepl/vim8/repo/epel-7/mcepl-vim8-epel-7.repo -o /etc/yum.repos.d/mcepl-vim8-epel-7.repo
-sudo yum update vim+
+sudo yum update vim*
 
 if [ $(getent passwd $(whoami) | cut -d: -f7) = "/bin/bash" ]; then
 	echo "Changing shell to zsh.. please enter password for ${currentuser}."
 	chsh -s $(which zsh)
-fi
-
-if [ ! -d ~/gitrepos ]; then 
-	mkdir ~/gitrepos 
 fi
 
 # zsh
@@ -50,18 +48,13 @@ fi
 
 # get custom files from git
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.vimrc > ~/.vimrc
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.vimrc-server > ~/.vimrc-server
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.zshrc > ~/.zshrc
+curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.zshrc-server > ~/.zshrc
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/zsh_autosuggestions_config.zsh > ~/.oh-my-zsh/custom/config.zsh
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.tmux.conf > ~/.tmux.conf
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.tmux-server.conf > ~/.tmux-server.conf
+curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.tmux-server.conf > ~/.tmux.conf
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.sshrc > ~/.ssh/myrc
 
 # Install vundle plugins
 vim +PluginInstall +qall
-
-# compile ycm_core
-cd ~/.vim/bundle/YouCompleteMe && ./install.py
 
 echo
 echo
