@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Google Khrome
+Exec=/usr/bin/google-chrome --password-store=kwallet
+Icon=/home/fblaise/gitrepos/misc/gnome/google_chrome_icon_green.png
+Type=Application
+Terminal=False
+Categories=Web;
