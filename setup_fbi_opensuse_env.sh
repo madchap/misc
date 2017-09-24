@@ -222,6 +222,7 @@ fi
 ~/bin/gnomeshell-extension-manage --install --extension-id 826
 ~/bin/gnomeshell-extension-manage --install --extension-id 1031
 ~/bin/gnomeshell-extension-manage --install --extension-id 1276
+~/bin/gnomeshell-extension-manage --install --extension-id 1028
 #freon not working ~/bin/gnomeshell-extension-manage --install --extension-id 841
 
 # gnome-screenshot
