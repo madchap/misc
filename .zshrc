@@ -59,7 +59,7 @@ CASE_SENSITIVE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions vault)
+plugins=(git zsh-autosuggestions vault nmcli)
 
 source $ZSH/oh-my-zsh.sh
 # source ~/tmuxinator.zsh
@@ -104,6 +104,7 @@ bindkey '^h' backward-delete-char
 bindkey '^w' backward-kill-word
 bindkey '^r' history-incremental-search-backward
 bindkey '\e.' insert-last-word # Do not set KEYTIMEOUT too low, or it will not work!
+bindkey -M vicmd v edit-command-line
 
 function zle-line-init zle-keymap-select {
     VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]%  %{$reset_color%}"
@@ -115,6 +116,6 @@ zle -N zle-line-init
 zle -N zle-keymap-select
 export KEYTIMEOUT=20
 
-sh ~/gitrepos/misc/setxkbmap
+#sh ~/gitrepos/misc/setxkbmap
 
-xmodmap ~/.Xmodmap
+#xmodmap ~/.Xmodmap
