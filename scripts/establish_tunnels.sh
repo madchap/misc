@@ -1,5 +1,7 @@
+#!/usr/bin/env bash
+
 X=$(ssh-add -l |wc -l)
-if [[ $X -eq 2 ]]; then
+if [[ $X -ge 2 ]]; then
 
 	echo "Killing existing tunnels"
 	ps -ef |grep -E '\-tunnel|\-jump' |awk {'print $2'} |xargs kill -9
