@@ -225,6 +225,7 @@ fi
 ~/bin/gnomeshell-extension-manage --install --extension-id 1276
 ~/bin/gnomeshell-extension-manage --install --extension-id 1028
 ~/bin/gnomeshell-extension-manage --install --extension-id 905		# wifi reload
+~/bin/gnomeshell-extension-manage --install --extension-id 1015		# gravatar9
 #freon not working ~/bin/gnomeshell-extension-manage --install --extension-id 841
 
 # gnome-screenshot
