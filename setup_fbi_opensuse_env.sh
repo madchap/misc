@@ -224,6 +224,7 @@ fi
 ~/bin/gnomeshell-extension-manage --install --extension-id 1031
 ~/bin/gnomeshell-extension-manage --install --extension-id 1276
 ~/bin/gnomeshell-extension-manage --install --extension-id 1028
+~/bin/gnomeshell-extension-manage --install --extension-id 905		# wifi reload
 #freon not working ~/bin/gnomeshell-extension-manage --install --extension-id 841
 
 # gnome-screenshot
