@@ -73,7 +73,8 @@ for file in ${files}; do
                         send_email "Geeknote scan: New file(s) to be triaged" "You've got new file(s) that need to be triaged at https://www.evernote.com/Home.action"
                 fi
         else
-                echo "Sending via email..."
+                log_it "Sending via email..."
                 echo "Sent via $0" | mail -s "${file##*/} #${tag_triage} @${notebook}" -a "$file" "$evernote_email"
+                send_email "Geeknote scan: New file(s) to be triaged" "You've got new file(s) that need to be triaged at https://www.evernote.com/Home.action"
         fi
 done
