@@ -2,6 +2,9 @@
 ! remove Lock = Caps_Lock
 ! keysym Caps_Lock = Control_L
 
-! disabling non-breaking space
+! disabling non-breaking space for apple keyboard
 ! https://help.ubuntu.com/community/AppleKeyboard
-keycode 65 =space space
+! keycode 65 =space space
+!
+! remaps numpad + button on paragraph CH keyb
+keycode 49 =plus
