@@ -1,0 +1,2 @@
+%_topdir /home/fblaise/rpmbuild
+%_tmppath %{_topdir}/tmp
