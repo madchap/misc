@@ -248,3 +248,11 @@ exec --no-startup-id "albert"
 # until shutter does not crash anymore when launched if already running
 bindsym --release Print exec scrot ~/Pictures/snap_full_%Y%m%d_%H%M%S.png
 bindsym --release ctrl+Print exec scrot -s ~/Pictures/snap_sel_%Y%m%d_%H%M%S.png
+
+# enable floating window for virtualbox
+for_window [class="^VirtualBox$"] floating enable, move container to workspace 10
+# assign some apps to some workspaces
+# assign [class="^VirtualBox$"] 10
+#
+# move the whole workspace to the next output
+bindsym $mod+x move workspace to output right
