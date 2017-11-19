@@ -12,7 +12,7 @@ zypper addrepo --non-interactive --gpg-auto-import-keys ar -f -n publishing http
 
 sudo zypper up
 
-sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter gnome-shell-devel libgtop-devel libgtop-2_0-10 cmake pavucontrol evolution-ews inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools yakuake ansible xdotool net-tools-deprecated docker-compose weechat kernel-source libinput-tools yakuake ansible xdotool net-tools-deprecated docker-compose weechat kernel-firmware dconf-editor pdftk
+sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter gnome-shell-devel libgtop-devel libgtop-2_0-10 cmake pavucontrol inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools yakuake ansible xdotool net-tools-deprecated docker-compose weechat libinput-tools yakuake ansible xdotool net-tools-deprecated docker-compose weechat kernel-firmware dconf-editor pdftk feh parcellite ipcalc xkill xautolock i3 xev scrot tig nmap rpm-build xf86-video-intel
 sudo zypper --non-interactive install -t pattern devel_python devel_python3 devel_basis
 sudo zypper --non-interactive install -t pattern "VideoLAN - VLC media player"
 sudo zypper --non-interactive install -t pattern "gnome"
@@ -206,6 +206,7 @@ sudo btrfs quota enable /home
 
 # remove synaptics if there, to the profit of libinput (gnome anyways)
 sudo zypper rm xf86-input-synaptics
+sudo zypper addlock xf86-input-synaptics
 
 # Get gnomeshell install script
 if [ ! -f ~/bin/gnomeshell-ext-manage ]; then
