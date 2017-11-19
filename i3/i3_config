@@ -38,6 +38,7 @@ bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
 bindsym $mod+space exec dmenu_run
+
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
@@ -153,9 +154,7 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-	#colors {
-	#	focused_workspace	#00FF00
-	#}
+	font xft:Droid Sans Mono, FontAwesome 10
 	separator_symbol ":|:"
 	position top
 
@@ -171,8 +170,10 @@ bar {
         	binding_mode       #2f343a #900000 #ffffff
     	}
         
-#	status_command i3status
-	status_command i3blocks
+	#status_command i3status
+	#status_command ~/bin/i3prep.sh
+	status_command i3status | ~/gitrepos/misc/i3/i3prep.py
+#	status_command i3blocks
 }
 
 # mouse middle click kills window
@@ -180,6 +181,7 @@ bindsym --release button2 kill
 
 # remember last workspace
 workspace_auto_back_and_forth yes
+bindsym Ctrl+Tab workspace next
 
 # alt-tab left to right
 bindsym Mod1+Tab focus right
