@@ -50,6 +50,9 @@ eval $(/usr/bin/gnome-keyring-daemon -r -d --components=pkcs11,secrets,ssh,gpg)
 export SSH_AUTH_SOCK
 
 dbus-update-activation-environment --all
+
+[[ -f ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources
+
 # 
 # finally start the window manager
 #
