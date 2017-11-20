@@ -178,6 +178,9 @@ bar {
 #	status_command i3blocks
 }
 
+# active window border color
+client.focused	#4c7899 #00ff00 #000000
+
 # mouse middle click kills window
 bindsym --release button2 kill
 
@@ -244,8 +247,11 @@ exec --no-startup-id "parcellite"
 exec --no-startup-id "/usr/lib/polkit-gnome-authentication-agent-1"
 exec --no-startup-id "nm-applet"
 exec --no-startup-id "compton -b -d :0"
+#
 exec --no-startup-id "shutter --min_at_startup"
 # exec --no-startup-id "albert"
+
+for_window [class="^.*"] border pixel 3
 
 # until shutter does not crash anymore when launched if already running
 bindsym --release Print exec scrot ~/Pictures/snap_full_%Y%m%d_%H%M%S.png
