@@ -37,7 +37,9 @@ bindsym $mod+Return exec dbus-launch /usr/bin/gnome-terminal
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+space exec dmenu_run
+# bindsym $mod+space exec dmenu_run
+bindsym $mod+space exec "rofi -combi-modi window,drun -show combi -modi combi"
+bindsym Ctrl+space exec "rofi -combi-modi window,drun -show combi -modi combi"
 
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
@@ -189,7 +191,7 @@ bindsym Mod1+Shift+Tab focus left
 
 # i3lock
 bindsym $mod+l exec "/usr/bin/i3lock -f -i ~/Pictures/linux-13.png"
-exec xautolock -time 10 -locker "/usr/bin/i3lock -f -i ~/Pictures/linux-13.png"
+exec xautolock -time 5 -locker "/usr/bin/i3lock -f -i ~/Pictures/linux-13.png"
 
 # background
 exec --no-startup-id "feh --bg-fill ~/Pictures/i3_solarized_bg.png"
@@ -243,7 +245,7 @@ exec --no-startup-id "/usr/lib/polkit-gnome-authentication-agent-1"
 exec --no-startup-id "nm-applet"
 exec --no-startup-id "compton -b -d :0"
 exec --no-startup-id "shutter --min_at_startup"
-exec --no-startup-id "albert"
+# exec --no-startup-id "albert"
 
 # until shutter does not crash anymore when launched if already running
 bindsym --release Print exec scrot ~/Pictures/snap_full_%Y%m%d_%H%M%S.png
@@ -253,6 +255,7 @@ bindsym --release ctrl+Print exec scrot -s ~/Pictures/snap_sel_%Y%m%d_%H%M%S.png
 for_window [class="^VirtualBox$"] floating enable, move container to workspace 10
 # assign some apps to some workspaces
 # assign [class="^VirtualBox$"] 10
+assign [class="^(?i)remmina$"] 9
 #
 # move the whole workspace to the next output
 bindsym $mod+x move workspace to output right
