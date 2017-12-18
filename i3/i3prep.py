@@ -89,7 +89,7 @@ if __name__ == '__main__':
         #j.insert(0, {'full_text' : '%s' % get_governor(), 'name' : 'gov'})
         vpn_color = '#ffff00'
         vpn_icon = ''
-        if get_vpnssl_status("ppp0"):
+        if get_vpnssl_status("ppp0") or get_vpnssl_status("vpn0"):
             vpn_color = '#00ff00'
             vpn_icon = ""
         
