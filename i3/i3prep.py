@@ -38,7 +38,8 @@ def get_vpnssl_status(iface):
     """ Get my vpnssl status """
     if iface in netifaces.interfaces():
         addr = netifaces.ifaddresses(iface)
-        return True
+        if len(addr) > 0:   # vpn0 remains in the array even when gone, for whatever reason. So check if there is anything in there.
+            return True
 
     return False
 
@@ -87,11 +88,12 @@ if __name__ == '__main__':
         # insert information into the start of the json, but could be anywhere
         # CHANGE THIS LINE TO INSERT SOMETHING ELSE
         #j.insert(0, {'full_text' : '%s' % get_governor(), 'name' : 'gov'})
-        vpn_color = '#ffff00'
-        vpn_icon = ''
         if get_vpnssl_status("ppp0") or get_vpnssl_status("vpn0"):
             vpn_color = '#00ff00'
             vpn_icon = ""
+        else:
+            vpn_color = '#ffff00'
+            vpn_icon = ''
         
         j.insert(0, {'full_text' : '%s' % vpn_icon, 'name' : 'vpnssl', 'color' : vpn_color})
         j.insert(1, {'full_text' : ' %s' % get_procs_count('sshuttle -r'), 'name' : 'sshuttle'})
