@@ -247,7 +247,35 @@ if [[ "$WM" == "gnome" ]]; then
 fi
 
 if [[ "$WM" == "i3" ]]; then
-	sudo zypper --non-interactive install i3 scrot xfce4-notifyd thunar xbacklight compton xev xautolock xkill xinput parcellite
+	sudo zypper --non-interactive install i3 scrot xfce4-notifyd thunar xbacklight compton xev xautolock xkill xinput parcellite rofi feh polkit-gnome NetworkManager-applet
+
+	# copy config files from git repo
+	cp -f ~/gitrepos/misc/i3/.compton.conf ~
+	cp -f ~/gitrepos/misc/i3/i3prep.py ~/bin/
+	cp -f ~/gitrepos/misc/i3/i3_config ~/.config/i3/config
+	cp -f ~/gitrepos/misc/i3/.i3status.conf ~
+	cp -f ~/gitrepos/misc/i3/.xinitrc ~
+	cp -f ~/gitrepos/misc/i3/xrandr.sh ~/.i3/scripts/
+	cp -f ~/gitrepos/misc/i3/.Xresources ~
+	cp -f ~/gitrepos/misc/i3/backlight.sh ~/.i3/scripts/
+	
+	# runlevel 3
+	sudo systemctl disable display-manager.service
+	sudo systemctl set-default multi-user.target	
+
+	# gnome keyring for pam
+	echo "password optional  pam_gnome_keyring.so" |sudo tee -a /etc/pam.d/passwd
+	echo "session    optional     pam_gnome_keyring.so        auto_start" |sudo tee -a /etc/pam.d/login
+
+	# get away avahi away from .local
+	sudo sed -i 's!#domain-name=local!domain-name=here!' /etc/avahi/avahi-daemon.conf
+
+	# multimonitor lock screen
+	git clone https://github.com/shikherverma/i3lock-multimonitor.git ~/.i3/i3lock-multimonitor
+
+	# cp assets around
+	cp -f ~/gitrepos/misc/assets/linux-13.png ~/.i3/i3lock-multimonitor/img/background.png
+	cp -f ~/gitrepos/misc/assets/i3_solarized_bg.png ~/Pictures/
 fi
 
 # Setting up onedrive client

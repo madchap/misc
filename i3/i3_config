@@ -193,8 +193,12 @@ bindsym Mod1+Tab focus right
 bindsym Mod1+Shift+Tab focus left
 
 # i3lock
-bindsym $mod+l exec "/usr/bin/i3lock -f -i ~/Pictures/linux-13.png"
-exec xautolock -time 5 -locker "/usr/bin/i3lock -f -i ~/Pictures/linux-13.png"
+#bindsym $mod+l exec "/usr/bin/i3lock -f -i ~/Pictures/linux-13.png"
+#exec xautolock -time 5 -locker "/usr/bin/i3lock -f -i ~/Pictures/linux-13.png"
+bindsym $mod+l exec "~/.i3/i3lock-multimonitor/lock"
+exec xautolock -time 5 -locker "~/.i3/i3lock-multimonitor/lock"
+#bindsym $mod+l exec "~/.i3/i3lock-fancy-multimonitor/lock"
+#exec xautolock -time 5 -locker "~/.i3/i3lock-fancy-multimonitor/lock"
 
 # background
 exec --no-startup-id "feh --bg-fill ~/Pictures/i3_solarized_bg.png"
@@ -230,8 +234,12 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #d
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
 
 # Sreen brightness controls
-bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
-bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
+# bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 20 # increase screen brightness
+# bindsym XF86MonBrightnessUp exec --no-startup-id ~/bin/xrandr_brightness.sh plus # increase screen brightness
+bindsym XF86MonBrightnessUp exec --no-startup-id ~/.i3/scripts/backlight.sh +10 # increase screen brightness
+# bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 20 # decrease screen brightness
+#bindsym XF86MonBrightnessDown exec --no-startup-id ~/bin/xrandr_brightness.sh minus # decrease screen brightness
+bindsym XF86MonBrightnessDown exec --no-startup-id ~/.i3/scripts/backlight.sh -10 # decrease screen brightness
 
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play
@@ -247,21 +255,20 @@ exec --no-startup-id "parcellite"
 exec --no-startup-id "/usr/lib/polkit-gnome-authentication-agent-1"
 exec --no-startup-id "nm-applet"
 exec --no-startup-id "compton -b -d :0"
-#
 exec --no-startup-id "shutter --min_at_startup"
 # exec --no-startup-id "albert"
 
-for_window [class="^.*"] border pixel 3
+# for_window [class="^.*"] border pixel 3
 
 # until shutter does not crash anymore when launched if already running
 bindsym --release Print exec scrot ~/Pictures/snap_full_%Y%m%d_%H%M%S.png
 bindsym --release ctrl+Print exec scrot -s ~/Pictures/snap_sel_%Y%m%d_%H%M%S.png
 
 # enable floating window for virtualbox
-for_window [class="^VirtualBox$"] floating enable, move container to workspace 10
+#for_window [class="^VirtualBox$"] floating enable, move container to workspace 10
 # assign some apps to some workspaces
 # assign [class="^VirtualBox$"] 10
 assign [class="^(?i)remmina$"] 9
 #
 # move the whole workspace to the next output
-bindsym $mod+x move workspace to output right
+bindsym $mod+x move workspace to output left
