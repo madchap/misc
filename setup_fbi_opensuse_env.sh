@@ -1,5 +1,11 @@
 #!/bin/bash
 
+set -e
+
+PATH=/usr/bin:/sbin:/usr/sbin
+
+[[ -z "$1" ]] && WM=i3 || WM="$1"
+
 sudo grep -q $(whoami) /etc/sudoers
 if [[ $? -eq 1 ]]; then
 	echo "Adding $(whoami) to sudoers"
@@ -12,14 +18,15 @@ zypper addrepo --non-interactive --gpg-auto-import-keys ar -f -n publishing http
 
 sudo zypper up
 
-sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter gnome-shell-devel libgtop-devel libgtop-2_0-10 cmake pavucontrol inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools yakuake ansible xdotool net-tools-deprecated docker-compose weechat libinput-tools yakuake ansible xdotool net-tools-deprecated docker-compose weechat kernel-firmware dconf-editor pdftk feh parcellite ipcalc xkill xautolock i3 xev scrot tig nmap rpm-build xf86-video-intel fontawesome-fonts albert
+sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter cmake pavucontrol inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools ansible xdotool net-tools-deprecated docker-compose weechat libinput-tools xdotool kernel-firmware pdftk ipcalc tig nmap rpm-build xf86-video-intel fontawesome-fonts gnome-keyring-daemon minicom pwgen speedtest-cli gnome-keyring gnome-terminal pulseaudio pulseaudio-utils NetworkManager-applet eog evince wireshark xbindkeys aws-cli sshuttle asciinema backintime backintime-qt4 
+
+
 sudo zypper --non-interactive install -t pattern devel_python devel_python3 devel_basis
 sudo zypper --non-interactive install -t pattern "VideoLAN - VLC media player"
-sudo zypper --non-interactive install -t pattern "gnome"
 
-sudo usermod -a -G vboxusers fblaise
-sudo usermod -a -G docker fblaise
-sudo usermod -a -G input fblaise
+sudo usermod -a -G vboxusers $(whoami)
+sudo usermod -a -G docker $(whoami)
+sudo usermod -a -G input $(whoami)
 
 if [ $(getent passwd $(whoami) | cut -d: -f7) = "/bin/bash" ]; then
 	echo "Changing shell to zsh.. please enter password for ${currentuser}."
@@ -125,7 +132,9 @@ cd ~/.vim/bundle/YouCompleteMe && ./install.py
 #EOF'
 
 # In the end, using the 'threadirqs' kernel param seems to do the trick! 4mn of audio playing with no stutter!
-sudo sed -i 's!quiet showopts"!quiet showopts threadirqs"!' /etc/default/grub
+# Or not... nothing really seems to work a 100% at that time.
+sudo sed -i 's!splash=silent quiet showopts"!splash=0 quiet showopts threadirqs"!' /etc/default/grub
+sudo sed -i 's!GRUB_TIMEOUT=8!GRUB_TIMEOUT=1' /etc/default/grub
 sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 
 # Installing extra soft
@@ -144,10 +153,10 @@ if [ ! -f ~/.extra_softs_installed ]; then
 fi
 
 # Extra github repos
-if [ ! -d ~/gitrepos/luxafor-python ]; then
-	cd ~/gitrepos
-	git clone https://github.com/vmitchell85/luxafor-python.git
-fi
+#if [ ! -d ~/gitrepos/luxafor-python ]; then
+#	cd ~/gitrepos
+#	git clone https://github.com/vmitchell85/luxafor-python.git
+#fi
 
 # oathtool
 if [ ! $(hash oathtool 2>/dev/null) ]; then
@@ -180,12 +189,12 @@ if [ ! $(hash vagrant 2>/dev/null) ]; then
 fi
 
 # coreOS for vagrant
-if [ ! -d ~/gitrepos/coreos-vagrant ]; then
-	cd ~/gitrepos
-	git clone https://github.com/coreos/coreos-vagrant.git
-	# coreOS for k8s
-	# git clone https://github.com/coreos/coreos-kubernetes.git
-fi
+# if [ ! -d ~/gitrepos/coreos-vagrant ]; then
+# 	cd ~/gitrepos
+# 	git clone https://github.com/coreos/coreos-vagrant.git
+#	# coreOS for k8s
+#	# git clone https://github.com/coreos/coreos-kubernetes.git
+#fi
 
 # libgestures libinput
 if [ ! -d ~/gitrepos/libinput-gestures ]; then
@@ -208,29 +217,38 @@ sudo btrfs quota enable /home
 sudo zypper rm xf86-input-synaptics
 sudo zypper addlock xf86-input-synaptics
 
-# Get gnomeshell install script
-if [ ! -f ~/bin/gnomeshell-ext-manage ]; then
-	curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/NicolasBernaerts/ubuntu-scripts/master/ubuntugnome/gnomeshell-extension-manage > ~/bin/gnomeshell-extension-manage
-	chmod +x ~/bin/gnomeshell-extension-manage
+
+if [[ "$WM" == "gnome" ]]; then
+	sudo zypper --non-interactive install -t pattern "gnome"
+
+	# Get gnomeshell install script
+	if [ ! -f ~/bin/gnomeshell-ext-manage ]; then
+		curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/NicolasBernaerts/ubuntu-scripts/master/ubuntugnome/gnomeshell-extension-manage > ~/bin/gnomeshell-extension-manage
+		chmod +x ~/bin/gnomeshell-extension-manage
+	fi
+
+	# install my wanted gnome extensions, thanks to Nicolas (http://bernaerts.dyndns.org/linux/76-gnome/345-gnome-shell-install-remove-extension-command-line-script)
+	~/bin/gnomeshell-extension-manage --install --extension-id 15
+	~/bin/gnomeshell-extension-manage --install --extension-id 118
+	~/bin/gnomeshell-extension-manage --install --extension-id 818
+	~/bin/gnomeshell-extension-manage --install --extension-id 1160
+	~/bin/gnomeshell-extension-manage --install --extension-id 545
+	~/bin/gnomeshell-extension-manage --install --extension-id 779
+	~/bin/gnomeshell-extension-manage --install --extension-id 826
+	~/bin/gnomeshell-extension-manage --install --extension-id 1031
+	~/bin/gnomeshell-extension-manage --install --extension-id 1276
+	~/bin/gnomeshell-extension-manage --install --extension-id 1028
+	~/bin/gnomeshell-extension-manage --install --extension-id 905		# wifi reload
+	~/bin/gnomeshell-extension-manage --install --extension-id 1015		# gravatar9
+	#freon not working ~/bin/gnomeshell-extension-manage --install --extension-id 841
+
+	# gnome-screenshot
+	gsettings set org.gnome.gnome-screenshot auto-save-directory "file:///home/$USER/Pictures/"
 fi
 
-# install my wanted gnome extensions, thanks to Nicolas (http://bernaerts.dyndns.org/linux/76-gnome/345-gnome-shell-install-remove-extension-command-line-script)
-~/bin/gnomeshell-extension-manage --install --extension-id 15
-~/bin/gnomeshell-extension-manage --install --extension-id 118
-~/bin/gnomeshell-extension-manage --install --extension-id 818
-~/bin/gnomeshell-extension-manage --install --extension-id 1160
-~/bin/gnomeshell-extension-manage --install --extension-id 545
-~/bin/gnomeshell-extension-manage --install --extension-id 779
-~/bin/gnomeshell-extension-manage --install --extension-id 826
-~/bin/gnomeshell-extension-manage --install --extension-id 1031
-~/bin/gnomeshell-extension-manage --install --extension-id 1276
-~/bin/gnomeshell-extension-manage --install --extension-id 1028
-~/bin/gnomeshell-extension-manage --install --extension-id 905		# wifi reload
-~/bin/gnomeshell-extension-manage --install --extension-id 1015		# gravatar9
-#freon not working ~/bin/gnomeshell-extension-manage --install --extension-id 841
-
-# gnome-screenshot
-gsettings set org.gnome.gnome-screenshot auto-save-directory "file:///home/$USER/Pictures/"
+if [[ "$WM" == "i3" ]]; then
+	sudo zypper --non-interactive install i3 scrot xfce4-notifyd thunar xbacklight compton xev xautolock xkill xinput parcellite
+fi
 
 # Setting up onedrive client
 if [ -d ~/gitrepos/onedrive ]; then
