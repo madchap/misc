@@ -287,6 +287,9 @@ if [[ "$WM" == "i3" ]]; then
 	# cp assets around
 	cp -f ~/gitrepos/misc/assets/linux-13.png ~/.i3/i3lock-multimonitor/img/background.png
 	cp -f ~/gitrepos/misc/assets/i3_solarized_bg.png ~/Pictures/
+
+	# installing python2 netifaces for i3prep.py -- i3 status bar
+	sudo pip2 install netifaces
 fi
 
 # Setting up onedrive client
