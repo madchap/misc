@@ -272,7 +272,13 @@ if [[ "$WM" == "i3" ]]; then
 	
 	# runlevel 3
 	sudo systemctl disable display-manager.service
-	sudo systemctl set-default multi-user.target	
+	sudo systemctl set-default runlevel3.target
+	# remove any kind of display-manager, that will still cause a mess
+	dm=( "sddm" "gdm" "kdm" "xdm" )
+	for dm in "${dm[@]}"; do
+		rpm --quiet -q $dm
+		[[ $? -eq 0 ]] && sudo zypper rm $dm
+	done
 
 	# gnome keyring for pam
 	echo "password optional  pam_gnome_keyring.so" |sudo tee -a /etc/pam.d/passwd
