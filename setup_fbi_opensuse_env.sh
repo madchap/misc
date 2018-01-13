@@ -1,8 +1,10 @@
 #!/bin/bash
 
-set -e
+set -ex
 
-PATH=/usr/bin:/sbin:/usr/sbin
+[[ $UID -eq 0 ]] && echo "Run as your user, no sudo." && exit 1
+
+PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin
 
 [[ -z "$1" ]] && WM=i3 || WM="$1"
 
@@ -12,13 +14,13 @@ if [[ $? -eq 1 ]]; then
 	sudo bash -c "echo \"$(whoami) ALL=(ALL) NOPASSWD:ALL\" >> /etc/sudoers"
 fi
 
-sudo zypper --non-interactive --gpg-auto-import-keys ar -f -n packman http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman
-sudo zypper --non-interactive --gpg-auto-import-keys ar -f -n vlc http://download.videolan.org/pub/vlc/SuSE/Tumbleweed/ vlc
-zypper addrepo --non-interactive --gpg-auto-import-keys ar -f -n publishing https://download.opensuse.org/repositories/Publishing/openSUSE_Tumbleweed/Publishing.repo publishing
+[[ ! -f /etc/zypp/repos.d/packman.repo ]] && sudo zypper ar -f -n packman http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman
+[[ ! -f /etc/zypp/repos.d/vlc.repo ]] && sudo zypper ar -f -n vlc http://download.videolan.org/pub/vlc/SuSE/Tumbleweed/ vlc
+# [[ ! -f /etc/zypp/repos.d/publishing.repo ]] && sudo zypper ar -f -n publishing https://download.opensuse.org/repositories/Publishing/openSUSE_Tumbleweed/Publishing.repo publishing
 
-sudo zypper up
+sudo zypper up -y --auto-agree-with-product-licenses --skip-interactive
 
-sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter cmake pavucontrol inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools ansible xdotool net-tools-deprecated docker-compose weechat libinput-tools xdotool kernel-firmware pdftk ipcalc tig nmap rpm-build xf86-video-intel fontawesome-fonts gnome-keyring-daemon minicom pwgen speedtest-cli gnome-keyring gnome-terminal pulseaudio pulseaudio-utils NetworkManager-applet eog evince wireshark xbindkeys aws-cli sshuttle asciinema backintime backintime-qt4 
+sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter cmake pavucontrol inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools ansible xdotool net-tools-deprecated docker-compose weechat libinput-tools xdotool kernel-firmware pdftk ipcalc tig nmap rpm-build xf86-video-intel fontawesome-fonts gnome-keyring minicom pwgen speedtest-cli gnome-keyring gnome-terminal pulseaudio pulseaudio-utils NetworkManager-applet eog evince wireshark xbindkeys aws-cli sshuttle asciinema backintime backintime-qt4 MozillaFirefox
 
 
 sudo zypper --non-interactive install -t pattern devel_python devel_python3 devel_basis
@@ -66,7 +68,7 @@ fi
 cd ~/gitrepos
 if [ ! -d vim-wombat256mod ]; then
 	git clone https://github.com/michalbachowski/vim-wombat256mod.git
-	sudo cp ~/gitrepos/vim-wombat256mod/colors/wombat256mod.vim /usr/share/vim/vim74/colors
+	# sudo cp ~/gitrepos/vim-wombat256mod/colors/wombat256mod.vim /usr/share/vim/vim74/colors
 	sudo cp ~/gitrepos/vim-wombat256mod/colors/wombat256mod.vim /usr/share/vim/vim80/colors
 fi
 
@@ -112,7 +114,9 @@ hash openstack 2>/dev/null || sudo pip install python-openstackclient
 vim +PluginInstall +qall
 
 # compile ycm_core
-cd ~/.vim/bundle/YouCompleteMe && ./install.py
+if [[ ! -f /home/fblaise/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.so ]]; then
+	cd ~/.vim/bundle/YouCompleteMe && ./install.py
+fi
 
 # Make sure (or try) that my bluetooth headset work. OK as of Feb 12 2017
 # kinda lots of breakouts/glitches it seems.. wifi/waves interferences? Useless at this point.
@@ -134,7 +138,7 @@ cd ~/.vim/bundle/YouCompleteMe && ./install.py
 # In the end, using the 'threadirqs' kernel param seems to do the trick! 4mn of audio playing with no stutter!
 # Or not... nothing really seems to work a 100% at that time.
 sudo sed -i 's!splash=silent quiet showopts"!splash=0 quiet showopts threadirqs"!' /etc/default/grub
-sudo sed -i 's!GRUB_TIMEOUT=8!GRUB_TIMEOUT=1' /etc/default/grub
+sudo sed -i 's!GRUB_TIMEOUT=8!GRUB_TIMEOUT=1!' /etc/default/grub
 sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 
 # Installing extra soft
@@ -143,8 +147,8 @@ if [ ! -f ~/.extra_softs_installed ]; then
 	echo "Downloading extra software from vps"
 	scp 149.202.49.79:~/softwares/* ~/apps/
 	
-	sudo rpm -Uvh ~/Downloads/google-chrome-stable_current_x86_64.rpm
 	cd ~/apps
+	sudo rpm -Uvh ~/apps/google-chrome-stable_current_x86_64.rpm
 	tar zxf forticlientsslvpn_linux_4.4.2332.tar.gz
 	tar zxf sdtconnector-1.7.5.tar.gz
 	tar zxvf mattermost-desktop-3.7.0-linux-x64.tar.gz && ln -s mattermost-desktop-3.7.0 mattermost
@@ -159,7 +163,7 @@ fi
 #fi
 
 # oathtool
-if [ ! $(hash oathtool 2>/dev/null) ]; then
+if [ ! hash oathtool 2>/dev/null ]; then
 	cd ~/Downloads
 	wget -q --show-progress http://download.savannah.nongnu.org/releases/oath-toolkit/oath-toolkit-2.6.2.tar.gz
 	# Patches should already be fetched from vps
@@ -178,13 +182,18 @@ curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/m
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/gnome/fortisslclient_icon.gif > ~/apps/forticlientsslvpn/icon.gif
 
 # minikube, kubectl
-curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && sudo mv kubectl /usr/local/bin/ && sudo chmod +x /usr/local/bin/kubectl
-curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+if [ ! hash kubectl 2>/dev/null ]; then
+       	curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && sudo mv -f kubectl /usr/local/bin/ && sudo chmod +x /usr/local/bin/kubectl
+fi
+if [ ! hash minikube 2>/dev/null ]; then
+       	curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv -f minikube /usr/local/bin/
+fi
 
 # more up-to-date version of vagrant
-if [ ! $(hash vagrant 2>/dev/null) ]; then
+if [ ! hash vagrant 2>/dev/null ]; then
+	version=2.0.1
 	cd ~/Downloads
-	wget -q --show-progress -O vagrant.rpm https://releases.hashicorp.com/vagrant/1.9.7/vagrant_1.9.7_x86_64.rpm
+	wget -q --show-progress -O vagrant.rpm https://releases.hashicorp.com/vagrant/$version/vagrant_${version}_x86_64.rpm
 	sudo rpm -Uvh vagrant.rpm
 fi
 
@@ -214,7 +223,7 @@ sudo btrfs quota enable /home
 ~/gitrepos/misc/snapper/snapper_home.sh
 
 # remove synaptics if there, to the profit of libinput (gnome anyways)
-sudo zypper rm xf86-input-synaptics
+[[ $(rpm --quiet -q xf86-input-synaptics) == 1 ]] && sudo zypper rm -y xf86-input-synaptics
 sudo zypper addlock xf86-input-synaptics
 
 
@@ -249,6 +258,8 @@ fi
 if [[ "$WM" == "i3" ]]; then
 	sudo zypper --non-interactive install i3 scrot xfce4-notifyd thunar xbacklight compton xev xautolock xkill xinput parcellite rofi feh polkit-gnome NetworkManager-applet
 
+	mkdir -p ~/.config/i3
+	mkdir -p ~/.i3/scripts
 	# copy config files from git repo
 	cp -f ~/gitrepos/misc/i3/.compton.conf ~
 	cp -f ~/gitrepos/misc/i3/i3prep.py ~/bin/
@@ -279,8 +290,8 @@ if [[ "$WM" == "i3" ]]; then
 fi
 
 # Setting up onedrive client
-if [ -d ~/gitrepos/onedrive ]; then
-	sudo zypper in sqlite3-devel libcurl-devel
+if [ ! -d ~/gitrepos/onedrive ]; then
+	sudo zypper install sqlite3-devel libcurl-devel
 	cd ~/gitrepos
 	git clone https://github.com/skilion/onedrive.git
 	cd ~/gitrepos/onedrive
@@ -295,4 +306,4 @@ fi
 
 echo
 echo
-echo "Done."
+echo "Setup script done."

@@ -1,12 +1,16 @@
-X=$(sudo btrfs sub list /home |grep -q vms_subvol)
-if [ $X -ne 0 ]; then
+#!/bin/bash
+
+set -ex
+
+sudo btrfs sub list /home |grep -q vms_subvol
+if [ $? != 0 ]; then
 	echo "Creating subvol for virtual machines"
 	sudo btrfs sub create ~/vms_subvol
 	sudo chown fblaise: ~/vms_subvol
 fi
 
-X=$(sudo btrfs sub list /home |grep -q .cache)
-if [ $X -ne 0 ]; then
+sudo btrfs sub list /home |grep -q .cache
+if [ $? != 0 ]; then
 	echo "Moving ~/.cache to its own subvol"
 	sudo btrfs sub create ~/.cache-sub
 	sudo chown fblaise: ~/.cache-sub
