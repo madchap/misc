@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -x
 
 [[ $UID -eq 0 ]] && echo "Run as your user, no sudo." && exit 1
 
@@ -20,7 +20,7 @@ fi
 
 sudo zypper up -y --auto-agree-with-product-licenses --skip-interactive
 
-sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter cmake pavucontrol inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools ansible xdotool net-tools-deprecated docker-compose weechat libinput-tools xdotool kernel-firmware pdftk ipcalc tig nmap rpm-build xf86-video-intel fontawesome-fonts gnome-keyring minicom pwgen speedtest-cli gnome-keyring gnome-terminal pulseaudio pulseaudio-utils NetworkManager-applet eog evince wireshark xbindkeys aws-cli sshuttle asciinema backintime backintime-qt4 MozillaFirefox
+sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter cmake pavucontrol inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools ansible xdotool net-tools-deprecated docker-compose weechat libinput-tools xdotool kernel-firmware pdftk ipcalc tig nmap rpm-build xf86-video-intel fontawesome-fonts gnome-keyring minicom pwgen speedtest-cli gnome-keyring gnome-terminal pulseaudio pulseaudio-utils NetworkManager-applet eog evince wireshark xbindkeys aws-cli sshuttle asciinema backintime backintime-qt4 MozillaFirefox python2-pip
 
 
 sudo zypper --non-interactive install -t pattern devel_python devel_python3 devel_basis
@@ -114,7 +114,7 @@ hash openstack 2>/dev/null || sudo pip install python-openstackclient
 vim +PluginInstall +qall
 
 # compile ycm_core
-if [[ ! -f /home/fblaise/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.so ]]; then
+if [[ ! -f ~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.so ]]; then
 	cd ~/.vim/bundle/YouCompleteMe && ./install.py
 fi
 
@@ -300,7 +300,7 @@ fi
 
 # Setting up onedrive client
 if [ ! -d ~/gitrepos/onedrive ]; then
-	sudo zypper install sqlite3-devel libcurl-devel
+	sudo zypper -y install sqlite3-devel libcurl-devel
 	cd ~/gitrepos
 	git clone https://github.com/skilion/onedrive.git
 	cd ~/gitrepos/onedrive
