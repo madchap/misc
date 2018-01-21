@@ -248,7 +248,8 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 # startup items
-exec --no-startup-id "parcellite"
+#exec --no-startup-id "parcellite"
+exec --no-startup-id "clipit"
 # network manager
 # exec --no-startup-id "nmcli agent all"
 # Start launching gnome polkit agent
