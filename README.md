@@ -4,6 +4,9 @@
 > Either keyboard or trackpad works fine, but the 2 together is causing much problem.
 > The Zik3 pairs OK, but sounds chops very badly at some point, where it becomes unusable...
 
+## Issues starting up bluetooth?
+Remove tlp packages.
+
 ## Pre-requisites
 Add the following to the bottom of your /etc/pulse/system.pa and do a `pulseaudio -k` to restart the pulseaudio deamon (or reboot your box)
 
