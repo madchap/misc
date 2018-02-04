@@ -14,14 +14,16 @@ if [[ $? -eq 1 ]]; then
 	sudo bash -c "echo \"$(whoami) ALL=(ALL) NOPASSWD:ALL\" >> /etc/sudoers"
 fi
 
+# setup the keyboard
+sudo localectl set-keymap ch-fr
+
 [[ ! -f /etc/zypp/repos.d/packman.repo ]] && sudo zypper ar -f -n packman http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman
 [[ ! -f /etc/zypp/repos.d/vlc.repo ]] && sudo zypper ar -f -n vlc http://download.videolan.org/pub/vlc/SuSE/Tumbleweed/ vlc
 # [[ ! -f /etc/zypp/repos.d/publishing.repo ]] && sudo zypper ar -f -n publishing https://download.opensuse.org/repositories/Publishing/openSUSE_Tumbleweed/Publishing.repo publishing
 
-sudo zypper up -y --auto-agree-with-product-licenses --skip-interactive
+sudo zypper dup -y --auto-agree-with-product-licenses 
 
 sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter cmake pavucontrol inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools ansible xdotool net-tools-deprecated docker-compose weechat libinput-tools xdotool kernel-firmware pdftk ipcalc tig nmap rpm-build xf86-video-intel fontawesome-fonts gnome-keyring minicom pwgen speedtest-cli gnome-keyring gnome-terminal pulseaudio pulseaudio-utils NetworkManager-applet eog evince wireshark xbindkeys aws-cli sshuttle asciinema backintime backintime-qt4 MozillaFirefox python2-pip
-
 
 sudo zypper --non-interactive install -t pattern devel_python devel_python3 devel_basis
 sudo zypper --non-interactive install -t pattern "VideoLAN - VLC media player"
@@ -149,7 +151,7 @@ if [ ! -f ~/.extra_softs_installed ]; then
 	
 	cd ~/apps
 	sudo rpm -Uvh ~/apps/google-chrome-stable_current_x86_64.rpm
-	tar zxf forticlientsslvpn_linux_4.4.2332.tar.gz
+	tar zxf forticlientsslvpn_linux_4.4.2335.tar.gz
 	tar zxf sdtconnector-1.7.5.tar.gz
 	tar zxvf mattermost-desktop-3.7.0-linux-x64.tar.gz && ln -s mattermost-desktop-3.7.0 mattermost
 
@@ -256,7 +258,7 @@ if [[ "$WM" == "gnome" ]]; then
 fi
 
 if [[ "$WM" == "i3" ]]; then
-	sudo zypper --non-interactive install i3 scrot xfce4-notifyd thunar xbacklight compton xev xautolock xkill xinput clipit rofi feh polkit-gnome NetworkManager-applet
+	sudo zypper --non-interactive install i3 scrot xfce4-notifyd thunar xbacklight compton xev xautolock xkill xinput clipit rofi feh polkit-gnome NetworkManager-applet blueman bluez
 
 	mkdir -p ~/.config/i3
 	mkdir -p ~/.i3/scripts
@@ -277,12 +279,19 @@ if [[ "$WM" == "i3" ]]; then
 	dm=( "sddm" "gdm" "kdm" "xdm" )
 	for dm in "${dm[@]}"; do
 		rpm --quiet -q $dm
-		[[ $? -eq 0 ]] && sudo zypper rm $dm
+		[[ $? -eq 0 ]] && sudo zypper rm -y $dm
 	done
 
 	# gnome keyring for pam
-	echo "password optional  pam_gnome_keyring.so" |sudo tee -a /etc/pam.d/passwd
-	echo "session    optional     pam_gnome_keyring.so        auto_start" |sudo tee -a /etc/pam.d/login
+	pam_gnome_password_string="password optional  pam_gnome_keyring.so"
+	if ! grep -q $pam_gnome_password_string /etc/pam.d/passwd; then 
+		echo "$pam_gnome_password_string" |sudo tee -a /etc/pam.d/passwd
+	fi
+
+	pam_gnome_autostart_string="session    optional     pam_gnome_keyring.so        auto_start"
+	if ! grep -q "$pam_gnome_autostart_string" /etc/pam.d/login; then
+		echo "$pam_gnome_autostart_string" |sudo tee -a /etc/pam.d/login
+	fi
 
 	# get away avahi away from .local
 	sudo sed -i 's!#domain-name=local!domain-name=here!' /etc/avahi/avahi-daemon.conf
@@ -305,6 +314,7 @@ if [ ! -d ~/gitrepos/onedrive ]; then
 	git clone https://github.com/skilion/onedrive.git
 	cd ~/gitrepos/onedrive
 	curl -fsS https://dlang.org/install.sh | bash -s dmd
+	#TODO will not work as version changes
 	source ~/dlang/dmd-2.076.0/activate
 	make
 	sudo make install
