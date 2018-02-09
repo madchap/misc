@@ -51,6 +51,13 @@ def get_procs_count(proc_name):
     return len(name_procs)
 
 
+def get_brightness():
+    """ Returns brightness from file, as writter per xrandr.sh custom script """
+    file = open ("/home/fblaise/.i3/scripts/backlight_p.out",'r')
+    return "{}%".format(file.readline().strip())
+
+
+
 def print_line(message):
     """ Non-buffered printing to stdout. """
     sys.stdout.write(message + '\n')
@@ -98,5 +105,6 @@ if __name__ == '__main__':
         j.insert(0, {'full_text' : '%s' % vpn_icon, 'name' : 'vpnssl', 'color' : vpn_color})
         j.insert(1, {'full_text' : ' %s' % get_procs_count('sshuttle -r'), 'name' : 'sshuttle'})
         j.insert(2, {'full_text' : ' %s' % get_procs_count('autossh -'), 'name' : 'autossh'})
+        j.insert(3, {'full_text' : ' %s' % get_brightness(), 'name' : 'brightness'})
         # and echo back new encoded json
         print_line(prefix+json.dumps(j))
