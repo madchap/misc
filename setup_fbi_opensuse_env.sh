@@ -174,7 +174,7 @@ if [ ! hash oathtool 2>/dev/null ]; then
 	# Patches should already be fetched from vps
 	tar zxf oath-toolkit-2.6.2.tar.gz
 	cd oath-toolkit-2.6.2
-	mv ~/Downloads/patch_*.patch .
+	mv ~/apps/patch_*.patch .
 	for i in $(find . -name intprops.h); do patch -p2 $i < patch_intprops.patch; done
 	./configure && make -j3 && sudo make install
 fi
