@@ -16,14 +16,18 @@ fi
 
 # setup the keyboard
 sudo localectl set-keymap ch-fr
+sudo localectl set-x11-keymap ch fr
 
 [[ ! -f /etc/zypp/repos.d/packman.repo ]] && sudo zypper ar -f -n packman http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman
 [[ ! -f /etc/zypp/repos.d/vlc.repo ]] && sudo zypper ar -f -n vlc http://download.videolan.org/pub/vlc/SuSE/Tumbleweed/ vlc
-# [[ ! -f /etc/zypp/repos.d/publishing.repo ]] && sudo zypper ar -f -n publishing https://download.opensuse.org/repositories/Publishing/openSUSE_Tumbleweed/Publishing.repo publishing
+
+# disabling gpg checks on repo temporarily
+sudo zypper mr -G packman
+sudo zypper mr -G vlc
 
 sudo zypper dup -y --auto-agree-with-product-licenses 
 
-sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter cmake pavucontrol inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools ansible xdotool net-tools-deprecated docker-compose weechat libinput-tools xdotool kernel-firmware pdftk ipcalc tig nmap rpm-build xf86-video-intel fontawesome-fonts gnome-keyring minicom pwgen speedtest-cli gnome-keyring gnome-terminal pulseaudio pulseaudio-utils NetworkManager-applet eog evince wireshark xbindkeys aws-cli sshuttle asciinema backintime backintime-qt4 MozillaFirefox python2-pip
+sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter cmake pavucontrol inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools ansible xdotool net-tools-deprecated docker-compose weechat libinput-tools xdotool kernel-firmware pdftk ipcalc tig nmap rpm-build xf86-video-intel fontawesome-fonts gnome-keyring minicom pwgen speedtest-cli gnome-keyring gnome-terminal pulseaudio pulseaudio-utils NetworkManager-applet NetworkManager-openconnect eog evince wireshark xbindkeys aws-cli sshuttle asciinema backintime backintime-qt4 MozillaFirefox python2-pip mosh xorg-x11-server xfce4-power-manager
 sudo zypper -n install python-devel
 sudo zypper -n install powerline powerline-fonts
 
@@ -262,7 +266,7 @@ if [[ "$WM" == "gnome" ]]; then
 fi
 
 if [[ "$WM" == "i3" ]]; then
-	sudo zypper --non-interactive install i3 scrot xfce4-notifyd thunar xbacklight compton xev xautolock xkill xinput clipit rofi feh polkit-gnome NetworkManager-applet blueman bluez
+	sudo zypper --non-interactive install i3 scrot xfce4-notifyd thunar xbacklight compton xev xautolock xkill xinput clipit rofi feh polkit-gnome NetworkManager-applet blueman bluez xfce4-settings
 
 	mkdir -p ~/.config/i3
 	mkdir -p ~/.i3/scripts
@@ -313,19 +317,27 @@ fi
 
 # Setting up onedrive client
 if [ ! -d ~/gitrepos/onedrive ]; then
-	sudo zypper -y install sqlite3-devel libcurl-devel
+	sudo zypper -n install sqlite3-devel libcurl-devel
 	cd ~/gitrepos
 	git clone https://github.com/skilion/onedrive.git
 	cd ~/gitrepos/onedrive
 	curl -fsS https://dlang.org/install.sh | bash -s dmd
 	#TODO will not work as version changes
-	source ~/dlang/dmd-2.076.0/activate
+	source ~/dlang/dmd-2.079.0/activate
 	make
 	sudo make install
 	cp ./onedrive ~/bin/
 	echo "Please initiate the setup manually."
 	systemctl --user enable onedrive
 fi
+
+
+# re-enabling gpg checks on repo temporarily
+sudo zypper mr -g packman
+sudo zypper mr -g vlc
+
+# power button suspends and do not poweroff
+sudo sed -i 's!#HandlePowerKey=poweroff!HandlePowerKey=suspend!' /etc/systemd/logind.conf
 
 echo
 echo
