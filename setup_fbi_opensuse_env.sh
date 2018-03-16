@@ -223,6 +223,7 @@ fi
 
 # enable btrfs quotas
 sudo btrfs quota enable /home
+sudo btrfs quota enable /
 
 # init snapper for /home config
 ~/gitrepos/misc/snapper/snapper_home.sh
