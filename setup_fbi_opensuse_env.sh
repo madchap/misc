@@ -24,8 +24,11 @@ sudo localectl set-keymap ch-fr
 sudo zypper dup -y --auto-agree-with-product-licenses 
 
 sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter cmake pavucontrol inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools ansible xdotool net-tools-deprecated docker-compose weechat libinput-tools xdotool kernel-firmware pdftk ipcalc tig nmap rpm-build xf86-video-intel fontawesome-fonts gnome-keyring minicom pwgen speedtest-cli gnome-keyring gnome-terminal pulseaudio pulseaudio-utils NetworkManager-applet eog evince wireshark xbindkeys aws-cli sshuttle asciinema backintime backintime-qt4 MozillaFirefox python2-pip
+sudo zypper -n install python-devel
+sudo zypper -n install powerline powerline-fonts
 
-sudo zypper --non-interactive install -t pattern devel_python devel_python3 devel_basis
+
+sudo zypper --non-interactive install -t pattern devel_python3 devel_basis
 sudo zypper --non-interactive install -t pattern "VideoLAN - VLC media player"
 
 sudo usermod -a -G vboxusers $(whoami)
