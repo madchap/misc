@@ -56,6 +56,7 @@ dbus-update-activation-environment --all
 # 
 # finally start the window manager
 #
+eval $(setxkbmap ch fr)
 unset WINDOW_MANAGER STARTUP
 exec $WINDOWMANAGER ${1+"$@"}
 
