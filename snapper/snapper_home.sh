@@ -1,12 +1,18 @@
 #!/bin/bash
 
-set -ex
+set -x
 
 sudo btrfs sub list /home |grep -q vms_subvol
 if [ $? != 0 ]; then
 	echo "Creating subvol for virtual machines"
 	sudo btrfs sub create ~/vms_subvol
 	sudo chown fblaise: ~/vms_subvol
+fi
+
+sudo btrfs sub list / |grep -q docker
+if [ $? != 0 ]; then
+	echo "Creating subvol for docker"
+	sudo btrfs sub create /var/lib/docker
 fi
 
 sudo btrfs sub list /home |grep -q .cache
@@ -29,7 +35,7 @@ if [ $? != 0 ]; then
 	sudo snapper -c home set-config "NUMBER_CLEANUP=no"
 	sudo snapper -c home set-config "NUMBER_LIMIT=0"
 	sudo snapper -c home set-config "NUMBER_LIMIT_IMPORTANT=0"
-	sudo snapper -c home set-config "TIMELINE_LIMIT_DAILY=3"
+	sudo snapper -c home set-config "TIMELINE_LIMIT_DAILY=2"
 	sudo snapper -c home set-config "TIMELINE_LIMIT_HOURLY=24"
 	sudo snapper -c home set-config "TIMELINE_LIMIT_WEEKLY=0"
 	sudo snapper -c home set-config "TIMELINE_LIMIT_MONTHLY=0"
