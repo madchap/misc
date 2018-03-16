@@ -11,8 +11,8 @@ fi
 
 sudo btrfs sub list / |grep -q docker
 if [ $? != 0 ]; then
-	echo "Creating subvol for docker"
-	sudo btrfs sub create /var/lib/docker
+	echo "Creating subvol for docker btrfs"
+	sudo btrfs sub create /var/lib/docker/btrfs
 fi
 
 sudo btrfs sub list /home |grep -q .cache
