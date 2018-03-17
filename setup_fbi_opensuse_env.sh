@@ -336,6 +336,9 @@ fi
 sudo zypper mr -g packman
 sudo zypper mr -g vlc
 
+#firewalld rules
+sh ~/gitrepos/misc/firewalld_rules.sh
+
 # power button suspends and do not poweroff
 sudo sed -i 's!#HandlePowerKey=poweroff!HandlePowerKey=suspend!' /etc/systemd/logind.conf
 
