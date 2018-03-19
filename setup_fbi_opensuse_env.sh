@@ -342,6 +342,9 @@ sh ~/gitrepos/misc/firewalld_rules.sh
 # power button suspends and do not poweroff
 sudo sed -i 's!#HandlePowerKey=poweroff!HandlePowerKey=suspend!' /etc/systemd/logind.conf
 
+# potentially helps in not losing bluetooth after resuming from suspend state.. happens once every 20'ish times..
+sudo sed -i 's!USB_BLACKLIST_BTUSB=0!USB_BLACKLIST_BTUSB=1!' /etc/default/tlp
+
 echo
 echo
 echo "Setup script done."
