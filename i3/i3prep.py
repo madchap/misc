@@ -24,6 +24,7 @@
 # 2, as published by Sam Hocevar. See http://sam.zoy.org/wtfpl/COPYING for more
 # details.
 
+import re
 import sys
 import json
 import netifaces
@@ -51,11 +52,22 @@ def get_procs_count(proc_name):
     return len(name_procs)
 
 
+def get_sshuttle_args_count(proc_name):
+    """ Returns number of subnets handled by sshuttle """
+    procs = subprocess.check_output(['ps', '-eo', 'comm,args']).splitlines()
+    name_procs = [proc for proc in procs if proc_name in proc]
+
+    if len(name_procs) > 1:
+        return -1
+    else:
+        nets = re.split('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,3}', name_procs[0])
+        return len(nets)-1
+
+
 def get_brightness():
     """ Returns brightness from file, as writter per xrandr.sh custom script """
     file = open ("/home/fblaise/.i3/scripts/backlight_p.out",'r')
     return "{}%".format(file.readline().strip())
-
 
 
 def print_line(message):
@@ -102,9 +114,9 @@ if __name__ == '__main__':
             vpn_color = '#ffff00'
             vpn_icon = ''
         
-        j.insert(0, {'full_text' : '%s' % vpn_icon, 'name' : 'vpnssl', 'color' : vpn_color})
-        j.insert(1, {'full_text' : ' %s' % get_procs_count('sshuttle -r'), 'name' : 'sshuttle'})
-        j.insert(2, {'full_text' : ' %s' % get_procs_count('autossh -'), 'name' : 'autossh'})
-        j.insert(3, {'full_text' : ' %s' % get_brightness(), 'name' : 'brightness'})
+        j.insert(0, {'full_text': '%s' % vpn_icon, 'name': 'vpnssl', 'color': vpn_color})
+        j.insert(1, {'full_text': ' %s' % get_sshuttle_args_count('sshuttle -D -r'), 'name': 'sshuttle'})
+        j.insert(2, {'full_text': ' %s' % get_procs_count('autossh -'), 'name': 'autossh'})
+        j.insert(3, {'full_text': ' %s' % get_brightness(), 'name': 'brightness'})
         # and echo back new encoded json
         print_line(prefix+json.dumps(j))
