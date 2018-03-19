@@ -59,6 +59,8 @@ def get_sshuttle_args_count(proc_name):
 
     if len(name_procs) > 1:
         return -1
+    elif len(name_procs) == 0:
+        return 0
     else:
         nets = re.split('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,3}', name_procs[0])
         return len(nets)-1
