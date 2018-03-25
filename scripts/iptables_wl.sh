@@ -6,11 +6,11 @@ set -x
 [[ $UID -ne 0 ]] && echo "Please run as root or sudo." && exit 1
 
 IPSET_LIST=geoAllowIP
-# allow only CH to access my port 443. Destination ports.
-PORTS=443
+# Comma separated destination ports.
+PORTS="443"
 # comma separated countries
 COUNTRIES="ch"
-# If you want to protest a destination port that ends in a docker container, DOCKER-USER is actually called before INPUT.
+# If you want to protest a destination port that ends in a docker container, use DOCKER-USER instead.
 IPTABLES_CHAIN="DOCKER-USER"
 #IPTABLES_CHAIN="INPUT"
 IPTABLES_ACTION="ACCEPT"

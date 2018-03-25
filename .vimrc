@@ -22,6 +22,7 @@
     Plugin 'vim-airline/vim-airline-themes'
     Plugin 'airblade/vim-gitgutter'
     Plugin 'rodjek/vim-puppet'
+    Plugin 'davidhalter/jedi-vim'
     Plugin 'vim-scripts/indentpython.vim'       " python indent
     Plugin 'Valloric/YouCompleteMe'             " python autocomplete
 
@@ -57,8 +58,13 @@
 
     :map <F6> :w<CR>:silent !chmod +x %:p<CR>:silent !%:p 2>&1 \| tee /tmp/%:t.tmp<CR>:pedit! +:42343234 /tmp/%:t.tmp<CR>:redraw!<CR><CR>n
 
+    set encoding=utf-8
+
     " yaml
     autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
- 
+    " debug youcompleteme
+    " let g:ycm_keep_logfiles = 1
+    " let g:ycm_log_level = 'debug'
+
 " Setting up Vundle - the vim plugin bundler end
