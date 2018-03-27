@@ -27,10 +27,13 @@ sudo zypper mr -G vlc
 
 sudo zypper dup -y --auto-agree-with-product-licenses 
 
-sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter cmake pavucontrol inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools ansible xdotool net-tools-deprecated docker-compose weechat libinput-tools xdotool kernel-firmware pdftk ipcalc tig nmap rpm-build xf86-video-intel fontawesome-fonts gnome-keyring minicom pwgen speedtest-cli gnome-keyring gnome-terminal pulseaudio pulseaudio-utils NetworkManager-applet NetworkManager-openconnect eog evince wireshark xbindkeys aws-cli sshuttle asciinema backintime backintime-qt4 MozillaFirefox python2-pip mosh xorg-x11-server xfce4-power-manager
+sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh shutter cmake pavucontrol inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools ansible xdotool net-tools-deprecated docker-compose weechat libinput-tools xdotool kernel-firmware pdftk ipcalc tig nmap rpm-build xf86-video-intel fontawesome-fonts gnome-keyring minicom pwgen speedtest-cli gnome-keyring gnome-terminal pulseaudio pulseaudio-utils NetworkManager-applet NetworkManager-openconnect eog evince wireshark xbindkeys aws-cli sshuttle asciinema backintime backintime-qt4 MozillaFirefox python2-pip mosh xorg-x11-server xfce4-power-manager xinit adobe-sourcecodepro-fonts kubernetes-client gnome-colors-icon-theme
+
+# ironkey needed
+sudo zypper -n install glibc-32bit libgcc_s1-32bit
+
 sudo zypper -n install python-devel
 sudo zypper -n install powerline powerline-fonts
-
 
 sudo zypper --non-interactive install -t pattern devel_python3 devel_basis
 sudo zypper --non-interactive install -t pattern "VideoLAN - VLC media player"
@@ -115,6 +118,9 @@ cp -ar ~/gitrepos/misc/kde_plasma5/* ~/.config/
 # Moving yubikey udev rules
 sudo mv ~/70-u2f.rules /etc/udev/rules.d/70-u2f.rules
 
+# yubikey - smartcard reader
+sudo zypper -n install pcsc-ccid
+
 # pip
 # pip install --upgrade pip
 hash openstack 2>/dev/null || sudo pip install python-openstackclient
@@ -181,6 +187,7 @@ if [ ! hash oathtool 2>/dev/null ]; then
 	mv ~/apps/patch_*.patch .
 	for i in $(find . -name intprops.h); do patch -p2 $i < patch_intprops.patch; done
 	./configure && make -j3 && sudo make install
+	sudo ldconfig
 fi
 
 # copy own desktop files
@@ -191,9 +198,10 @@ curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/m
 curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/gnome/fortisslclient_icon.gif > ~/apps/forticlientsslvpn/icon.gif
 
 # minikube, kubectl
-if [ ! hash kubectl 2>/dev/null ]; then
-       	curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && sudo mv -f kubectl /usr/local/bin/ && sudo chmod +x /usr/local/bin/kubectl
-fi
+# now a pkg for it
+#if [ ! hash kubectl 2>/dev/null ]; then
+#       	curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && sudo mv -f kubectl /usr/local/bin/ && sudo chmod +x /usr/local/bin/kubectl
+#fi
 if [ ! hash minikube 2>/dev/null ]; then
        	curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv -f minikube /usr/local/bin/
 fi
@@ -227,7 +235,7 @@ fi
 
 # enable btrfs quotas
 sudo btrfs quota enable /home
-sudo btrfs quota enable /
+#sudo btrfs quota enable /
 
 # init snapper for /home config
 ~/gitrepos/misc/snapper/snapper_home.sh

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -x
+set -o pipefail
 
 sudo btrfs sub list /home |grep -q vms_subvol
 if [ $? != 0 ]; then
