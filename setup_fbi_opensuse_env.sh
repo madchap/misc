@@ -120,6 +120,7 @@ sudo mv ~/70-u2f.rules /etc/udev/rules.d/70-u2f.rules
 
 # yubikey - smartcard reader
 sudo zypper -n install pcsc-ccid
+sudo systemctl enable pcscd
 
 # pip
 # pip install --upgrade pip
