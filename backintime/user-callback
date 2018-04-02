@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -e
+
+# called before backup is taken
+# see https://github.com/bit-team/backintime/wiki/FAQ#user-callback-and-other-plugins
+
+profile_id="$1"
+profile_name="$2"
+reason="$3"
+errorcode="$4"
+DST="$HOME/.backintime/"
+
+case $reason in
+	1) #on process begin
+		mkdir -p $DST
+		rpm -qa --queryformat '%{installtime} (%{installtime:date}) %{name}\n' |sort -n > $DST/rpms.list
+		zypper lr -d > $DST/zypper_repos.list
+		dconf dump / > $DST/dconf-dump.out	
+	;;
+esac

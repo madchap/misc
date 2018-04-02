@@ -1,19 +1,29 @@
 #!/bin/bash
-
 # Fix SSH auth socket location so agent forwarding works with tmux
-echo "Looking at sockets and SSH_AUTH_SOCK currently set at $SSH_AUTH_SOCK"
+echo "Looking at sockets and SSH_AUTH_SOCK currently set to $SSH_AUTH_SOCK (-> $(readlink $SSH_AUTH_SOCK))"
 ssh-add -l
 if [[ $? -eq 2 ]]; then
- 	echo "Cannot connect to agent. Unsetting $SSH_AUTH_SOCK"
- 	unset SSH_AUTH_SOCK
-        echo "Removing stale SSH_AUTH_SOCK"
-        rm -f ~/.ssh/ssh_auth_sock
-        unset SSH_AUTH_SOCK
-	eval $(gpg-agent --homedir /home/fblaise/.gnupg --daemon)
-        ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock 2>/dev/null
-        export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
-	echo "Now, add your key to the agent."
+	if [[ -z $SSH_TTY ]]; then
+		echo "Cannot connect to gpg agent. Unsetting $SSH_AUTH_SOCK and removing stale SSH_AUTH_SOCK"
+		rm -f ~/.ssh/ssh_auth_sock
+		unset SSH_AUTH_SOCK
+		echo "Killing potentially running gpg-agent, and relaunching"
+		# pkill -9 gpg-agent
+		gpgconf --kill gpg-agent
+		sleep 1
+		# echo "Launching new gpg-agent"
+		# requires proper .gnupg/gpg-agent.conf with ssh-enabled option
+		eval $(gpg-agent --homedir /home/fblaise/.gnupg --daemon)
+		sleep 3
+
+		echo "Setting up env vars"
+		ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock 2>/dev/null
+		export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
+		echo "Status: $SSH_AUTH_SOCK -> $(readlink $SSH_AUTH_SOCK)"
+	fi
 fi
+export GPG_TTY=$(tty)
+echo -n "Updating gpg agent startup tty... " && echo UPDATESTARTUPTTY | gpg-connect-agent
 
 # prior to yubikey and gpg-agent
 # if [[ $? -eq 2 ]]; then

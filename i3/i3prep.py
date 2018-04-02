@@ -109,16 +109,17 @@ if __name__ == '__main__':
         # insert information into the start of the json, but could be anywhere
         # CHANGE THIS LINE TO INSERT SOMETHING ELSE
         #j.insert(0, {'full_text' : '%s' % get_governor(), 'name' : 'gov'})
-        if get_vpnssl_status("ppp0") or get_vpnssl_status("vpn0"):
+        if get_vpnssl_status("ppp0") or get_vpnssl_status("vpn0") or get_vpnssl_status("tun0"):
             vpn_color = '#00ff00'
             vpn_icon = ""
         else:
             vpn_color = '#ffff00'
             vpn_icon = ''
         
-        j.insert(0, {'full_text': '%s' % vpn_icon, 'name': 'vpnssl', 'color': vpn_color})
-        j.insert(1, {'full_text': ' %s' % get_sshuttle_args_count('sshuttle -D -r'), 'name': 'sshuttle'})
-        j.insert(2, {'full_text': ' %s' % get_procs_count('autossh -'), 'name': 'autossh'})
-        j.insert(3, {'full_text': ' %s' % get_brightness(), 'name': 'brightness'})
+        j.insert(0, {'full_text': ' %s' % get_procs_count('pinentry'), 'name': 'pinentry'})
+        j.insert(1, {'full_text': '%s' % vpn_icon, 'name': 'vpnssl', 'color': vpn_color})
+        j.insert(2, {'full_text': ' %s' % get_sshuttle_args_count('sshuttle -D -r'), 'name': 'sshuttle'})
+        j.insert(3, {'full_text': ' %s' % get_procs_count('autossh -'), 'name': 'autossh'})
+        j.insert(4, {'full_text': ' %s' % get_brightness(), 'name': 'brightness'})
         # and echo back new encoded json
         print_line(prefix+json.dumps(j))
