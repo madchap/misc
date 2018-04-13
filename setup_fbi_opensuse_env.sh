@@ -20,11 +20,12 @@ sudo localectl set-x11-keymap ch fr
 
 [[ ! -f /etc/zypp/repos.d/packman.repo ]] && sudo zypper ar -f -n packman http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman
 [[ ! -f /etc/zypp/repos.d/vlc.repo ]] && sudo zypper ar -f -n vlc http://download.videolan.org/pub/vlc/SuSE/Tumbleweed/ vlc
-[[ ! -f /etc/zypp/repos.d/home_ithod_signal.repo ]] && sudo zypper ar -f http://download.videolan.org/pub/vlc/SuSE/Tumbleweed/ 
+[[ ! -f /etc/zypp/repos.d/home_ithod_signal.repo ]] && sudo zypper ar -f -n ithod https://download.opensuse.org/repositories/home:/ithod:/signal/openSUSE_Tumbleweed/ ithod
 
 # disabling gpg checks on repo temporarily
 sudo zypper mr -G packman
 sudo zypper mr -G vlc
+sudo zypper mr -G ithod
 
 sudo zypper dup -y --auto-agree-with-product-licenses 
 
@@ -51,9 +52,8 @@ if [ $(getent passwd $(whoami) | cut -d: -f7) = "/bin/bash" ]; then
 	chsh -s $(which zsh)
 fi
 
-if [ ! -d ~/gitrepos ]; then 
-	mkdir ~/gitrepos 
-fi
+mkdir ~/gitrepos 
+mkdir ~/Pictures
 
 if [ ! -d ~/apps ]; then 
 	mkdir ~/apps 
@@ -326,6 +326,9 @@ if [[ "$WM" == "i3" ]]; then
 
 	# installing python2 netifaces for i3prep.py -- i3 status bar
 	sudo pip2 install netifaces
+
+	# create the backlight_p.out to avoid i3prep.py to bomb
+	echo 100 > ~/.i3/scripts/backlight_p.out
 fi
 
 # Setting up onedrive client
@@ -348,6 +351,7 @@ fi
 # re-enabling gpg checks on repo temporarily
 sudo zypper mr -g packman
 sudo zypper mr -g vlc
+sudo zypper mr -g ithod
 
 #firewalld rules
 sh ~/gitrepos/misc/firewalld_rules.sh
