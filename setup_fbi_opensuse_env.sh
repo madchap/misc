@@ -86,7 +86,7 @@ cd ~/gitrepos
 if [ ! -d vim-wombat256mod ]; then
 	git clone https://github.com/michalbachowski/vim-wombat256mod.git
 	# sudo cp ~/gitrepos/vim-wombat256mod/colors/wombat256mod.vim /usr/share/vim/vim74/colors
-	sudo cp ~/gitrepos/vim-wombat256mod/colors/wombat256mod.vim /usr/share/vim/vim80/colors
+	sudo cp ~/gitrepos/vim-wombat256mod/colors/wombat256mod.vim /usr/share/vim/vim81/colors
 fi
 
 # tmux
