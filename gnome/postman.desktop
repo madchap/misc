@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Name=Postman
 Exec=/home/fblaise/apps/Postman/Postman
-Icon=
+Icon=/home/fblaise/apps/Postman/app/resources/app/assets/icon.png
 Type=Application
 Terminal=False
 Categories=Web;
