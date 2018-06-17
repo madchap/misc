@@ -1,6 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
+# geeknote used is https://github.com/jeffkowalski/geeknote
+
+geeknote=/usr/bin/geeknote
 tesseract=$(which tesseract)
 tag_triage="triage"
 notebook="Main"
@@ -65,7 +68,7 @@ clean_tesseract_temp_files() {
 # check_nfs_mount
 
 # Look for file, pdf 
-files=$(find ${scan_point} -type f -newermt "-${scan_max_value} seconds" -not -newermt "-${scan_min_value} seconds" \( -name '*.tif' -o -name '*.jpg' \))
+files=$(find ${scan_point} -type f -newermt "-${scan_max_value} seconds" -not -newermt "-${scan_min_value} seconds" \( -name '*.tif' -o -name '*.jpg' -o -name '*.pdf' \))
 #[[ ${#files[@]} -eq 1 ]] && log_it "No new file found."
 
 for file in ${files}; do
@@ -80,10 +83,11 @@ for file in ${files}; do
 	if [ ${filename_ext} == "tif" ]; then
 		# make it a searchable pdf
 		tesseract_file $file_fullpath $filename_noext
+		filename_ext="pdf"
 	fi
 
 	log_it "Sending to evernote via email..."
-	echo "Sent via $0" | mail -s "${filename_noext} #${tag_triage} @${notebook}" -a "${file_pathonly}/${filename_noext}.pdf" "$evernote_email"
+	echo "Sent via $0" | mail -s "${filename_noext} #${tag_triage} @${notebook}" -a "${file_pathonly}/${filename_noext}.${filename_ext}" "$evernote_email"
 	send_email "Geeknote scan: New file(s) to be triaged" "You've got new file(s) that need to be triaged at https://www.evernote.com/Home.action"
 
 done
