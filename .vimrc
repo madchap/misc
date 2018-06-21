@@ -66,5 +66,12 @@
     " debug youcompleteme
     " let g:ycm_keep_logfiles = 1
     " let g:ycm_log_level = 'debug'
+     " indent several lines in visual mode
+    xnoremap <Tab> >gv
+    xnoremap <S-Tab> <gv
+
+    " list and select buffers
+    :nnoremap <F5> :buffers<CR>:buffer<Space>
+
 
 " Setting up Vundle - the vim plugin bundler end
