@@ -24,6 +24,9 @@
     Plugin 'rodjek/vim-puppet'
     Plugin 'davidhalter/jedi-vim'
     Plugin 'vim-scripts/indentpython.vim'       " python indent
+    Plugin 'godlygeek/tabular'			" required for vim-markdown
+    Plugin 'plasticboy/vim-markdown'		" md plugin
+    Plugin 'vimwiki/vimwiki'
     Plugin 'Valloric/YouCompleteMe'             " python autocomplete
 
     if iCanHazVundle == 0
@@ -64,14 +67,13 @@
     autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
     " debug youcompleteme
-    " let g:ycm_keep_logfiles = 1
-    " let g:ycm_log_level = 'debug'
-     " indent several lines in visual mode
+    let g:ycm_keep_logfiles = 1
+    let g:ycm_log_level = 'debug'
+
+    " indent several lines in visual mode 
     xnoremap <Tab> >gv
     xnoremap <S-Tab> <gv
 
     " list and select buffers
     :nnoremap <F5> :buffers<CR>:buffer<Space>
-
-
 " Setting up Vundle - the vim plugin bundler end
