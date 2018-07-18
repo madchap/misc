@@ -67,8 +67,8 @@
     autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
     " debug youcompleteme
-    let g:ycm_keep_logfiles = 1
-    let g:ycm_log_level = 'debug'
+    " let g:ycm_keep_logfiles = 1
+    " let g:ycm_log_level = 'debug'
 
     " indent several lines in visual mode 
     xnoremap <Tab> >gv
@@ -77,10 +77,10 @@
     " list and select buffers
     :nnoremap <F5> :buffers<CR>:buffer<Space>
 
-    " vim-markdown github/gitlab compat
-    let g:vim_markdown_no_extensions_in_markdown = 1
-
     " vimwiki options
-    let g:vimwiki_autowriteall = 1
+    let mywiki = {}
+    let mywiki.path = '~/gitrepos/mywiki'
+    let mywiki.path_htlm = '~/gitrepos/mywiki_html'
+    let g:vimwiki_list = [mywiki]
 
-" Setting up Vundle - the vim plugin bundler end
+    let g:vimwiki_autowriteall = 1
