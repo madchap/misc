@@ -80,4 +80,7 @@
     " vim-markdown github/gitlab compat
     let g:vim_markdown_no_extensions_in_markdown = 1
 
+    " vimwiki options
+    let g:vimwiki_autowriteall = 1
+
 " Setting up Vundle - the vim plugin bundler end
