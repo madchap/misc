@@ -76,4 +76,8 @@
 
     " list and select buffers
     :nnoremap <F5> :buffers<CR>:buffer<Space>
+
+    " vim-markdown github/gitlab compat
+    let g:vim_markdown_no_extensions_in_markdown = 1
+
 " Setting up Vundle - the vim plugin bundler end
