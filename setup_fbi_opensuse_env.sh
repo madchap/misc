@@ -241,11 +241,15 @@ if [ ! -d ~/gitrepos/libinput-gestures ]; then
 fi
 
 # enable btrfs quotas
-sudo btrfs quota enable /home
-#sudo btrfs quota enable /
+if [[ $(mount |awk '/on \/home\s{1}/ {print $5}') == 'btrfs' ]]; then
+	sudo btrfs quota enable /home
+	# init snapper for /home config
+	~/gitrepos/misc/snapper/snapper_home.sh
+fi
 
-# init snapper for /home config
-~/gitrepos/misc/snapper/snapper_home.sh
+if [[ $(mount |awk '/on \/\s{1}/ {print $5}') == 'btrfs' ]]; then
+	sudo btrfs quota enable /
+fi
 
 # remove synaptics if there, to the profit of libinput (gnome anyways)
 [[ $(rpm --quiet -q xf86-input-synaptics) == 1 ]] && sudo zypper rm -y xf86-input-synaptics
