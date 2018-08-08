@@ -52,7 +52,8 @@ if [ $(getent passwd $(whoami) | cut -d: -f7) = "/bin/bash" ]; then
 	chsh -s $(which zsh)
 fi
 
-mkdir ~/gitrepos 
+mkdir ~/gitrepos
+mkdir ~/.ssh
 mkdir ~/Pictures
 mkdir ~/Downloads
 
@@ -169,10 +170,8 @@ if [ ! -f ~/.extra_softs_installed ]; then
 	scp 149.202.49.79:~/softwares/* ~/apps/
 	
 	cd ~/apps
-	sudo rpm -Uvh ~/apps/google-chrome-stable_current_x86_64.rpm
 	tar zxf forticlientsslvpn_linux_4.4.2335.tar.gz
 	tar zxf sdtconnector-1.7.5.tar.gz
-	tar zxvf mattermost-desktop-3.7.0-linux-x64.tar.gz && ln -s mattermost-desktop-3.7.0 mattermost
 
 	touch ~/.extra_softs_installed
 fi
