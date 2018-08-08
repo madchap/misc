@@ -367,6 +367,10 @@ sudo sed -i 's!#HandlePowerKey=poweroff!HandlePowerKey=suspend!' /etc/systemd/lo
 # potentially helps in not losing bluetooth after resuming from suspend state.. happens once every 20'ish times..
 sudo sed -i 's!USB_BLACKLIST_BTUSB=0!USB_BLACKLIST_BTUSB=1!' /etc/default/tlp
 
+# no DM, setting setuid
+echo "/usr/bin/Xorg                 root:root       4711" | sudo tee -a /etc/permissions.local
+sudo chkstat --system --set
+
 echo
 echo
 echo "Setup script done."
