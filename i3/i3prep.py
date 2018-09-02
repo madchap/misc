@@ -109,7 +109,7 @@ if __name__ == '__main__':
         # insert information into the start of the json, but could be anywhere
         # CHANGE THIS LINE TO INSERT SOMETHING ELSE
         #j.insert(0, {'full_text' : '%s' % get_governor(), 'name' : 'gov'})
-        if get_vpnssl_status("ppp0") or get_vpnssl_status("vpn0") or get_vpnssl_status("tun0"):
+        if get_vpnssl_status("ppp0") or get_vpnssl_status("vpn0") or get_vpnssl_status("tun0") or get_vpnssl_status("wg0"):
             vpn_color = '#00ff00'
             vpn_icon = ""
         else:
