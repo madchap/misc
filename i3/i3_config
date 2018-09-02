@@ -39,7 +39,7 @@ bindsym $mod+Shift+q kill
 # start dmenu (a program launcher)
 # bindsym $mod+space exec dmenu_run
 bindsym $mod+space exec "rofi -combi-modi window,drun -show combi -modi combi"
-bindsym Ctrl+space exec "rofi -combi-modi window,drun -show combi -modi combi"
+#bindsym Ctrl+space exec "rofi -combi-modi window,drun -show combi -modi combi"
 
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
@@ -189,8 +189,12 @@ workspace_auto_back_and_forth yes
 bindsym Ctrl+Tab workspace next
 
 # alt-tab left to right
-bindsym Mod1+Tab focus right
-bindsym Mod1+Shift+Tab focus left
+# bindsym Mod1+Tab focus right
+# bindsym Mod1+Shift+Tab focus left
+
+# ... or alt-tab up to down
+bindsym Mod1+Tab focus down
+bindsym Mod1+Shift+Tab focus up
 
 # i3lock
 #bindsym $mod+l exec "/usr/bin/i3lock -f -i ~/Pictures/linux-13.png"
@@ -225,8 +229,8 @@ exec --no-startup-id "xmodmap ~/.Xmodmap"
 set $monitor eDP1 # my laptop's internal screen
 set $monitor2 DP1-2 # external screen, they are set here to make it easier to move to new setups
 # that has to be a fucking joke that it's the only multimedia key not detected.. bios bug?
-bindsym XF86Display exec --no-startup-id "sh ~/.i3/scripts/xrandr.sh $monitor $monitor2"
-exec --no-startup-id "xrandr --auto && sh ~/.i3/scripts/xrandr.sh $monitor $monitor2"
+#bindsym XF86Display exec --no-startup-id "sh ~/.i3/scripts/xrandr.sh $monitor $monitor2"
+exec --no-startup-id "sh ~/.i3/scripts/xrandr.sh $monitor"
 
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
@@ -257,6 +261,7 @@ exec --no-startup-id "/usr/lib/polkit-gnome-authentication-agent-1"
 exec --no-startup-id "nm-applet"
 exec --no-startup-id "compton -b -d :0"
 exec --no-startup-id "shutter --min_at_startup"
+exec --no-startup-id "blueman-manager"
 # exec --no-startup-id "albert"
 
 # for_window [class="^.*"] border pixel 3
@@ -268,8 +273,9 @@ bindsym --release ctrl+Print exec scrot -s ~/Pictures/snap_sel_%Y%m%d_%H%M%S.png
 # enable floating window for virtualbox
 #for_window [class="^VirtualBox$"] floating enable, move container to workspace 10
 # assign some apps to some workspaces
-# assign [class="^VirtualBox$"] 10
+# assign [class="^VirtualBox$"] 9
 assign [class="^(?i)remmina$"] 9
 #
 # move the whole workspace to the next output
 bindsym $mod+x move workspace to output left
+bindsym $mod+y move workspace to output down
