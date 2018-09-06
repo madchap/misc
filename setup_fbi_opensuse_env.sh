@@ -68,6 +68,20 @@ else
 	git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 fi
 
+# fzf
+if [ -d  ~/.fzf ]; then
+	cd ~/.oh-my-zsh
+	git pull
+else
+	git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+	~/.fzf/install
+fi
+
+if [ ! -f ~/bin/bat ]; then
+	wget https://github.com/sharkdp/bat/releases/download/v0.6.1/bat-v0.6.1-x86_64-unknown-linux-gnu.tar.gz -O ~/bin/bat.tar.gz
+	tar zvxf ~/bin/bat.tar.gz
+fi	
+
 if [ -d ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ]; then
 	cd ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 	git pull
