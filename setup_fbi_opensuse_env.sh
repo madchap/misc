@@ -70,7 +70,7 @@ fi
 
 # fzf
 if [ -d  ~/.fzf ]; then
-	cd ~/.oh-my-zsh
+	cd ~/.fzf
 	git pull
 else
 	git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
@@ -79,7 +79,7 @@ fi
 
 if [ ! -f ~/bin/bat ]; then
 	wget https://github.com/sharkdp/bat/releases/download/v0.6.1/bat-v0.6.1-x86_64-unknown-linux-gnu.tar.gz -O ~/bin/bat.tar.gz
-	tar zvxf ~/bin/bat.tar.gz
+	tar zvxf ~/bin/bat.tar.gz -C ~/bin --strip 1
 fi	
 
 if [ -d ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ]; then
