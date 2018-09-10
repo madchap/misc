@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$PATH:/usr/sbin
+export PATH=$HOME/bin:/home/fblaise/.local/bin:/usr/local/bin:$PATH:/usr/sbin:$HOME/apps/kafka_2.11-0.11.0.2/bin:$HOME/apps/istio-0.7.1/bin
 export TERM="xterm-256color"
 export LC_ALL="en_US.UTF-8"
 export EDITOR="vim"
@@ -59,11 +59,12 @@ CASE_SENSITIVE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions vault nmcli)
+plugins=(git zsh-autosuggestions vault nmcli docker aws)
 
 source $ZSH/oh-my-zsh.sh
 # source ~/tmuxinator.zsh
 source <(kubectl completion zsh)
+source <(kops completion zsh)
 
 # User configuration
 
@@ -116,6 +117,16 @@ zle -N zle-line-init
 zle -N zle-keymap-select
 export KEYTIMEOUT=20
 
-#sh ~/gitrepos/misc/setxkbmap
+sh ~/gitrepos/misc/setxkbmap
 
-#xmodmap ~/.Xmodmap
+# map my stuff, + sign, ctrl
+xmodmap ~/.Xmodmap
+
+# rid of the PC speaker awful beep
+xset -b
+
+# load custom functions
+source /home/fblaise/gitrepos/ide-infra/zsh/fbi_zsh_functions
+
+setopt hist_ignore_all_dups 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
