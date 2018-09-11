@@ -107,3 +107,6 @@ let g:vimwiki_autowriteall = 1
 " nerdtree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif " close vim if only nerdtree 
 map <C-n> :NERDTreeToggle<CR>
+
+" .py header
+au BufNewFile *.py 0r ~/gitrepos/misc/scripts/vim_python_header.txt
