@@ -38,7 +38,7 @@ bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
 # bindsym $mod+space exec dmenu_run
-bindsym $mod+space exec "rofi -plugin-path /usr/local/lib64/rofi -combi-modi window#run -show combi"
+bindsym $mod+space exec "rofi -plugin-path /usr/local/lib64/rofi -combi-modi window#drun -show combi"
 bindsym $mod+c exec --no-startup-id "rofi -plugin-path /usr/local/lib64/rofi -show calc -modi calc -no-show-match -no-sort"
 bindsym $mod+f exec --no-startup-id "xdg-open \\"$(locate home media | rofi -threads 0 -width 100 -dmenu -i -p \\"locate:\\")\\" "
 
