@@ -94,7 +94,9 @@ for file in ${files}; do
 	    log_it "Sending to evernote via email..."
 	    echo "Sent via $0" | mail -s "${filename_noext} #${tag_triage} @${notebook}" -a "${file_pathonly}/${filename_noext}.${filename_ext}" "$evernote_email"
 	    send_email "Geeknote scan: New file(s) to be triaged" "You've got new file(s) that need to be triaged at https://www.evernote.com/Home.action"
-	elif [[ "$target_platform" == "gdrive" ]] || [[ "$target_platform" == "both" ]]; then
+	fi
+
+	if [[ "$target_platform" == "gdrive" ]] || [[ "$target_platform" == "both" ]]; then
 	    log_it "Sending to google drive..."
 	    $upload_to_gdrive --filename /docs/${filename_noext}.${filename_ext}
 	fi
