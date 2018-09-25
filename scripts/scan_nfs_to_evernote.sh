@@ -5,6 +5,7 @@ set -euo pipefail
 
 geeknote=/usr/bin/geeknote
 tesseract=$(which tesseract)
+upload_to_gdrive="docker run --rm --name=scanner-uploader -v $( dirname "${BASH_SOURCE[0]}" )/secrets:/secrets -v /exports/scans:/docs:ro madchap/gdrive-scanner-upload:0.1"
 tag_triage="triage"
 notebook="Main"
 logfile=/home/fblaise/evernote_upload.log
@@ -19,6 +20,7 @@ scan_min_value=15
 scan_point="/exports/scans"
 email_to="xxxxxxxxxx"
 evernote_email="xxxxxxxxxx"
+target_platform="both"
 
 log_it() {
 	msg=$1
@@ -65,6 +67,8 @@ clean_tesseract_temp_files() {
 	rm -f $scan_point/*.txt $scan_point/*.tif
 }
 
+[[ -z "$1" ]] && echo "Need a target platform: evernote or gdrive" && exit -1
+
 # check_nfs_mount
 
 # Look for file, pdf 
@@ -86,9 +90,14 @@ for file in ${files}; do
 		filename_ext="pdf"
 	fi
 
-	log_it "Sending to evernote via email..."
-	echo "Sent via $0" | mail -s "${filename_noext} #${tag_triage} @${notebook}" -a "${file_pathonly}/${filename_noext}.${filename_ext}" "$evernote_email"
-	send_email "Geeknote scan: New file(s) to be triaged" "You've got new file(s) that need to be triaged at https://www.evernote.com/Home.action"
+    if [[ "$target_platform" == "evernote" ]] || [[ "$target_platform" == "both" ]]; then
+	    log_it "Sending to evernote via email..."
+	    echo "Sent via $0" | mail -s "${filename_noext} #${tag_triage} @${notebook}" -a "${file_pathonly}/${filename_noext}.${filename_ext}" "$evernote_email"
+	    send_email "Geeknote scan: New file(s) to be triaged" "You've got new file(s) that need to be triaged at https://www.evernote.com/Home.action"
+	elif [[ "$target_platform" == "gdrive" ]] || [[ "$target_platform" == "both" ]]; then
+	    log_it "Sending to google drive..."
+	    $upload_to_gdrive --filename /docs/${filename_noext}.${filename_ext}
+	fi
 
 done
 
