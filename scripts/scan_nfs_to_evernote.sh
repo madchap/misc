@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -eo pipefail
 
 # geeknote used is https://github.com/jeffkowalski/geeknote
 
