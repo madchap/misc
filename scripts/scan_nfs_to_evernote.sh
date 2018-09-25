@@ -5,7 +5,7 @@ set -eo pipefail
 
 geeknote=/usr/bin/geeknote
 tesseract=$(which tesseract)
-upload_to_gdrive="docker run --rm --name=scanner-uploader -v $( dirname "${BASH_SOURCE[0]}" )/secrets:/secrets -v /exports/scans:/docs:ro madchap/gdrive-scanner-upload:0.1"
+upload_to_gdrive="docker run --rm --name=scanner-uploader -v $(dirname $0)/gdrive/secrets:/secrets -v /exports/scans:/docs:ro madchap/gdrive-scanner-upload:0.1"
 tag_triage="triage"
 notebook="Main"
 logfile=/home/fblaise/evernote_upload.log
@@ -20,7 +20,6 @@ scan_min_value=15
 scan_point="/exports/scans"
 email_to="xxxxxxxxxx"
 evernote_email="xxxxxxxxxx"
-target_platform="both"
 
 log_it() {
 	msg=$1
@@ -68,6 +67,7 @@ clean_tesseract_temp_files() {
 }
 
 [[ -z "$1" ]] && echo "Need a target platform: evernote or gdrive" && exit -1
+target_platform=$1
 
 # check_nfs_mount
 
