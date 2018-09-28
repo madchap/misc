@@ -66,7 +66,7 @@ clean_tesseract_temp_files() {
 	rm -f $scan_point/*.txt $scan_point/*.tif
 }
 
-[[ -z "$1" ]] && echo "Need a target platform: evernote or gdrive" && exit -1
+[[ -z "$1" ]] && echo "Need a target platform: evernote or gdrive, or both." && exit -1
 target_platform=$1
 
 # check_nfs_mount
@@ -75,8 +75,10 @@ target_platform=$1
 files=$(find ${scan_point} -type f -newermt "-${scan_max_value} seconds" -not -newermt "-${scan_min_value} seconds" \( -name '*.tif' -o -name '*.jpg' -o -name '*.pdf' \))
 #[[ ${#files[@]} -eq 1 ]] && log_it "No new file found."
 
+something_is_processed=0
 for file in ${files}; do
 	log_it "Found file $file."
+    something_is_processed=1
 
 	file_fullpath=$file
 	file_pathonly=${file%/*}
@@ -103,6 +105,7 @@ for file in ${files}; do
 
 done
 
-clean_tesseract_temp_files
+[[ $something_is_processed -eq 1 ]] && clean_tesseract_temp_files && echo "Done."
+
 
 log_it "Done."
