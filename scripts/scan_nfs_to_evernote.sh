@@ -77,6 +77,7 @@ processed_directory=${scan_point}/processed
 something_is_processed=0
 for file in ${files}; do
 	log_it "Found file $file."
+    something_is_processed=1
 
 	file_fullpath=$file
 	file_pathonly=${file%/*}
