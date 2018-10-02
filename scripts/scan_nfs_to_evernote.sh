@@ -9,17 +9,13 @@ upload_to_gdrive="docker run --rm --name=scanner-uploader -v $(dirname $0)/gdriv
 tag_triage="triage"
 notebook="Main"
 logfile=/home/fblaise/evernote_upload.log
-# crontab and value here must correlate with the scan_max_value
-# example: cron every 5mn, diff between scan_max_value and scan_min_value should be 300 secs.
-# the delta is here to avoid picking up on not fully written files yet, as scanning a remote nfs folder (i.e. lsof -N) is not working in my case.
-# in seconds
-scan_max_value=315
+# scan_max_value=315
 scan_min_value=15
 # nfs_server="192.168.10.25"
 # nfs_export_point="/Scans"
 scan_point="/exports/scans"
-email_to="xxxxxxxxxx"
-evernote_email="xxxxxxxxxx"
+email_to=""
+evernote_email=""
 
 log_it() {
 	msg=$1
@@ -66,15 +62,19 @@ clean_tesseract_temp_files() {
 	rm -f $scan_point/*.txt $scan_point/*.tif
 }
 
-[[ -z "$1" ]] && echo "Need a target platform: evernote or gdrive" && exit -1
+[[ -z "$1" ]] && echo "Need a target platform: evernote or gdrive, or both." && exit -1
 target_platform=$1
 
 # check_nfs_mount
 
-# Look for file, pdf 
-files=$(find ${scan_point} -type f -newermt "-${scan_max_value} seconds" -not -newermt "-${scan_min_value} seconds" \( -name '*.tif' -o -name '*.jpg' -o -name '*.pdf' \))
+# Look for file, pdf
+# files=$(find ${scan_point} -maxdepth 1 -type f -newermt "-${scan_max_value} seconds" -not -newermt "-${scan_min_value} seconds" \( -name '*.tif' -o -name '*.jpg' -o -name '*.pdf' \))
+files=$(find ${scan_point} -maxdepth 1 -type f -not -newermt "-${scan_min_value} seconds" \( -name '*.tif' -o -name '*.jpg' -o -name '*.pdf' \))
 #[[ ${#files[@]} -eq 1 ]] && log_it "No new file found."
+processed_directory=${scan_point}/processed
+[[ ! -d $processed_directory ]] && mkdir $processed_directory
 
+something_is_processed=0
 for file in ${files}; do
 	log_it "Found file $file."
 
@@ -90,19 +90,20 @@ for file in ${files}; do
 		filename_ext="pdf"
 	fi
 
-    if [[ "$target_platform" == "evernote" ]] || [[ "$target_platform" == "both" ]]; then
+	if [[ "$target_platform" == "evernote" ]] || [[ "$target_platform" == "both" ]]; then
 	    log_it "Sending to evernote via email..."
 	    echo "Sent via $0" | mail -s "${filename_noext} #${tag_triage} @${notebook}" -a "${file_pathonly}/${filename_noext}.${filename_ext}" "$evernote_email"
-	    send_email "Geeknote scan: New file(s) to be triaged" "You've got new file(s) that need to be triaged at https://www.evernote.com/Home.action"
+	    # send_email "Geeknote scan: New file(s) to be triaged" "You've got new file(s) that need to be triaged at https://www.evernote.com/Home.action"
 	fi
 
 	if [[ "$target_platform" == "gdrive" ]] || [[ "$target_platform" == "both" ]]; then
 	    log_it "Sending to google drive..."
 	    $upload_to_gdrive --filename /docs/${filename_noext}.${filename_ext}
 	fi
+	
+	something_is_processed=1
+	mv "${file_pathonly}/${filename_noext}.${filename_ext}" $processed_directory
 
 done
 
-clean_tesseract_temp_files
-
-log_it "Done."
+[[ $something_is_processed -eq 1 ]] && clean_tesseract_temp_files && echo "Done."
