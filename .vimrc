@@ -30,6 +30,7 @@ Plugin 'vimwiki/vimwiki'
 Plugin 'scrooloose/nerdtree'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'Valloric/YouCompleteMe'             " python autocomplete
+Plugin 'saltstack/salt-vim'
 
 if iCanHazVundle == 0
     echo "Installing Vundles, please ignore key map error messages"
