@@ -76,6 +76,11 @@ autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 " let g:ycm_log_level = 'debug'
 let g:ycm_autoclose_preview_window_after_completion=1
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_key_list_select_completion = ['<TAB>', '<DOWN>']
+let g:ycm_key_list_previous_completion = ['<S-TAB>', '<UP>']
+let g:ycm_key_list_stop_completion = ['<C-y>', '<ENTER>']
 
 py << EOF
 import os
