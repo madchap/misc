@@ -1,2 +1,7 @@
 setxkbmap ch fr_mac
 setxkbmap -option caps:ctrl_modifier
+
+# bad idea on laptop keyboard that do not have the OS key on the right
+## i could remap the right Ctrl to an OS key.. or not.
+# setxkbmap -option altwin:swap_alt_win 
+# reset with bare -option param
