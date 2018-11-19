@@ -1,0 +1,118 @@
+---
+- hosts: localhost
+  tasks:
+
+  - name: check on brew
+    tags:
+      - brew
+    stat: 
+      path: /usr/local/bin/brew
+    register: is_brew
+
+  - name: install brew
+    tags:
+      - brew
+    script: /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    when: not is_brew.stat.exists
+
+  - name: install taps
+    tags:
+      - brew
+      - taps
+    homebrew_tap:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - sambadevi/powerlevel9k
+
+  - name: install formulaes
+    tags:
+      - brew
+      - formulaes
+    homebrew:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - coreutils
+      - zsh
+      - bash
+      - tmux
+      - reattach-to-user-namespace
+      - gnupg
+      - zsh-syntax-highlighting
+      - zsh-autosuggestions
+      - powerlevel9k
+      - bat
+      - fzf
+      - docker-completion
+      - docker-compose-completion
+      - docker-compose
+      - sleepwatcher
+      - sshuttle
+      - mosh
+      - pam_yubico
+  
+  - name: install casks
+    tags:
+      - brew
+      - casks
+    homebrew_cask:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - firefox
+      - google-chrome
+      - istat-menus
+      - alfred2
+      - iterm2
+      - gpg-suite
+      - karabiner-elements
+      - evernote
+      - slack
+      - signal
+      - spectable
+      - spotify
+      - microsoft-office
+      - visual-studio-code
+      - postman
+      - kindle
+      # - send-to-kindle
+      - docker
+      - yubico-yubikey-personalization-gui
+      - yubico-yubikey-manager
+      - yubico-yubikey-piv-manager
+
+  - name: install oh-my-zsh
+    git:
+      repo: https://github.com/robbyrussell/oh-my-zsh
+      dest: ~/.oh-my-zsh
+      clone: yes
+    ignore_errors: yes
+
+  - name: clone dotfiles repo
+    git:
+      repo: git@github.com:madchap/dotfiles.git
+      dest: ~/gitrepos/dotfiles
+      track_submodules: yes
+
+#  - name: powerlevel9k
+#    git:
+#      repo: https://github.com/bhilburn/powerlevel9k.git
+#      dest: ~/.oh-my-zsh/custom/themes/powerlevel9k
+
+  - name: tmux TPM
+    tags:
+      - tmux
+    git:
+      repo: https://github.com/tmux-plugins/tpm
+      dest: ~/.tmux/plugins/tpm
+
+#  - name: copy wombat256 for vim
+#    tags:
+#      - wombat
+#    get_url:
+#      url: https://raw.githubusercontent.com/michalbachowski/vim-wombat256mod/master/colors/wombat256mod.vim
+#      dest: /usr/share/vim/vim80/colors/wombat256mod.vim
+#    become: true
+#    ignore_errors: yes
+
