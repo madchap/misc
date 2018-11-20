@@ -25,6 +25,47 @@
     loop:
       - sambadevi/powerlevel9k
 
+  - name: install casks
+    tags:
+      - brew
+      - casks
+    homebrew_cask:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - firefox
+      - google-chrome
+      - istat-menus
+      - alfred2
+      - iterm2
+      - gpg-suite
+      - karabiner-elements
+      - evernote
+      - slack
+      - signal
+      - spectacle
+      - spotify
+      - microsoft-office
+      - visual-studio-code
+      - postman
+      - kindle
+      # - send-to-kindle
+      - docker
+      - yubico-yubikey-personalization-gui
+      - yubico-yubikey-manager
+      - yubico-yubikey-piv-manager
+      - osxfuse
+
+  - name: override system vim
+    tags:
+      - brew
+      - formulaes
+      - vim
+    homebrew:
+      name: vim
+      state: present
+      options: with-override-system-vi
+
   - name: install formulaes
     tags:
       - brew
@@ -51,36 +92,30 @@
       - sshuttle
       - mosh
       - pam_yubico
-  
-  - name: install casks
+      - ykman
+      - encfs
+      - asciinema
+      - jupyter
+      - speedtest-cli
+      - tree
+      - pstree
+
+    - name: post-install scripts to run
+      tags:
+        - scripts
+      script:
+        - cd ~/.vim/bundle/YouCompleteMe && python3 ./install.py
+        - /usr/local/Cellar/fzf/0.17.5/install --key-bindings --completion --no-update-rc
+      ignore_errors: yes
+
+  - name: Python pips
     tags:
-      - brew
-      - casks
-    homebrew_cask:
+      - python
+    pip:
       name: "{{ item }}"
-      state: present
+      executable: pip3
     loop:
-      - firefox
-      - google-chrome
-      - istat-menus
-      - alfred2
-      - iterm2
-      - gpg-suite
-      - karabiner-elements
-      - evernote
-      - slack
-      - signal
-      - spectable
-      - spotify
-      - microsoft-office
-      - visual-studio-code
-      - postman
-      - kindle
-      # - send-to-kindle
-      - docker
-      - yubico-yubikey-personalization-gui
-      - yubico-yubikey-manager
-      - yubico-yubikey-piv-manager
+      - virtualenv
 
   - name: install oh-my-zsh
     git:
@@ -94,6 +129,11 @@
       repo: git@github.com:madchap/dotfiles.git
       dest: ~/gitrepos/dotfiles
       track_submodules: yes
+
+  - name: clone misc repo
+    git:
+      repo: git@github.com:madchap/misc.git
+      dest: ~/gitrepos/misc
 
 #  - name: powerlevel9k
 #    git:
