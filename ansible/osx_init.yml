@@ -24,6 +24,7 @@
       state: present
     loop:
       - sambadevi/powerlevel9k
+      - caskroom/fonts
 
   - name: install casks
     tags:
@@ -55,6 +56,10 @@
       - yubico-yubikey-manager
       - yubico-yubikey-piv-manager
       - osxfuse
+      - font-hack-nerd-font
+      - font-meslo-nerd-font
+      - xquartz
+      - inkscape
 
   - name: override system vim
     tags:
@@ -99,14 +104,16 @@
       - speedtest-cli
       - tree
       - pstree
+      - libxdg-basedir
+      - htop
 
-    - name: post-install scripts to run
-      tags:
-        - scripts
-      script:
-        - cd ~/.vim/bundle/YouCompleteMe && python3 ./install.py
-        - /usr/local/Cellar/fzf/0.17.5/install --key-bindings --completion --no-update-rc
-      ignore_errors: yes
+  - name: post-install scripts to run
+    tags:
+      - scripts
+    script:
+      - cd ~/.vim/bundle/YouCompleteMe && python3 ./install.py
+      - /usr/local/Cellar/fzf/0.17.5/install --key-bindings --completion --no-update-rc
+    ignore_errors: yes
 
   - name: Python pips
     tags:
@@ -156,3 +163,21 @@
 #    become: true
 #    ignore_errors: yes
 
+  - name: enable locate
+    tags:
+      - locate
+    script: /bin/launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
+    become: true
+
+  - name: symlink updatedb
+    tags:
+      - locate
+    file:
+      src: /usr/libexec/locate.updatedb
+      dest: /usr/local/bin/updatedb
+      state: link
+
+  - name: VS code press and hold
+    tags:
+      - vscode
+    script: /usr/bin/defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
