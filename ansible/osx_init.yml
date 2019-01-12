@@ -136,7 +136,8 @@
       executable: pip3
     loop:
       - virtualenv
-      - powerline-status  
+      - powerline-status
+      - netifaces
 
   - name: install oh-my-zsh
     tags:
