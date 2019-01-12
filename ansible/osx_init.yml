@@ -37,7 +37,7 @@
       - firefox
       - google-chrome
       - istat-menus
-      - alfred2
+      - homebrew/cask-versions/alfred2
       - iterm2
       - gpg-suite
       - karabiner-elements
@@ -52,14 +52,23 @@
       - kindle
       # - send-to-kindle
       - docker
-      - yubico-yubikey-personalization-gui
-      - yubico-yubikey-manager
-      - yubico-yubikey-piv-manager
+      - homebrew/cask-drivers/yubico-yubikey-personalization-gui
+      - homebrew/cask-drivers/yubico-yubikey-manager
+      - homebrew/cask-drivers/yubico-yubikey-piv-manager
       - osxfuse
       - font-hack-nerd-font
       - font-meslo-nerd-font
+      - font-inconsolata
+      - font-terminus
+      - font-source-code-pro
       - xquartz
       - inkscape
+      - hipchat
+      - vlc
+      - wireshark
+      - microsoft-teams
+      - synergy-beta
+    ignore_errors: yes
 
   - name: override system vim
     tags:
@@ -81,6 +90,7 @@
     loop:
       - coreutils
       - zsh
+      - cmake
       - bash
       - tmux
       - reattach-to-user-namespace
@@ -106,14 +116,17 @@
       - pstree
       - libxdg-basedir
       - htop
+      - postgres
+      - hexyl
 
-  - name: post-install scripts to run
+  - name: add local zsh to shells
     tags:
-      - scripts
-    script:
-      - cd ~/.vim/bundle/YouCompleteMe && python3 ./install.py
-      - /usr/local/Cellar/fzf/0.17.5/install --key-bindings --completion --no-update-rc
-    ignore_errors: yes
+      - zsh
+    lineinfile:
+      path: /etc/shells
+      line: '/usr/local/bin/zsh'
+      state: present
+    become: true
 
   - name: Python pips
     tags:
@@ -123,29 +136,37 @@
       executable: pip3
     loop:
       - virtualenv
+      - powerline-status  
 
   - name: install oh-my-zsh
-    git:
-      repo: https://github.com/robbyrussell/oh-my-zsh
-      dest: ~/.oh-my-zsh
-      clone: yes
-    ignore_errors: yes
+    tags:
+      - zsh
+    script: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
 
   - name: clone dotfiles repo
     git:
-      repo: git@github.com:madchap/dotfiles.git
+      # repo: git@github.com:madchap/dotfiles.git
+      repo: https://github.com/madchap/dotfiles
       dest: ~/gitrepos/dotfiles
       track_submodules: yes
+    ignore_errors: yes
 
-  - name: clone misc repo
+  - name: dotdrop install requirements
+    tags:
+      - dotdrop
+    script: pip3 install -r ~/gitrepos/dotfiles/dotdrop/requirements.txt 
+    become: true
+
+  - name: dotdrop install all files
+    tags:
+      - dotdrop
+    script: ~/gitrepos/dotfiles/dotdrop.sh install
+
+  - name: powerlevel9k
     git:
-      repo: git@github.com:madchap/misc.git
-      dest: ~/gitrepos/misc
-
-#  - name: powerlevel9k
-#    git:
-#      repo: https://github.com/bhilburn/powerlevel9k.git
-#      dest: ~/.oh-my-zsh/custom/themes/powerlevel9k
+      repo: https://github.com/bhilburn/powerlevel9k.git
+      dest: ~/.oh-my-zsh/custom/themes/powerlevel9k
 
   - name: tmux TPM
     tags:
@@ -163,11 +184,33 @@
 #    become: true
 #    ignore_errors: yes
 
+  - name: YouCompleteMe install run
+    tags: 
+      - ycm
+    script: 
+      cd ~/.vim/bundle/YouCompleteMe && python3 ./install.py
+
+  - name: fzf install run
+    tags:
+      - fzf
+    script:
+      /usr/local/Cellar/fzf/0.17.5/install --key-bindings --completion --no-update-rc
+
   - name: enable locate
     tags:
       - locate
     script: /bin/launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
     become: true
+
+  - name: load ssh-auth override
+    tags:
+      - gpg
+    script: launchctl load -F ~/Library/LaunchAgents/link-ssh-auth-sock.plist
+  
+  - name: load homebrew gpg-agent
+    tags:
+      - gpg
+    script: launchctl load -F ~/Library/LaunchAgents/homebrew.gpg.gpg-agent.plist
 
   - name: symlink updatedb
     tags:
