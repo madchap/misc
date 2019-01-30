@@ -34,6 +34,7 @@
       name: "{{ item }}"
       state: present
     loop:
+      - keepingyouawake
       - zoomus
       - firefox
       - google-chrome
@@ -198,6 +199,20 @@
     script:
       /usr/local/Cellar/fzf/0.17.5/install --key-bindings --completion --no-update-rc
 
+  - name: copy sleepwatcher plist
+    tags:
+      - sleepwatcher
+    file:
+      src: ~/gitrepos/misc/osx/de.bernhard-baehr.sleepwatcher-20compatibility-localuser.plist
+      dst: ~/Library/LaunchDaemons/de.bernhard-baehr.sleepwatcher-20compatibility-localuser.plist
+      become: true
+
+  - name: enable sleepwatcher at start
+    tags:
+      - sleepwatcher
+    script: /bin/launchctl load -w /Library/LaunchDaemons/de.bernhard-baehr.sleepwatcher-20compatibility-localuser.plist
+    become: true 
+      
   - name: enable locate
     tags:
       - locate
