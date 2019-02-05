@@ -1,0 +1,6 @@
+# ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{vendor}=="0xd4", ATTR{device}=="0xb054", RUN="/tmp/test_add.sh"
+ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{vendor}=="0xd4", ATTR{device}=="0xb054", RUN="/usr/bin/at -M -f /home/fblaise/bin/udev_plug_dock.sh now"
+ACTION=="remove", SUBSYSTEM=="thunderbolt", ENV{DEVPATH}=="/devices/pci0000:00/0000:00:1c.0/0000:01:00.0/0000:02:00.0/0000:03:00.0/domain0/0-0/0-1/0-301", RUN="/usr/bin/at -M -f /home/fblaise/bin/udev_unplug_dock.sh now"
+# https://www.linuxquestions.org/questions/linux-desktop-74/udev-not-doing-remove-rules-841733/
+# no access to ATTR upon remove and not much ENV variables available
+# ACTION=="remove", SUBSYSTEM=="thunderbolt", ATTR{vendor}=="0xd4", ATTR{device}=="0xb054", RUN="/tmp/test_remove.sh"
