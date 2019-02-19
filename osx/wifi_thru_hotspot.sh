@@ -5,7 +5,7 @@ set -euo pipefail
 
 state_file=$HOME/.$(basename ${0}).log
 hotspot_ssid="blazer"
-darth_ip=$(dig +short q.darthgibus.net |tail -1)
+darth_ip=$(dig +short vpn.darthgibus.net |tail -1)
 bb_ip=$(dig +short bitbucket.pmidce.com)
 echo "IP for darthgibus is $darth_ip"
 echo "IPs for BB pmi: $bb_ip"

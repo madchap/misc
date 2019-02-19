@@ -48,7 +48,7 @@
       - signal
       - spectacle
       - spotify
-      - microsoft-office
+      # - microsoft-office
       - visual-studio-code
       - postman
       - kindle
@@ -65,14 +65,16 @@
       - font-source-code-pro
       - xquartz
       - inkscape
-      - hipchat
       - vlc
       - wireshark
-      - microsoft-teams
+      # - microsoft-teams
       - synergy-beta
+      - bitwarden
+      - authy
     ignore_errors: yes
 
   - name: override system vim
+    # Xcode needs to run manually 
     tags:
       - brew
       - formulaes
@@ -81,6 +83,7 @@
       name: vim
       state: present
       options: with-override-system-vi
+    ignore_errors: yes
 
   - name: install formulaes
     tags:
@@ -120,6 +123,16 @@
       - htop
       - postgres
       - hexyl
+      - pipenv
+      - npm
+      - aws-vault
+      - vault
+      - gist
+      - jq
+      - minikube
+      - wireguard-tools
+      - terraform
+      - bitwarden-cli
 
   - name: add local zsh to shells
     tags:
@@ -140,11 +153,14 @@
       - virtualenv
       - powerline-status
       - netifaces
+      - shodan
+      - truffleHog
+      - awscli
 
   - name: install oh-my-zsh
     tags:
       - zsh
-    script: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+    script: /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 
   - name: clone dotfiles repo
@@ -158,10 +174,11 @@
   - name: dotdrop install requirements
     tags:
       - dotdrop
-    script: pip3 install -r ~/gitrepos/dotfiles/dotdrop/requirements.txt 
+    script: /usr/local/bin/pip3 install -r /Users/fblaise/gitrepos/dotfiles/dotdrop/requirements.txt 
     become: true
 
   - name: dotdrop install all files
+    # need to add computer profile to config.yml
     tags:
       - dotdrop
     script: ~/gitrepos/dotfiles/dotdrop.sh install
@@ -199,18 +216,24 @@
     script:
       /usr/local/Cellar/fzf/0.17.5/install --key-bindings --completion --no-update-rc
 
+  - name: create LaunchDaemons directory
+    file:
+      path: ~/Library/LaunchDaemons
+      state: directory
+      mode: 0700
+
   - name: copy sleepwatcher plist
     tags:
       - sleepwatcher
     file:
-      src: ~/gitrepos/misc/osx/de.bernhard-baehr.sleepwatcher-20compatibility-localuser.plist
-      dst: ~/Library/LaunchDaemons/de.bernhard-baehr.sleepwatcher-20compatibility-localuser.plist
-      become: true
+      src: /Users/fblaise/gitrepos/misc/osx/de.bernhard-baehr.sleepwatcher-20compatibility-localuser.plist
+      dest: /Users/fblaise/Library/LaunchDaemons/de.bernhard-baehr.sleepwatcher-20compatibility-localuser.plist
+      state: link
 
   - name: enable sleepwatcher at start
     tags:
       - sleepwatcher
-    script: /bin/launchctl load -w /Library/LaunchDaemons/de.bernhard-baehr.sleepwatcher-20compatibility-localuser.plist
+    script: /bin/launchctl load -w /Users/fblaise/Library/LaunchDaemons/de.bernhard-baehr.sleepwatcher-20compatibility-localuser.plist
     become: true 
       
   - name: enable locate
@@ -222,12 +245,12 @@
   - name: load ssh-auth override
     tags:
       - gpg
-    script: launchctl load -F ~/Library/LaunchAgents/link-ssh-auth-sock.plist
+    script: /bin/launchctl load -F ~/Library/LaunchAgents/link-ssh-auth-sock.plist
   
   - name: load homebrew gpg-agent
     tags:
       - gpg
-    script: launchctl load -F ~/Library/LaunchAgents/homebrew.gpg.gpg-agent.plist
+    script: /bin/launchctl load -F ~/Library/LaunchAgents/homebrew.gpg.gpg-agent.plist
 
   - name: symlink updatedb
     tags:
