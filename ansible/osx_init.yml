@@ -71,6 +71,11 @@
       - synergy-beta
       - bitwarden
       - authy
+      - minikube
+      - aws-vault
+      - vagrant
+      - virtualbox
+      - virtualbox-extension-pack
     ignore_errors: yes
 
   - name: override system vim
@@ -82,7 +87,8 @@
     homebrew:
       name: vim
       state: present
-      options: with-override-system-vi
+      # not needed anymore on mojava?
+      # options: with-override-system-vi
     ignore_errors: yes
 
   - name: install formulaes
@@ -125,11 +131,9 @@
       - hexyl
       - pipenv
       - npm
-      - aws-vault
       - vault
       - gist
       - jq
-      - minikube
       - wireguard-tools
       - terraform
       - bitwarden-cli
