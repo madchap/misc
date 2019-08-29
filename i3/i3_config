@@ -32,6 +32,8 @@ floating_modifier $mod
 # start a terminal
 # bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Return exec dbus-launch /usr/bin/gnome-terminal
+# bindsym $mod+Return exec alacritty
+
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -101,28 +103,28 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 
 # switch to workspace
-bindsym $mod+1 workspace 1
-bindsym $mod+2 workspace 2
-bindsym $mod+3 workspace 3
-bindsym $mod+4 workspace 4
-bindsym $mod+5 workspace 5
-bindsym $mod+6 workspace 6
-bindsym $mod+7 workspace 7
+bindsym $mod+1 workspace 1: chats
+bindsym $mod+2 workspace 2: dev
+bindsym $mod+3 workspace 3: dojo
+bindsym $mod+4 workspace 4: read
+bindsym $mod+5 workspace 5: meetings
+bindsym $mod+6 workspace 6: edu
+bindsym $mod+7 workspace 7: sides
 bindsym $mod+8 workspace 8
 bindsym $mod+9 workspace 9
-bindsym $mod+0 workspace 10
+bindsym $mod+0 workspace 10: browse
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace 1
-bindsym $mod+Shift+2 move container to workspace 2
-bindsym $mod+Shift+3 move container to workspace 3
-bindsym $mod+Shift+4 move container to workspace 4
-bindsym $mod+Shift+5 move container to workspace 5
-bindsym $mod+Shift+6 move container to workspace 6
-bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+1 move container to workspace 1: chats
+bindsym $mod+Shift+2 move container to workspace 2: dev
+bindsym $mod+Shift+3 move container to workspace 3: dojo
+bindsym $mod+Shift+4 move container to workspace 4: read
+bindsym $mod+Shift+5 move container to workspace 5: meetings
+bindsym $mod+Shift+6 move container to workspace 6: edu
+bindsym $mod+Shift+7 move container to workspace 7: sides
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
-bindsym $mod+Shift+0 move container to workspace 10
+bindsym $mod+Shift+0 move container to workspace 10: browse
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -163,6 +165,8 @@ bar {
 	font xft:Droid Sans Mono, FontAwesome 10
 	separator_symbol ":|:"
 	position top
+    # output primary
+    tray_output primary
 
 	colors {
 		background #000000
@@ -181,6 +185,7 @@ bar {
 	status_command i3status | ~/gitrepos/misc/i3/i3prep.py
 #	status_command i3blocks
 }
+
 
 # active window border color
 client.focused	#4c7899 #00ff00 #000000
@@ -204,12 +209,13 @@ bindsym Mod1+Shift+Tab focus up
 #bindsym $mod+l exec "/usr/bin/i3lock -f -i ~/Pictures/linux-13.png"
 #exec xautolock -time 5 -locker "/usr/bin/i3lock -f -i ~/Pictures/linux-13.png"
 bindsym $mod+l exec "~/.i3/i3lock-multimonitor/lock"
-exec xautolock -time 5 -locker "~/.i3/i3lock-multimonitor/lock"
+bindsym XF86Launch5 exec "~/.i3/i3lock-multimonitor/lock"
+exec xautolock -time 30 -locker "~/.i3/i3lock-multimonitor/lock"
 #bindsym $mod+l exec "~/.i3/i3lock-fancy-multimonitor/lock"
 #exec xautolock -time 5 -locker "~/.i3/i3lock-fancy-multimonitor/lock"
 
 # background
-exec --no-startup-id "feh --bg-fill ~/Pictures/i3_solarized_bg.png"
+exec --no-startup-id "feh --bg-fill ~/Pictures/planet_clouds.jpg"
 
 # watch out for plasma5-workspace, conflicting dbus notifications
 exec --no-startup-id /usr/lib/xfce4/notifyd/xfce4-notifyd
@@ -237,9 +243,9 @@ set $monitor2 DP1-2 # external screen, they are set here to make it easier to mo
 exec --no-startup-id "sh ~/.i3/scripts/xrandr.sh $monitor"
 
 # Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+bindsym Mod4+Prior exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+bindsym Mod4+Next exec --no-startup-id pactl set-sink-volume 0 +5% #decrease sound volume
+bindsym XF86Launch6 exec --no-startup-id pamixer -t
 
 # Sreen brightness controls
 # bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 20 # increase screen brightness
@@ -266,19 +272,25 @@ exec --no-startup-id "nm-applet"
 exec --no-startup-id "compton -b -d :0"
 exec --no-startup-id "shutter --min_at_startup"
 exec --no-startup-id "blueman-manager"
+exec --no-startup-id "pasystray"
 # exec --no-startup-id "albert"
 
 # for_window [class="^.*"] border pixel 3
 
 # until shutter does not crash anymore when launched if already running
-bindsym --release Print exec scrot ~/Pictures/snap_full_%Y%m%d_%H%M%S.png
-bindsym --release ctrl+Print exec scrot -s ~/Pictures/snap_sel_%Y%m%d_%H%M%S.png
+# bindsym --release Print exec scrot ~/Pictures/snap_full_%Y%m%d_%H%M%S.png
+# bindsym --release ctrl+Print exec scrot -s ~/Pictures/snap_sel_%Y%m%d_%H%M%S.png
+bindsym --release ctrl+Print exec shutter -s -e --disable_systray -p default -n
+
+# vpn
+bindsym ctrl+XF86Launch5 exec "/home/fblaise/bin/toggle_vpn.sh"
+
 
 # enable floating window for virtualbox
 #for_window [class="^VirtualBox$"] floating enable, move container to workspace 10
 # assign some apps to some workspaces
 # assign [class="^VirtualBox$"] 9
-assign [class="^(?i)remmina$"] 9
+# assign [class="^(?i)remmina$"] 9
 #
 # move the whole workspace to the next output
 bindsym $mod+x move workspace to output left
