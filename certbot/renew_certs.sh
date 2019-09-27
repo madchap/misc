@@ -5,7 +5,7 @@ set -ex
 cleanup() {
         # kill http server
         kill $pypid
-	# _owncloud start
+        _restart_container start nginx-rp
 }
 
 _restart_container() {
@@ -19,11 +19,24 @@ _restart_container() {
 	fi
 }
 
+send_alert() {
+        to="xxx@gmail.com"
+        echo "Sending alert to $to"
+
+        subject="Problem with cert renewal"
+        body="The $0 had issues with some certs renewal. Please check.\r\n\r\n"
+        body+=$(cat $log)
+
+        echo "$body" |mail -s "$subject" $to
+}
+
 trap cleanup INT TERM EXIT
  
 wwwdir=/var/www/html
+log=/tmp/cert_renewal.log
+exec > >(tee $log) 2>&1
 
-_restart_container stop nginx
+_restart_container stop nginx-rp
  
 # Start python simple server on port 80 for letsencrypt check
 [[ -d $wwwdir ]] || mkdir -p $wwwdir
@@ -37,6 +50,5 @@ sleep 5
 # full -- not done automatically. Do the initial certs at least once.
 # certbot certonly --webroot -w $wwwdir -d logstash.cyberfusion.center
 # renew
-/usr/bin/certbot renew --post-hook "/root/certbot/cp_owncloud_certs.sh"
+/usr/bin/certbot renew --post-hook "/root/certbot/cp_certs.sh" || send_alert
 
-_restart_container start nginx
