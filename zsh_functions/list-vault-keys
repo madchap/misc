@@ -1,6 +1,11 @@
-# stolen from https://github.com/hashicorp/vault/issues/5275#issuecomment-508841622
+# stolen and adapted from https://github.com/hashicorp/vault/issues/5275#issuecomment-508841622
 function list-vault-keys {
+    iteration=0
     place=("${1%"/"}/")
+    if [ -z "$2" ]; then
+        start_place=$place
+        iteration=1
+    fi
 
     result=$(vault kv list -format=json $place 2>&1)
 
@@ -14,9 +19,10 @@ function list-vault-keys {
 
     for secret in $(echo "$result" | jq -r '.[]'); do
         if [[ "$secret" == */ ]]; then
-            list-vault-keys "$place$secret"
+            list-vault-keys "$place$secret" "iteration"
         else
             echo "$place$secret"
         fi
     done
+    place=$start_place
 }
