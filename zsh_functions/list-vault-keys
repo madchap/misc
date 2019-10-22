@@ -1,0 +1,22 @@
+# stolen from https://github.com/hashicorp/vault/issues/5275#issuecomment-508841622
+function list-vault-keys {
+    place=("${1%"/"}/")
+
+    result=$(vault kv list -format=json $place 2>&1)
+
+    if [ ! $? -eq 0 ];
+    then
+        if [[ $result =~ "permission denied" ]]; then
+            return
+        fi
+        >&2 echo "$result"
+    fi
+
+    for secret in $(echo "$result" | jq -r '.[]'); do
+        if [[ "$secret" == */ ]]; then
+            list-vault-keys "$place$secret"
+        else
+            echo "$place$secret"
+        fi
+    done
+}
