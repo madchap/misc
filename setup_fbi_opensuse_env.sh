@@ -3,6 +3,7 @@
 set -x
 
 [[ $UID -eq 0 ]] && echo "Run as your user, no sudo." && exit 1
+[[ "$PWD" != '/home/fblaise/gitrepos/misc' ]] && echo "Wrong start directory" && exit 2
 
 PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin
 
@@ -52,7 +53,6 @@ if [ $(getent passwd $(whoami) | cut -d: -f7) = "/bin/bash" ]; then
 	chsh -s $(which zsh)
 fi
 
-mkdir ~/gitrepos
 mkdir ~/.ssh
 mkdir ~/Pictures
 mkdir ~/Downloads
