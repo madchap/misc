@@ -78,7 +78,7 @@ else
 fi
 
 if [ ! -f ~/bin/bat ]; then
-	wget https://github.com/sharkdp/bat/releases/download/v0.6.1/bat-v0.6.1-x86_64-unknown-linux-gnu.tar.gz -O ~/bin/bat.tar.gz
+	wget https://github.com/sharkdp/bat/releases/download/v0.12.1/bat-v0.12.1-x86_64-unknown-linux-gnu.tar.gz -O ~/bin/bat.tar.gz
 	tar zvxf ~/bin/bat.tar.gz -C ~/bin --strip 1
 fi	
 
@@ -112,24 +112,34 @@ if [ ! -d ~/.tmux/plugins/tpm ]; then
     #cp /var/lib/gems/2.3.0/gems/tmuxinator-0.9.0/completion/tmuxinator.zsh ~
 fi
 
+if [ ! -d ~/gitrepos/dotfiles ]; then
+    git clone https://github.com/madchap/dotfiles.git
+
+    cd ~/gitrepos/dotfiles
+    pip3 install -r dotdrop/requirements.txt --user
+    ./dotdrop.sh install
+
+fi
+
 # get custom files from git
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.vimrc > ~/.vimrc
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.vimrc-server > ~/.vimrc-server
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.zshrc > ~/.zshrc
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/zsh_autosuggestions_config.zsh > ~/.oh-my-zsh/custom/config.zsh
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.tmux.conf > ~/.tmux.conf
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.tmux-server.conf > ~/.tmux-server.conf
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.tmux-macos.conf > ~/.tmux-macos.conf
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.sshrc > ~/.ssh/myrc
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.alias > ~/.alias
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/sync_remote_tmux_and_vi.sh > ~/sync_remote_tmux_and_vi.sh && chmod u+x ~/sync_remote_tmux_and_vi.sh
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/yubikey/70-u2f.rules > ~/70-u2f.rules
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/gnome/gtk.css > ~/.config/gtk-3.0/gtk.css
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/scripts/launch_fortivpnsslcli_cli > ~/bin/launch_fortivpnsslcli_cli
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/scripts/establish_tunnels.sh > ~/bin/establish_tunnels.sh
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/scripts/tmux_sshkey_indicator.sh > ~/bin/tmux_sshkey_indicator.sh
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/scripts/tmux_autossh_indicator.sh > ~/bin/tmux_autossh_indicator.sh
-curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/scripts/tmux_vpnssl_indicator.sh > ~/bin/tmux_vpnssl_indicator.sh
+echo "Moved to dotdrop now!!"
+# curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.vimrc > ~/.vimrc
+# curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.vimrc-server > ~/.vimrc-server
+# curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.zshrc > ~/.zshrc
+# curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/zsh_autosuggestions_config.zsh > ~/.oh-my-zsh/custom/config.zsh
+# curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.tmux.conf > ~/.tmux.conf
+# curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.tmux-server.conf > ~/.tmux-server.conf
+# curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.tmux-macos.conf > ~/.tmux-macos.conf
+# curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.sshrc > ~/.ssh/myrc
+# curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/.alias > ~/.alias
+# curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/sync_remote_tmux_and_vi.sh > ~/sync_remote_tmux_and_vi.sh && chmod u+x ~/sync_remote_tmux_and_vi.sh
+# curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/yubikey/70-u2f.rules > ~/70-u2f.rules
+# curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/gnome/gtk.css > ~/.config/gtk-3.0/gtk.css
+# curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/scripts/launch_fortivpnsslcli_cli > ~/bin/launch_fortivpnsslcli_cli
+# curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/scripts/establish_tunnels.sh > ~/bin/establish_tunnels.sh
+# curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/scripts/tmux_sshkey_indicator.sh > ~/bin/tmux_sshkey_indicator.sh
+# curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/scripts/tmux_autossh_indicator.sh > ~/bin/tmux_autossh_indicator.sh
+# curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/misc/master/scripts/tmux_vpnssl_indicator.sh > ~/bin/tmux_vpnssl_indicator.sh
 
 # plasma config files
 # kglobalshortcut has to be put prior to starting kdm to prevent being overwritten
@@ -144,7 +154,7 @@ sudo systemctl enable pcscd
 
 # pip
 # pip install --upgrade pip
-hash openstack 2>/dev/null || sudo pip install python-openstackclient
+# hash openstack 2>/dev/null || sudo pip install python-openstackclient
 
 # Install vundle plugins
 vim +PluginInstall +qall
@@ -178,17 +188,17 @@ sudo sed -i 's!GRUB_TIMEOUT=8!GRUB_TIMEOUT=1!' /etc/default/grub
 sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 
 # Installing extra soft
-if [ ! -f ~/.extra_softs_installed ]; then
-	# Get extra softwares instead of going to download them again from websites.
-	echo "Downloading extra software from vps"
-	scp 149.202.49.79:~/softwares/* ~/apps/
-	
-	cd ~/apps
-	tar zxf forticlientsslvpn_linux_4.4.2335.tar.gz
-	tar zxf sdtconnector-1.7.5.tar.gz
-
-	touch ~/.extra_softs_installed
-fi
+# if [ ! -f ~/.extra_softs_installed ]; then
+# 	# Get extra softwares instead of going to download them again from websites.
+# 	echo "Downloading extra software from vps"
+# 	scp 149.202.49.79:~/softwares/* ~/apps/
+# 	
+# 	cd ~/apps
+# 	tar zxf forticlientsslvpn_linux_4.4.2335.tar.gz
+# 	tar zxf sdtconnector-1.7.5.tar.gz
+# 
+# 	touch ~/.extra_softs_installed
+#fi
 
 # Extra github repos
 #if [ ! -d ~/gitrepos/luxafor-python ]; then
@@ -219,20 +229,20 @@ curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/m
 
 # minikube, kubectl
 # now a pkg for it
-#if [ ! hash kubectl 2>/dev/null ]; then
-#       	curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && sudo mv -f kubectl /usr/local/bin/ && sudo chmod +x /usr/local/bin/kubectl
-#fi
+if [ ! hash kubectl 2>/dev/null ]; then
+       	curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && sudo mv -f kubectl /usr/local/bin/ && sudo chmod +x /usr/local/bin/kubectl
+fi
 if [ ! hash minikube 2>/dev/null ]; then
        	curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv -f minikube /usr/local/bin/
 fi
 
 # more up-to-date version of vagrant
-if [ ! hash vagrant 2>/dev/null ]; then
-	version=2.0.1
-	cd ~/Downloads
-	wget -q --show-progress -O vagrant.rpm https://releases.hashicorp.com/vagrant/$version/vagrant_${version}_x86_64.rpm
-	sudo rpm -Uvh vagrant.rpm
-fi
+#if [ ! hash vagrant 2>/dev/null ]; then
+#	version=2.0.1
+#	cd ~/Downloads
+#	wget -q --show-progress -O vagrant.rpm https://releases.hashicorp.com/vagrant/$version/vagrant_${version}_x86_64.rpm
+#	sudo rpm -Uvh vagrant.rpm
+#fi
 
 # coreOS for vagrant
 # if [ ! -d ~/gitrepos/coreos-vagrant ]; then
@@ -302,15 +312,16 @@ if [[ "$WM" == "i3" ]]; then
 
 	mkdir -p ~/.config/i3
 	mkdir -p ~/.i3/scripts
+    # should dotdrop
 	# copy config files from git repo
-	cp -f ~/gitrepos/misc/i3/.compton.conf ~
-	cp -f ~/gitrepos/misc/i3/i3prep.py ~/bin/
-	cp -f ~/gitrepos/misc/i3/i3_config ~/.config/i3/config
-	cp -f ~/gitrepos/misc/i3/.i3status.conf ~
-	cp -f ~/gitrepos/misc/i3/.xinitrc ~
-	cp -f ~/gitrepos/misc/i3/xrandr.sh ~/.i3/scripts/
-	cp -f ~/gitrepos/misc/i3/.Xresources ~
-	cp -f ~/gitrepos/misc/i3/backlight.sh ~/.i3/scripts/
+	# cp -f ~/gitrepos/misc/i3/.compton.conf ~
+	# cp -f ~/gitrepos/misc/i3/i3prep.py ~/bin/
+	# cp -f ~/gitrepos/misc/i3/i3_config ~/.config/i3/config
+	# cp -f ~/gitrepos/misc/i3/.i3status.conf ~
+	# cp -f ~/gitrepos/misc/i3/.xinitrc ~
+	# cp -f ~/gitrepos/misc/i3/xrandr.sh ~/.i3/scripts/
+	# cp -f ~/gitrepos/misc/i3/.Xresources ~
+	# cp -f ~/gitrepos/misc/i3/backlight.sh ~/.i3/scripts/
 	
 	# runlevel 3
 	sudo systemctl disable display-manager.service
@@ -344,27 +355,27 @@ if [[ "$WM" == "i3" ]]; then
 	cp -f ~/gitrepos/misc/assets/i3_solarized_bg.png ~/Pictures/
 
 	# installing python2 netifaces for i3prep.py -- i3 status bar
-	sudo pip2 install netifaces
+	sudo zypper --non-interactive in python2-netifaces
 
 	# create the backlight_p.out to avoid i3prep.py to bomb
 	echo 100 > ~/.i3/scripts/backlight_p.out
 fi
 
 # Setting up onedrive client
-if [ ! -d ~/gitrepos/onedrive ]; then
-	sudo zypper -n install sqlite3-devel libcurl-devel
-	cd ~/gitrepos
-	git clone https://github.com/skilion/onedrive.git
-	cd ~/gitrepos/onedrive
-	curl -fsS https://dlang.org/install.sh | bash -s dmd
-	#TODO will not work as version changes
-	source ~/dlang/dmd-2.079.0/activate
-	make
-	sudo make install
-	cp ./onedrive ~/bin/
-	echo "Please initiate the setup manually."
-	systemctl --user enable onedrive
-fi
+# if [ ! -d ~/gitrepos/onedrive ]; then
+# 	sudo zypper -n install sqlite3-devel libcurl-devel
+# 	cd ~/gitrepos
+# 	git clone https://github.com/skilion/onedrive.git
+# 	cd ~/gitrepos/onedrive
+# 	curl -fsS https://dlang.org/install.sh | bash -s dmd
+# 	#TODO will not work as version changes
+# 	source ~/dlang/dmd-2.079.0/activate
+# 	make
+# 	sudo make install
+# 	cp ./onedrive ~/bin/
+# 	echo "Please initiate the setup manually."
+# 	systemctl --user enable onedrive
+# fi
 
 
 # re-enabling gpg checks on repo temporarily
