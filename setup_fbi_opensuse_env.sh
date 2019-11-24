@@ -151,7 +151,7 @@ vim +PluginInstall +qall
 
 # compile ycm_core
 if [[ ! -f ~/.vim/bundle/YouCompleteMe/third_party/ycmd/ycm_core.so ]]; then
-	cd ~/.vim/bundle/YouCompleteMe && ./install.py
+	cd ~/.vim/bundle/YouCompleteMe && ./install.py --gocode-completer
 fi
 
 # Make sure (or try) that my bluetooth headset work. OK as of Feb 12 2017
