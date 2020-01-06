@@ -33,7 +33,7 @@ sudo zypper mr -G ithod
 
 sudo zypper dup -y --auto-agree-with-product-licenses 
 
-sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh cmake pavucontrol inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools ansible xdotool net-tools-deprecated docker-compose weechat libinput-tools xdotool pdftk ipcalc tig nmap rpm-build xf86-video-intel fontawesome-fonts gnome-keyring minicom pwgen speedtest-cli gnome-keyring gnome-terminal pulseaudio pulseaudio-utils NetworkManager-applet NetworkManager-openconnect eog evince wireshark xbindkeys aws-cli sshuttle asciinema backintime backintime-qt MozillaFirefox python2-pip mosh xorg-x11-server xfce4-power-manager xinit adobe-sourcecodepro-fonts kubernetes-client gnome-colors-icon-theme go1.13 go1.12 pinentry-gtk2 NetworkManager-openvpn flameshot
+sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh cmake pavucontrol inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools ansible xdotool net-tools-deprecated docker-compose weechat libinput-tools xdotool pdftk ipcalc tig nmap rpm-build xf86-video-intel fontawesome-fonts gnome-keyring minicom pwgen speedtest-cli gnome-keyring gnome-terminal pulseaudio pulseaudio-utils NetworkManager-applet NetworkManager-openconnect eog evince wireshark xbindkeys aws-cli sshuttle asciinema backintime backintime-qt MozillaFirefox python2-pip mosh xorg-x11-server xfce4-power-manager xinit adobe-sourcecodepro-fonts kubernetes-client gnome-colors-icon-theme go1.13 go1.12 pinentry-gtk2 NetworkManager-openvpn flameshot vlc-codecs
 
 sudo zypper -n install google-chrome
 
@@ -100,11 +100,11 @@ if [ -d ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions ]; then
 else
 	git clone git://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 fi
-if [ -d ~/.oh-my-zsh/custom/themes/powerlevel9k ]; then
-    cd ~/.oh-my-zsh/custom/themes/powerlevel9k
+if [ -d ~/.oh-my-zsh/custom/themes/powerlevel10k ]; then
+    cd ~/.oh-my-zsh/custom/themes/powerlevel10k
     git pull
 else
-    git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k
 fi
 
 
