@@ -120,6 +120,6 @@ if __name__ == '__main__':
         j.insert(1, {'full_text': '%s' % vpn_icon, 'name': 'vpnssl', 'color': vpn_color})
         j.insert(2, {'full_text': ' %s' % get_sshuttle_args_count('sshuttle --pidfile=/tmp/sshuttle.pid -D -r'), 'name': 'sshuttle'})
         j.insert(3, {'full_text': ' %s' % get_procs_count('autossh -'), 'name': 'autossh'})
-        j.insert(4, {'full_text': ' %s' % get_brightness(), 'name': 'brightness'})
+        # j.insert(4, {'full_text': ' %s' % get_brightness(), 'name': 'brightness'})
         # and echo back new encoded json
         print_line(prefix+json.dumps(j))
