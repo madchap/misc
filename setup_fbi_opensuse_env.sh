@@ -25,15 +25,17 @@ sudo localectl set-x11-keymap ch fr
 [[ ! -f /etc/zypp/repos.d/home_ithod_signal.repo ]] && sudo zypper ar -f -n ithod https://download.opensuse.org/repositories/home:/ithod:/signal/openSUSE_Tumbleweed/ ithod
 [[ ! -f /etc/zypp/repos.d/vscode.repo ]] && sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc && sudo zypper ar -f -n vscode https://packages.microsoft.com/yumrepos/vscode vscode
 [[ ! -f /etc/zypp/repos.d/google-chrome.repo ]] && sudo zypper ar -f -n google-chrome http://dl.google.com/linux/chrome/rpm/stable/x86_64 google-chrome
+[[ ! -f /etc/zypp/repos.d/wireguard.repo ]] && sudo zypper ar -f obs://network:vpn:wireguard wireguard
 
 # disabling gpg checks on repo temporarily
 sudo zypper mr -G packman
 sudo zypper mr -G vlc
 sudo zypper mr -G ithod
+sudo zypper mr -G wireguard
 
 sudo zypper dup -y --auto-agree-with-product-licenses 
 
-sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh cmake pavucontrol inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools ansible xdotool net-tools-deprecated docker-compose weechat libinput-tools xdotool pdftk ipcalc tig nmap rpm-build xf86-video-intel fontawesome-fonts gnome-keyring minicom pwgen speedtest-cli gnome-keyring gnome-terminal pulseaudio pulseaudio-utils NetworkManager-applet NetworkManager-openconnect eog evince wireshark xbindkeys aws-cli sshuttle asciinema backintime backintime-qt MozillaFirefox python2-pip mosh xorg-x11-server xfce4-power-manager xinit adobe-sourcecodepro-fonts kubernetes-client gnome-colors-icon-theme go1.13 go1.12 pinentry-gtk2 NetworkManager-openvpn flameshot vlc-codecs
+sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh cmake pavucontrol inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools ansible xdotool net-tools-deprecated docker-compose weechat libinput-tools xdotool pdftk ipcalc tig nmap rpm-build xf86-video-intel fontawesome-fonts gnome-keyring minicom pwgen speedtest-cli gnome-keyring gnome-terminal pulseaudio pulseaudio-utils NetworkManager-applet NetworkManager-openconnect eog evince wireshark xbindkeys aws-cli sshuttle asciinema backintime backintime-qt MozillaFirefox python2-pip mosh xorg-x11-server xfce4-power-manager xinit adobe-sourcecodepro-fonts kubernetes-client gnome-colors-icon-theme go1.13 go1.12 pinentry-gtk2 NetworkManager-openvpn flameshot vlc-codecs wireguard-kmp-default wireguard-tools
 
 sudo zypper -n install google-chrome
 
@@ -252,7 +254,7 @@ if [[ "$WM" == "gnome" ]]; then
 fi
 
 if [[ "$WM" == "i3" ]]; then
-	sudo zypper --non-interactive install i3 scrot xfce4-notifyd thunar thunar-plugin-archive thunar-plugin-vcs thunar-sendto-blueman xbacklight compton xev xautolock xkill xinput clipit rofi feh polkit-gnome NetworkManager-applet blueman bluez xfce4-settings file-roller
+	sudo zypper --non-interactive install i3 scrot xfce4-notifyd thunar thunar-plugin-archive thunar-plugin-vcs thunar-sendto-blueman xbacklight picom xev xautolock xkill xinput clipit rofi feh polkit-gnome NetworkManager-applet blueman bluez xfce4-settings file-roller
 
 	mkdir -p ~/.config/i3
 	mkdir -p ~/.i3/scripts
@@ -300,6 +302,7 @@ fi
 sudo zypper mr -g packman
 sudo zypper mr -g vlc
 sudo zypper mr -g ithod
+sudo zypper mr -g wireguard
 
 #firewalld rules
 sh ~/gitrepos/misc/firewalld_rules.sh
