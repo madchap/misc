@@ -254,7 +254,7 @@ if [[ "$WM" == "gnome" ]]; then
 fi
 
 if [[ "$WM" == "i3" ]]; then
-	sudo zypper --non-interactive install i3 scrot xfce4-notifyd thunar thunar-plugin-archive thunar-plugin-vcs thunar-sendto-blueman xbacklight picom xev xautolock xkill xinput clipit rofi feh polkit-gnome NetworkManager-applet blueman bluez xfce4-settings file-roller
+	sudo zypper --non-interactive install i3 scrot xfce4-notifyd thunar thunar-plugin-archive thunar-plugin-vcs thunar-sendto-blueman xbacklight picom xev xautolock xkill xinput clipit rofi feh polkit-gnome NetworkManager-applet blueman bluez xfce4-settings file-roller rofi-calc
 
 	mkdir -p ~/.config/i3
 	mkdir -p ~/.i3/scripts
