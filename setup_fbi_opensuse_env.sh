@@ -21,7 +21,7 @@ sudo localectl set-keymap ch-fr
 sudo localectl set-x11-keymap ch fr
 
 [[ ! -f /etc/zypp/repos.d/packman.repo ]] && sudo zypper ar -f -n packman http://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed/ packman
-[[ ! -f /etc/zypp/repos.d/vlc.repo ]] && sudo zypper ar -f -n vlc http://download.videolan.org/pub/vlc/SuSE/Tumbleweed/ vlc
+# [[ ! -f /etc/zypp/repos.d/vlc.repo ]] && sudo zypper ar -f -n vlc http://download.videolan.org/pub/vlc/SuSE/Tumbleweed/ vlc
 [[ ! -f /etc/zypp/repos.d/home_ithod_signal.repo ]] && sudo zypper ar -f -n ithod https://download.opensuse.org/repositories/home:/ithod:/signal/openSUSE_Tumbleweed/ ithod
 [[ ! -f /etc/zypp/repos.d/vscode.repo ]] && sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc && sudo zypper ar -f -n vscode https://packages.microsoft.com/yumrepos/vscode vscode
 [[ ! -f /etc/zypp/repos.d/google-chrome.repo ]] && sudo zypper ar -f -n google-chrome http://dl.google.com/linux/chrome/rpm/stable/x86_64 google-chrome
@@ -29,7 +29,6 @@ sudo localectl set-x11-keymap ch fr
 
 # disabling gpg checks on repo temporarily
 sudo zypper mr -G packman
-sudo zypper mr -G vlc
 sudo zypper mr -G ithod
 sudo zypper mr -G wireguard
 
@@ -300,7 +299,6 @@ fi
 
 # re-enabling gpg checks on repo temporarily
 sudo zypper mr -g packman
-sudo zypper mr -g vlc
 sudo zypper mr -g ithod
 sudo zypper mr -g wireguard
 
