@@ -60,8 +60,12 @@ if [ $(getent passwd $(whoami) | cut -d: -f7) == "/bin/bash" ]; then
 fi
 
 mkdir ~/.ssh
+mkdir ~/.npm-packages
 mkdir ~/Pictures
 mkdir ~/Downloads
+
+# set npm to look for user's directory
+npm config set prefix "${HOME}/.npm-packages"
 
 if [ ! -d ~/apps ]; then 
 	mkdir ~/apps 
