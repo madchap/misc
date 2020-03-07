@@ -5,6 +5,10 @@ import CloudFlare
 import hvac
 import json
 import sys
+import subprocess
+import docker_helper
+import webserver_helper
+import email_helper
 
 
 def get_cf_token_from_vault():
@@ -28,11 +32,23 @@ def get_cf_token_from_vault():
         print("Something is wrong: {}".format(e))
 """
 
+def exec_certbot():
+    command = '/usr/bin/certbot renew --post-hook "./cp_certs.sh"'
+    r = subprocess.Popen("./renew_certs.sh")
+    r_text = r.communicate()[0]
+    r_code = r.returncode
+
+    if r_code is not 0:
+        message = "Error renewing your certificates: {}".format(r_text)
+        email_helper.send_email()
+
+
 def flip_dns_proxy(switch=True):
     zone_name = "darthgibus.net"
     zones = cf.zones.get(params={'name': zone_name})
     if len(zones) == 0:
         print("no zone found")
+        email_helper.send_email()
         sys.exit()
     # else:
     #    print(json.dumps(zones, indent=4, sort_keys=True))
@@ -60,3 +76,9 @@ if __name__ == "__main__":
     cftoken = get_cf_token_from_vault()
     cf = CloudFlare.CloudFlare(debug=False, token=cftoken)
     flip_dns_proxy(True)
+
+    webserver_helper.up()
+    docker_helper.stop_container("nginx-rp")
+    exec_certbot()
+    webserver_helper.down()
+    docker_helper.start_container("nginx-rp")
