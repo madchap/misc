@@ -9,6 +9,7 @@ import subprocess
 import docker_helper
 import webserver_helper
 import email_helper
+import time
 
 
 def get_cf_token_from_vault():
@@ -33,14 +34,14 @@ def get_cf_token_from_vault():
 """
 
 def exec_certbot():
-    command = '/usr/bin/certbot renew --post-hook "./cp_certs.sh"'
-    r = subprocess.Popen("./renew_certs.sh")
+    command = '/usr/bin/certbot renew --post-hook "../cp_certs.sh"'
+    r = subprocess.Popen(command)
     r_text = r.communicate()[0]
     r_code = r.returncode
 
     if r_code is not 0:
         message = "Error renewing your certificates: {}".format(r_text)
-        email_helper.send_email()
+        email_helper.send_email("fred.blaise@gmail.com", message)
 
 
 def flip_dns_proxy(switch=True):
@@ -48,7 +49,7 @@ def flip_dns_proxy(switch=True):
     zones = cf.zones.get(params={'name': zone_name})
     if len(zones) == 0:
         print("no zone found")
-        email_helper.send_email()
+        email_helper.send_email("fred.blaise@gmail.com", "Certs renewal failed - no zone found")
         sys.exit()
     # else:
     #    print(json.dumps(zones, indent=4, sort_keys=True))
@@ -75,10 +76,13 @@ def flip_dns_proxy(switch=True):
 if __name__ == "__main__":
     cftoken = get_cf_token_from_vault()
     cf = CloudFlare.CloudFlare(debug=False, token=cftoken)
-    flip_dns_proxy(True)
+    flip_dns_proxy(False)
 
     webserver_helper.up()
+    time.sleep(5)
     docker_helper.stop_container("nginx-rp")
     exec_certbot()
     webserver_helper.down()
     docker_helper.start_container("nginx-rp")
+    
+    flip_dns_proxy(True)
