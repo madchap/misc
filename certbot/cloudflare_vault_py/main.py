@@ -35,7 +35,7 @@ def get_cf_token_from_vault():
 
 def exec_certbot():
     command = '/usr/bin/certbot renew --post-hook "/usr/local/bin/cp_certs.sh"'
-    r = subprocess.Popen(command)
+    r = subprocess.Popen(command, shell=True)
     r_text = r.communicate()[0]
     r_code = r.returncode
 
