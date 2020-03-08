@@ -10,7 +10,7 @@ def stop_container(container_name):
 def start_container(container_name):
     try:
         print("Starting container {}".format(container_name))
-        docker_client.containers.get(container_name).stop()
+        docker_client.containers.get(container_name).start()
     except Exception as e:
         print(str(e))
 
