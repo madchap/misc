@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # This script is a simple wrapper which prefixes each i3status line with custom
@@ -48,14 +48,14 @@ def get_vpnssl_status(iface):
 def get_procs_count(proc_name):
     """ Returns number of procs """
     procs = subprocess.check_output(['ps','-ef']).splitlines()
-    name_procs = [proc for proc in procs if proc_name in proc]
+    name_procs = [proc for proc in procs if proc_name.encode() in proc]
     return len(name_procs)
 
 
 def get_sshuttle_args_count(proc_name):
     """ Returns number of subnets handled by sshuttle """
     procs = subprocess.check_output(['ps', '-eo', 'comm,args']).splitlines()
-    name_procs = [proc for proc in procs if proc_name in proc]
+    name_procs = [proc for proc in procs if proc_name.encode() in proc]
 
     if len(name_procs) > 1:
         return -1
