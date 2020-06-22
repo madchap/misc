@@ -293,5 +293,5 @@ bindsym ctrl+XF86Launch5 exec "/home/fblaise/bin/toggle_vpn.sh"
 # assign [class="^(?i)remmina$"] 9
 #
 # move the whole workspace to the next output
-bindsym $mod+x move workspace to output left
-bindsym $mod+y move workspace to output down
+bindsym $mod+x move workspace to output right
+bindsym $mod+y move workspace to output left
