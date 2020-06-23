@@ -1,0 +1,8 @@
+# plug and unplug actions for the Plugable TBT3-UDV Docking Station
+ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{vendor}=="0x173", ATTR{device}=="0x2002", RUN="/usr/bin/at -M -f /home/fblaise/bin/udev_plug_dock.sh now"
+# ACTION=="remove", SUBSYSTEM=="thunderbolt", ENV{DEVPATH}=="/devices/pci0000:00/0000:00:1d.4/0000:05:00.0/0000:06:00.0/0000:07:00.0/domain0/0-0/0-1", RUN+="/usr/bin/at -M -f /home/fblaise/bin/udev_unplug_dock.sh now"
+ACTION=="remove", SUBSYSTEM=="thunderbolt", ENV{DEVPATH}=="/devices/pci0000:00/0000:00:1d.4/0000:05:00.0/0000:06:00.0/0000:07:00.0/domain0/0-0", RUN+="/usr/bin/at -M -f /home/fblaise/bin/udev_unplug_dock.sh now"
+
+# https://www.linuxquestions.org/questions/linux-desktop-74/udev-not-doing-remove-rules-841733/
+# no access to ATTR upon remove and not much ENV variables available
+# ACTION=="remove", SUBSYSTEM=="thunderbolt", ATTR{vendor}=="0xd4", ATTR{device}=="0xb054", RUN="/tmp/test_remove.sh"
