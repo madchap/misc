@@ -15,7 +15,7 @@ if xrandr | grep -wq "$3 connected"; then
 
     # laptop is on the right
     xrandr --output "$3" --mode 3840x2160 --rate 60.00 \
-        --output "$2" --mode 3840x2160 --pos 3840x0 --rate 60.00 \
+        --output "$2" --mode 3840x2160 --pos 3840x0 --rate 60.00 --primary \
         --output "$1" --mode 2560x1440 --pos 7680x0
 
 
@@ -28,7 +28,7 @@ elif xrandr | grep -qw "$2 connected"; then
 
     # laptop is on the left
 	xrandr --output "$2" --mode 3840x2160 --rate 60.00 \
-           --output "$1" --mode 2560x1440 --pos 3840x0 --rate 60.00
+           --output "$1" --mode 2560x1440 --pos 3840x0 --rate 60.00 --primary
 
 	# sleep 1
 	# xrandr --output "${3%-*}" --off
