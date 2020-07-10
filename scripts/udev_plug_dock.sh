@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # run through 'at' coming from udev
 set -x
+exec > >(tee /tmp/udev_plug.log) 2>&1
 
 # wait for the system to stabilize
 sleep 3

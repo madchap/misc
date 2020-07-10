@@ -6,7 +6,7 @@ if [[ "$1" == "laptop" ]]; then
     exit 0
 fi
 
-if xrandr | grep -wq "$3 connected"; then
+if xrandr | grep -wq "DP2 connected"; then
     echo "laptop monitor + 2 4K"
     # laptop is on the left
     # xrandr --output "$1" --mode 2560x1440 \
@@ -19,7 +19,7 @@ if xrandr | grep -wq "$3 connected"; then
         --output "$1" --mode 2560x1440 --pos 7680x0
 
 
-elif xrandr | grep -qw "$2 connected"; then
+elif xrandr | grep -qw "DP1 connected"; then
 	echo "laptop monitor + 1 4K"
 
     # laptop is on the right
