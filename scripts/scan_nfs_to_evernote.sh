@@ -69,7 +69,7 @@ target_platform=$1
 
 # Look for file, pdf
 # files=$(find ${scan_point} -maxdepth 1 -type f -newermt "-${scan_max_value} seconds" -not -newermt "-${scan_min_value} seconds" \( -name '*.tif' -o -name '*.jpg' -o -name '*.pdf' \))
-files=$(find ${scan_point} -maxdepth 1 -type f -not -newermt "-${scan_min_value} seconds" \( -name '*.tif' -o -name '*.jpg' -o -name '*.pdf' \))
+files=$(find ${scan_point} -maxdepth 1 -type f -not -newermt "-${scan_min_value} seconds" \( -name '*.tif' -o -name '*.jpg' -o -name '*.pdf' \) -size +200k)
 #[[ ${#files[@]} -eq 1 ]] && log_it "No new file found."
 processed_directory=${scan_point}/processed
 [[ ! -d $processed_directory ]] && mkdir $processed_directory
