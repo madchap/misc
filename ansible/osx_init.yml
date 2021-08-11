@@ -1,4 +1,4 @@
----
+----
 - hosts: localhost
   tasks:
 
@@ -24,7 +24,7 @@
       state: present
     loop:
       - sambadevi/powerlevel9k
-      - caskroom/fonts
+      - homebrew/cask-fonts
 
   - name: install casks
     tags:
@@ -39,6 +39,7 @@
       - firefox
       - google-chrome
       - istat-menus
+      - alfred
       - iterm2
       - gpg-suite
       - karabiner-elements
@@ -60,20 +61,21 @@
       - font-meslo-nerd-font
       - font-inconsolata
       - font-terminus
-      - font-source-code-pro
+      - font-source-code-pro-for-powerline
       - xquartz
       - inkscape
       - vlc
       - wireshark
       # - microsoft-teams
-      - synergy-beta
+      - synergy
       - bitwarden
       - authy
-      - minikube
+      # - minikube
       - aws-vault
-      - vagrant
+      # - vagrant
       - virtualbox
       - virtualbox-extension-pack
+      - alt-tab  
     ignore_errors: yes
 
   - name: override system vim
@@ -117,7 +119,7 @@
       - mosh
       - pam_yubico
       - ykman
-      - encfs
+      # - encfs
       - asciinema
       - speedtest-cli
       - tree
@@ -143,6 +145,7 @@
       line: '/usr/local/bin/zsh'
       state: present
     become: true
+    ignore_errors: yes
 
   - name: Python pips
     tags:
@@ -162,6 +165,7 @@
     tags:
       - zsh
     script: /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+    ignore_errors: yes
 
 
   - name: clone dotfiles repo
@@ -177,17 +181,19 @@
       - dotdrop
     script: /usr/local/bin/pip3 install -r /Users/fblaise/gitrepos/dotfiles/dotdrop/requirements.txt 
     become: true
+    ignore_errors: yes
 
   - name: dotdrop install all files
     # need to add computer profile to config.yml
     tags:
       - dotdrop
     script: ~/gitrepos/dotfiles/dotdrop.sh install
+    ignore_errors: yes
 
-  - name: powerlevel9k
+  - name: powerlevel10k
     git:
-      repo: https://github.com/bhilburn/powerlevel9k.git
-      dest: ~/.oh-my-zsh/custom/themes/powerlevel9k
+      repo: https://github.com/romkatv/powerlevel10k.git
+      dest: ~/.oh-my-zsh/custom/themes/powerlevel10k
 
   - name: tmux TPM
     tags:
@@ -210,14 +216,17 @@
       - ycm
     script: 
       cd ~/.vim/bundle/YouCompleteMe && python3 ./install.py
+    ignore_errors: yes
 
   - name: fzf install run
     tags:
       - fzf
     script:
-      /usr/local/Cellar/fzf/0.17.5/install --key-bindings --completion --no-update-rc
+      /usr/local/Cellar/fzf/0.27.2/install --key-bindings --completion --no-update-rc
 
   - name: create LaunchDaemons directory
+    tags:
+      - launchctl
     file:
       path: ~/Library/LaunchDaemons
       state: directory
@@ -225,6 +234,7 @@
 
   - name: copy sleepwatcher plist
     tags:
+      - launchctl
       - sleepwatcher
     file:
       src: /Users/fblaise/gitrepos/misc/osx/de.bernhard-baehr.sleepwatcher-20compatibility-localuser.plist
@@ -233,32 +243,38 @@
 
   - name: enable sleepwatcher at start
     tags:
+      - launchctl
       - sleepwatcher
     script: /bin/launchctl load -w ~/Library/LaunchDaemons/de.bernhard-baehr.sleepwatcher-20compatibility-localuser.plist
       
   - name: enable locate
     tags:
+      - launchctl
       - locate
     script: /bin/launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
     become: true
 
   - name: load ssh-auth override
     tags:
+      - launchctl
       - gpg
     script: /bin/launchctl load -F ~/Library/LaunchAgents/link-ssh-auth-sock.plist
   
   - name: load homebrew gpg-agent
     tags:
+      - launchctl
       - gpg
     script: /bin/launchctl load -F ~/Library/LaunchAgents/homebrew.gpg.gpg-agent.plist
 
   - name: symlink updatedb
     tags:
+      - launchctl
       - locate
     file:
       src: /usr/libexec/locate.updatedb
       dest: /usr/local/bin/updatedb
       state: link
+    become: true    
 
   - name: VS code press and hold
     tags:
