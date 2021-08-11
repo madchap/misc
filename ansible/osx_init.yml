@@ -35,15 +35,13 @@
       state: present
     loop:
       - keepingyouawake
-      - zoomus
+      - zoom
       - firefox
       - google-chrome
       - istat-menus
-      - homebrew/cask-versions/alfred2
       - iterm2
       - gpg-suite
       - karabiner-elements
-      - evernote
       - slack
       - signal
       - spectacle
@@ -121,7 +119,6 @@
       - ykman
       - encfs
       - asciinema
-      - jupyter
       - speedtest-cli
       - tree
       - pstree
