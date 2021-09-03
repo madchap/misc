@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # hacky script bound to keyboard shortcut to reset source and sink
-set -ex
+set -x
 
 boseqc_headset_bt_id=bluez_card.28_11_A5_74_6A_B8
+boseqc_headset_bt_sink=bluez_sink.28_11_A5_74_6A_B8.a2dp_sink
 
 # set yeti with echo cancellation as the default source
 # this should be the one selected in the app too, otherwise..
@@ -14,9 +15,9 @@ pactl set-source-mute alsa_input.pci-0000_00_1f.3.analog-stereo on
 pactl set-card-profile ${boseqc_headset_bt_id} a2dp_sink
 
 # set it as default sink for all apps, but MSTeams won't give a crap.
-pactl set-default-sink ${boseqc_headset_bt_id}.a2dp_sink
+pactl set-default-sink ${boseqc_headset_bt_sink}
 
 # set MSteams to use bose QCii, no telling what that app is doing
 # shaky for now, waiting on pactl json output coming soon..
-sink_id=$(pactl list sink-inputs | grep -B 16 skype |awk '/Sink Input/ {print substr($3,2)}')
-pactl move-sink-input $sink_id ${boseqc_headset_bt_id}.a2dp_sink
+sink_id=$(pactl list sink-inputs | grep -B 16 skype |awk '/Sink Input/ {print substr($3,2)}' |xargs echo -n)
+pactl move-sink-input $sink_id ${boseqc_headset_bt_sink}
