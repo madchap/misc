@@ -97,7 +97,9 @@ def get_pulseaudio_source_status():
     # relies on the fact that all are toggled muted or not per key binding
     pulse = pulsectl.Pulse('i3bar')
     # 1 when muted, 0 when not muted
-    if pulse.source_list()[0].mute:
+    is_muted = pulse.source_list()[0].mute
+    pulse.close()
+    if is_muted:
         return "Muted"
     else:
         return "On Air"
