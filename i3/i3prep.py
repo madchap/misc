@@ -29,6 +29,7 @@ import sys
 import json
 import netifaces
 import subprocess
+import pulsectl
 
 def get_governor():
     """ Get the current governor for cpu0, assuming all CPUs use the same. """
@@ -92,6 +93,16 @@ def read_line():
         sys.exit()
 
 
+def get_pulseaudio_source_status():
+    # relies on the fact that all are toggled muted or not per key binding
+    pulse = pulsectl.Pulse('i3bar')
+    # 1 when muted, 0 when not muted
+    if pulse.source_list()[0].mute:
+        return "Muted"
+    else:
+        return "On Air"
+
+
 if __name__ == '__main__':
     # Skip the first line which contains the version header.
     print_line(read_line())
@@ -120,6 +131,7 @@ if __name__ == '__main__':
         j.insert(1, {'full_text': '%s' % vpn_icon, 'name': 'vpnssl', 'color': vpn_color})
         j.insert(2, {'full_text': ' %s' % get_sshuttle_args_count('sshuttle --pidfile=/tmp/sshuttle.pid -D -r'), 'name': 'sshuttle'})
         j.insert(3, {'full_text': ' %s' % get_procs_count('autossh -'), 'name': 'autossh'})
+        j.insert(4, {'full_text': '🎙%s' % get_pulseaudio_source_status(), 'name': 'pa_source'})
         # j.insert(4, {'full_text': ' %s' % get_brightness(), 'name': 'brightness'})
         # and echo back new encoded json
         print_line(prefix+json.dumps(j))
