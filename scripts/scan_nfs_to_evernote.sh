@@ -69,7 +69,7 @@ target_platform=$1
 
 # Look for file, pdf
 # files=$(find ${scan_point} -maxdepth 1 -type f -newermt "-${scan_max_value} seconds" -not -newermt "-${scan_min_value} seconds" \( -name '*.tif' -o -name '*.jpg' -o -name '*.pdf' \))
-files=$(find ${scan_point} -maxdepth 1 -type f -not -newermt "-${scan_min_value} seconds" \( -name '*.tif' -o -name '*.jpg' -o -name '*.pdf' \))
+files=$(find ${scan_point} -maxdepth 1 -type f -not -newermt "-${scan_min_value} seconds" \( -name '*.tif' -o -name '*.jpg' -o -name '*.pdf' \) -size +200k)
 #[[ ${#files[@]} -eq 1 ]] && log_it "No new file found."
 processed_directory=${scan_point}/processed
 [[ ! -d $processed_directory ]] && mkdir $processed_directory
@@ -77,7 +77,6 @@ processed_directory=${scan_point}/processed
 something_is_processed=0
 for file in ${files}; do
 	log_it "Found file $file."
-    something_is_processed=1
 
 	file_fullpath=$file
 	file_pathonly=${file%/*}
@@ -101,10 +100,14 @@ for file in ${files}; do
 	    log_it "Sending to google drive..."
 	    $upload_to_gdrive --filename /docs/${filename_noext}.${filename_ext}
 	fi
-	
-	something_is_processed=1
+
+	# move pdf to processed	
 	mv "${file_pathonly}/${filename_noext}.${filename_ext}" $processed_directory
+	# removed .tif file just processed
+	rm -f "${file_fullpath}"
+	rm -f "${file_pathonly}/${filename_noext}.txt"
 
 done
 
-[[ $something_is_processed -eq 1 ]] && clean_tesseract_temp_files && echo "Done."
+# don't do this to avoid deleting files that are not old enough to be processed this round, still being processed
+# [[ $something_is_processed -eq 1 ]] && clean_tesseract_temp_files && echo "Done."
