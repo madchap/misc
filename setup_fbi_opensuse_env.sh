@@ -26,6 +26,7 @@ sudo localectl set-x11-keymap ch fr
 [[ ! -f /etc/zypp/repos.d/vscode.repo ]] && sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc && sudo zypper ar -f -n vscode https://packages.microsoft.com/yumrepos/vscode vscode
 [[ ! -f /etc/zypp/repos.d/google-chrome.repo ]] && sudo zypper ar -f -n google-chrome http://dl.google.com/linux/chrome/rpm/stable/x86_64 google-chrome
 [[ ! -f /etc/zypp/repos.d/wireguard.repo ]] && sudo zypper ar -f obs://network:vpn:wireguard wireguard
+[[ ! -f /etc/zypp/repos.d/snappy.repo ]] && sudo zypper ar -f -n snappy https://download.opensuse.org/repositories/system:/snappy/openSUSE_Tumbleweed snappy
 
 # disabling gpg checks on repo temporarily
 sudo zypper mr -G packman
@@ -34,7 +35,7 @@ sudo zypper mr -G wireguard
 
 sudo zypper dup -y --auto-agree-with-product-licenses 
 
-sudo zypper --non-interactive install zsh git curl vim python-pip jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh cmake pavucontrol inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools ansible xdotool net-tools-deprecated docker-compose weechat libinput-tools xdotool pdftk ipcalc tig nmap rpm-build xf86-video-intel fontawesome-fonts gnome-keyring minicom pwgen speedtest-cli gnome-keyring gnome-terminal pulseaudio pulseaudio-utils NetworkManager-applet NetworkManager-openconnect eog evince wireshark xbindkeys aws-cli sshuttle asciinema backintime backintime-qt MozillaFirefox python2-pip mosh xorg-x11-server xfce4-power-manager xinit adobe-sourcecodepro-fonts kubernetes-client gnome-colors-icon-theme go1.13 go1.12 pinentry-gtk2 NetworkManager-openvpn flameshot vlc-codecs wireguard-kmp-default wireguard-tools
+sudo zypper --non-interactive install zsh git curl vim jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh cmake pavucontrol inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools ansible xdotool net-tools-deprecated docker-compose weechat libinput-tools xdotool pdftk ipcalc tig nmap rpm-build xf86-video-intel fontawesome-fonts gnome-keyring minicom pwgen speedtest-cli gnome-keyring gnome-terminal pulseaudio pulseaudio-utils NetworkManager-applet NetworkManager-openconnect eog evince wireshark xbindkeys aws-cli sshuttle asciinema backintime backintime-qt MozillaFirefox python2-pip mosh xorg-x11-server xfce4-power-manager xinit adobe-sourcecodepro-fonts kubernetes-client gnome-colors-icon-theme go1.13 go1.12 pinentry-gtk2 NetworkManager-openvpn flameshot vlc-codecs wireguard-kmp-default wireguard-tools sof-firmware
 
 sudo zypper -n install google-chrome
 
@@ -55,7 +56,7 @@ sudo usermod -a -G docker $(whoami)
 sudo usermod -a -G input $(whoami)
 
 if [ $(getent passwd $(whoami) | cut -d: -f7) == "/bin/bash" ]; then
-	echo "Changing shell to zsh.. please enter password for ${currentuser}."
+	echo "Changing shell to zsh.. please enter password for currentuser."
 	chsh -s $(which zsh)
 fi
 
@@ -257,7 +258,7 @@ if [[ "$WM" == "gnome" ]]; then
 fi
 
 if [[ "$WM" == "i3" ]]; then
-	sudo zypper --non-interactive install i3 scrot xfce4-notifyd thunar thunar-plugin-archive thunar-plugin-vcs thunar-sendto-blueman xbacklight picom xev xautolock xkill xinput clipit rofi feh polkit-gnome NetworkManager-applet blueman bluez xfce4-settings file-roller rofi-calc
+	sudo zypper --non-interactive install i3 scrot xfce4-notifyd thunar thunar-plugin-archive thunar-plugin-vcs thunar-sendto-blueman xbacklight picom xev xautolock xkill xinput clipit rofi feh polkit-gnome NetworkManager-applet blueman bluez xfce4-settings file-roller rofi-calc dunst
 
 	mkdir -p ~/.config/i3
 	mkdir -p ~/.i3/scripts
@@ -274,28 +275,29 @@ if [[ "$WM" == "i3" ]]; then
 	# done
 
 	# gnome keyring for pam
-	pam_gnome_password_string="password optional  pam_gnome_keyring.so"
-	if ! grep -q $pam_gnome_password_string /etc/pam.d/passwd; then 
-		echo "$pam_gnome_password_string" |sudo tee -a /etc/pam.d/passwd
-	fi
-
-	pam_gnome_autostart_string="session    optional     pam_gnome_keyring.so        auto_start"
-	if ! grep -q "$pam_gnome_autostart_string" /etc/pam.d/login; then
-		echo "$pam_gnome_autostart_string" |sudo tee -a /etc/pam.d/login
-	fi
-
-	# get away avahi away from .local
-	sudo sed -i 's!#domain-name=local!domain-name=here!' /etc/avahi/avahi-daemon.conf
-
-	# multimonitor lock screen
-	git clone https://github.com/shikherverma/i3lock-multimonitor.git ~/.i3/i3lock-multimonitor
-
+	# pam_gnome_password_string="password optional  pam_gnome_keyring.so"
+	# if ! grep -q $pam_gnome_password_string /etc/pam.d/passwd; then 
+# 		echo "$pam_gnome_password_string" |sudo tee -a /etc/pam.d/passwd
+# 	fi
+# 
+# 	pam_gnome_autostart_string="session    optional     pam_gnome_keyring.so        auto_start"
+# 	if ! grep -q "$pam_gnome_autostart_string" /etc/pam.d/login; then
+# 		echo "$pam_gnome_autostart_string" |sudo tee -a /etc/pam.d/login
+# 	fi
+# 
+# 	# get away avahi away from .local
+# 	sudo sed -i 's!#domain-name=local!domain-name=here!' /etc/avahi/avahi-daemon.conf
+# 
+# 	# multimonitor lock screen
+# 	git clone https://github.com/shikherverma/i3lock-multimonitor.git ~/.i3/i3lock-multimonitor
+# 
 	# cp assets around
 	cp -f ~/gitrepos/misc/assets/linux-13.png ~/.i3/i3lock-multimonitor/img/background.png
 	cp -f ~/gitrepos/misc/assets/i3_solarized_bg.png ~/Pictures/
 
 	# installing python2 netifaces for i3prep.py -- i3 status bar
-	sudo zypper --non-interactive in python2-netifaces
+	echo "install pulsectl and netifaces through pip."
+    sudo zypper --non-interactive in python2-netifaces
 
 	# create the backlight_p.out to avoid i3prep.py to bomb
 	echo 100 > ~/.i3/scripts/backlight_p.out

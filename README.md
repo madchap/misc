@@ -169,4 +169,3 @@ To apply the changes, you have to remove all xkb cache files:
 rm -rf /var/lib/xkb/*
 ```
 
-```

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # This script is a simple wrapper which prefixes each i3status line with custom
@@ -29,6 +29,7 @@ import sys
 import json
 import netifaces
 import subprocess
+import pulsectl
 
 def get_governor():
     """ Get the current governor for cpu0, assuming all CPUs use the same. """
@@ -48,14 +49,14 @@ def get_vpnssl_status(iface):
 def get_procs_count(proc_name):
     """ Returns number of procs """
     procs = subprocess.check_output(['ps','-ef']).splitlines()
-    name_procs = [proc for proc in procs if proc_name in proc]
+    name_procs = [proc for proc in procs if proc_name.encode() in proc]
     return len(name_procs)
 
 
 def get_sshuttle_args_count(proc_name):
     """ Returns number of subnets handled by sshuttle """
     procs = subprocess.check_output(['ps', '-eo', 'comm,args']).splitlines()
-    name_procs = [proc for proc in procs if proc_name in proc]
+    name_procs = [proc for proc in procs if proc_name.encode() in proc]
 
     if len(name_procs) > 1:
         return -1
@@ -92,6 +93,18 @@ def read_line():
         sys.exit()
 
 
+def get_pulseaudio_source_status():
+    # relies on the fact that all are toggled muted or not per key binding
+    pulse = pulsectl.Pulse('i3bar')
+    # 1 when muted, 0 when not muted
+    is_muted = pulse.source_list()[0].mute
+    pulse.close()
+    if is_muted:
+        return "Muted"
+    else:
+        return "On Air"
+
+
 if __name__ == '__main__':
     # Skip the first line which contains the version header.
     print_line(read_line())
@@ -116,10 +129,11 @@ if __name__ == '__main__':
             vpn_color = '#ffff00'
             vpn_icon = ''
         
-        j.insert(0, {'full_text': ' %s' % get_procs_count('pinentry'), 'name': 'pinentry'})
+        # j.insert(0, {'full_text': ' %s' % get_procs_count('pinentry'), 'name': 'pinentry'})
         j.insert(1, {'full_text': '%s' % vpn_icon, 'name': 'vpnssl', 'color': vpn_color})
-        j.insert(2, {'full_text': ' %s' % get_sshuttle_args_count('sshuttle --pidfile=/tmp/sshuttle.pid -D -r'), 'name': 'sshuttle'})
-        j.insert(3, {'full_text': ' %s' % get_procs_count('autossh -'), 'name': 'autossh'})
+        # j.insert(2, {'full_text': ' %s' % get_sshuttle_args_count('sshuttle --pidfile=/tmp/sshuttle.pid -D -r'), 'name': 'sshuttle'})
+        # j.insert(3, {'full_text': ' %s' % get_procs_count('autossh -'), 'name': 'autossh'})
+        j.insert(4, {'full_text': '🎙%s' % get_pulseaudio_source_status(), 'name': 'pa_source'})
         # j.insert(4, {'full_text': ' %s' % get_brightness(), 'name': 'brightness'})
         # and echo back new encoded json
         print_line(prefix+json.dumps(j))
