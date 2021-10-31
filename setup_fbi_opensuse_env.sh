@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+set -xe
 
 [[ $UID -eq 0 ]] && echo "Run as your user, no sudo." && exit 1
 [[ "$PWD" != '/home/fblaise/gitrepos/misc' ]] && echo "Wrong start directory" && exit 2
@@ -35,7 +35,7 @@ sudo zypper mr -G wireguard
 
 sudo zypper dup -y --auto-agree-with-product-licenses 
 
-sudo zypper --non-interactive install zsh git curl vim jq tmux xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh cmake pavucontrol inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools ansible xdotool net-tools-deprecated docker-compose weechat libinput-tools xdotool pdftk ipcalc tig nmap rpm-build xf86-video-intel fontawesome-fonts gnome-keyring minicom pwgen speedtest-cli gnome-keyring gnome-terminal pulseaudio pulseaudio-utils NetworkManager-applet NetworkManager-openconnect eog evince wireshark xbindkeys aws-cli sshuttle asciinema backintime backintime-qt MozillaFirefox python2-pip mosh xorg-x11-server xfce4-power-manager xinit adobe-sourcecodepro-fonts kubernetes-client gnome-colors-icon-theme go1.13 go1.12 pinentry-gtk2 NetworkManager-openvpn flameshot vlc-codecs wireguard-kmp-default wireguard-tools sof-firmware
+sudo zypper --non-interactive install zsh git curl vim jq tmux tmux-powerline xclip xsel chromium remmina-plugin-rdp lsb synergy exfat-utils fuse-exfat virtualbox deluge autossh cmake pavucontrol inkscape docker docker-zsh-completion mlocate powertop expect whois kernel-source libinput-tools ansible xdotool net-tools-deprecated docker-compose weechat libinput-tools xdotool pdftk ipcalc tig nmap rpm-build xf86-video-intel fontawesome-fonts gnome-keyring minicom pwgen speedtest-cli gnome-keyring gnome-terminal pulseaudio pulseaudio-utils NetworkManager-applet NetworkManager-openconnect eog evince wireshark xbindkeys aws-cli sshuttle asciinema backintime backintime-qt MozillaFirefox python2-pip mosh xorg-x11-server xfce4-power-manager xinit adobe-sourcecodepro-fonts kubernetes-client gnome-colors-icon-theme go1.13 go1.12 pinentry-gtk2 NetworkManager-openvpn flameshot vlc-codecs wireguard-kmp-default wireguard-tools sof-firmware
 
 sudo zypper -n install google-chrome
 
@@ -56,7 +56,7 @@ sudo usermod -a -G docker $(whoami)
 sudo usermod -a -G input $(whoami)
 
 if [ $(getent passwd $(whoami) | cut -d: -f7) == "/bin/bash" ]; then
-	echo "Changing shell to zsh.. please enter password for currentuser."
+    echo "Changing shell to zsh.. please enter password for $(whoami)."
 	chsh -s $(which zsh)
 fi
 
@@ -190,6 +190,7 @@ curl -H 'Cache-Control: no-cache' -s https://raw.githubusercontent.com/madchap/m
 if [ ! hash kubectl 2>/dev/null ]; then
        	curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && sudo mv -f kubectl /usr/local/bin/ && sudo chmod +x /usr/local/bin/kubectl
 fi
+
 if [ ! hash minikube 2>/dev/null ]; then
        	curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv -f minikube /usr/local/bin/
 fi
@@ -258,7 +259,7 @@ if [[ "$WM" == "gnome" ]]; then
 fi
 
 if [[ "$WM" == "i3" ]]; then
-	sudo zypper --non-interactive install i3 scrot xfce4-notifyd thunar thunar-plugin-archive thunar-plugin-vcs thunar-sendto-blueman xbacklight picom xev xautolock xkill xinput clipit rofi feh polkit-gnome NetworkManager-applet blueman bluez xfce4-settings file-roller rofi-calc dunst
+	sudo zypper --non-interactive install i3 scrot xfce4-notifyd thunar thunar-plugin-archive thunar-plugin-vcs thunar-sendto-blueman xbacklight picom xev xautolock xkill xinput clipit rofi feh polkit-gnome NetworkManager-applet blueman bluez xfce4-settings file-roller rofi-calc dunst pasystray
 
 	mkdir -p ~/.config/i3
 	mkdir -p ~/.i3/scripts
@@ -275,6 +276,7 @@ if [[ "$WM" == "i3" ]]; then
 	# done
 
 	# gnome keyring for pam
+    # !! don't do this anymore, will make login unusable now
 	# pam_gnome_password_string="password optional  pam_gnome_keyring.so"
 	# if ! grep -q $pam_gnome_password_string /etc/pam.d/passwd; then 
 # 		echo "$pam_gnome_password_string" |sudo tee -a /etc/pam.d/passwd
@@ -289,8 +291,9 @@ if [[ "$WM" == "i3" ]]; then
 # 	sudo sed -i 's!#domain-name=local!domain-name=here!' /etc/avahi/avahi-daemon.conf
 # 
 # 	# multimonitor lock screen
-# 	git clone https://github.com/shikherverma/i3lock-multimonitor.git ~/.i3/i3lock-multimonitor
-# 
+ 	git clone https://github.com/shikherverma/i3lock-multimonitor.git ~/.i3/i3lock-multimonitor
+    sed -i 's/LOCK_ARGS="-t -e"/LOCK_ARGS="-t"/' ~/.i3/i3lock-multimonitor/lock
+ 
 	# cp assets around
 	cp -f ~/gitrepos/misc/assets/linux-13.png ~/.i3/i3lock-multimonitor/img/background.png
 	cp -f ~/gitrepos/misc/assets/i3_solarized_bg.png ~/Pictures/

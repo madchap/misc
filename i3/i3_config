@@ -208,7 +208,7 @@ bindsym Mod1+Shift+Tab focus up
 # i3lock
 #bindsym $mod+l exec "/usr/bin/i3lock -f -i ~/Pictures/linux-13.png"
 #exec xautolock -time 5 -locker "/usr/bin/i3lock -f -i ~/Pictures/linux-13.png"
-bindsym $mod+l exec "~/.i3/i3lock-multimonitor/lock"
+bindsym $mod+l exec --no-startup-id "~/.i3/i3lock-multimonitor/lock"
 bindsym XF86Launch5 exec "~/.i3/i3lock-multimonitor/lock"
 exec xautolock -time 30 -locker "~/.i3/i3lock-multimonitor/lock"
 #bindsym $mod+l exec "~/.i3/i3lock-fancy-multimonitor/lock"
