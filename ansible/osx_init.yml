@@ -36,6 +36,7 @@
       name: "{{ item }}"
       state: present
     loop:
+      - whatever
       - dotdrop
       - firefox
       - google-chrome
