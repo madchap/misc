@@ -36,6 +36,7 @@
       name: "{{ item }}"
       state: present
     loop:
+      - dotdrop
       - firefox
       - google-chrome
       - istat-menus
