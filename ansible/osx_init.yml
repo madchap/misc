@@ -15,69 +15,6 @@
     script: /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     when: not is_brew.stat.exists
 
-  - name: install taps
-    tags:
-      - brew
-      - taps
-    homebrew_tap:
-      name: "{{ item }}"
-      state: present
-    loop:
-      - sambadevi/powerlevel9k
-      - homebrew/cask-fonts
-
-  - name: install casks
-    tags:
-      - brew
-      - casks
-    homebrew_cask:
-      name: "{{ item }}"
-      state: present
-    loop:
-      - keepingyouawake
-      - zoom
-      - firefox
-      - google-chrome
-      - istat-menus
-      - alfred
-      - iterm2
-      - gpg-suite
-      - karabiner-elements
-      - slack
-      - signal
-      - spectacle
-      - spotify
-      # - microsoft-office
-      - visual-studio-code
-      - postman
-      - kindle
-      # - send-to-kindle
-      - docker
-      - homebrew/cask-drivers/yubico-yubikey-personalization-gui
-      - homebrew/cask-drivers/yubico-yubikey-manager
-      - homebrew/cask-drivers/yubico-yubikey-piv-manager
-      - osxfuse
-      - font-hack-nerd-font
-      - font-meslo-nerd-font
-      - font-inconsolata
-      - font-terminus
-      - font-source-code-pro-for-powerline
-      - xquartz
-      - inkscape
-      - vlc
-      - wireshark
-      # - microsoft-teams
-      - synergy
-      - bitwarden
-      - authy
-      # - minikube
-      - aws-vault
-      # - vagrant
-      - virtualbox
-      - virtualbox-extension-pack
-      - alt-tab  
-    ignore_errors: yes
-
   - name: override system vim
     # Xcode needs to run manually 
     tags:
@@ -99,6 +36,36 @@
       name: "{{ item }}"
       state: present
     loop:
+      - firefox
+      - google-chrome
+      - istat-menus
+      - alfred
+      - iterm2
+      - gpg-suite
+      - karabiner-elements
+      - slack
+      - signal
+      - spectacle
+      - spotify
+      # - microsoft-office
+      - visual-studio-code
+      - postman
+      - kindle
+      # - send-to-kindle
+      - docker
+      - osxfuse
+      - font-hack-nerd-font
+      - font-meslo-nerd-font
+      - font-inconsolata
+      - font-terminus
+      - font-source-code-pro-for-powerline
+      - xquartz
+      - vlc
+      - wireshark
+      # - microsoft-teams
+      - bitwarden
+      - aws-vault
+      - alt-tab  
       - coreutils
       - zsh
       - cmake
@@ -108,18 +75,15 @@
       - gnupg
       - zsh-syntax-highlighting
       - zsh-autosuggestions
-      - powerlevel9k
+      - powerlevel10k
       - bat
       - fzf
       - docker-completion
       - docker-compose-completion
       - docker-compose
       - sleepwatcher
-      - sshuttle
+      # - sshuttle
       - mosh
-      - pam_yubico
-      - ykman
-      # - encfs
       - asciinema
       - speedtest-cli
       - tree
@@ -128,14 +92,20 @@
       - htop
       - postgres
       - hexyl
-      - pipenv
+      - pipx
       - npm
       - vault
       - gist
       - jq
       - wireguard-tools
-      - terraform
-      - bitwarden-cli
+      - tenv
+      - direnv
+      - python-setuptools
+      - tig
+      - gh
+      - awscli
+      - python
+      - yubico-yubikey-manager
 
   - name: add local zsh to shells
     tags:
